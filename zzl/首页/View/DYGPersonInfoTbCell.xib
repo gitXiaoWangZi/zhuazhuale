@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="perCell" id="iN0-l3-epB" customClass="DYGPersonInfoTbCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="im3-OU-PZ3">
+                    <rect key="frame" x="16" y="17.5" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="I1W-rq-DXG"/>
+                        <constraint firstAttribute="width" constant="40" id="Vx6-jQ-LXB"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KBB-mZ-dd6">
+                    <rect key="frame" x="64" y="37.5" width="262" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video" translatesAutoresizingMaskIntoConstraints="NO" id="mjg-re-cPD">
+                    <rect key="frame" x="334" y="26" width="31" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="23" id="ifu-3h-B4B"/>
+                        <constraint firstAttribute="width" constant="31" id="vb4-LX-rHC"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="mjg-re-cPD" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="5QW-AY-72W"/>
+                <constraint firstItem="KBB-mZ-dd6" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="9xc-Jr-6se"/>
+                <constraint firstItem="KBB-mZ-dd6" firstAttribute="leading" secondItem="im3-OU-PZ3" secondAttribute="trailing" constant="8" id="chu-9Z-FCF"/>
+                <constraint firstItem="mjg-re-cPD" firstAttribute="leading" secondItem="KBB-mZ-dd6" secondAttribute="trailing" constant="8" id="hN0-Kq-0ib"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="mjg-re-cPD" secondAttribute="trailing" constant="10" id="kQo-fl-7pG"/>
+                <constraint firstItem="im3-OU-PZ3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="q26-9I-BK1"/>
+                <constraint firstItem="im3-OU-PZ3" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="vUG-np-w1X"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="iconImgV" destination="im3-OU-PZ3" id="9hB-kU-d77"/>
+                <outlet property="nickNameL" destination="KBB-mZ-dd6" id="n1Q-4g-Ejd"/>
+            </connections>
+            <point key="canvasLocation" x="-15.5" y="-137.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="video" width="31" height="23"/>
+    </resources>
+</document>

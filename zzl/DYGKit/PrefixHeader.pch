@@ -1,0 +1,16 @@
+//
+//  PrefixHeader.pch
+//  test
+//
+//  Created by Mr_Du on 2017/10/29.
+//  Copyright © 2017年 Mr_Du. All rights reserved.
+//
+
+#ifndef PrefixHeader_h
+#define PrefixHeader_h
+
+#define DYGColorFromHex(s)  [UIColor colorWithRed:(((s & 0xFF0000) >> 16))/255.0 green:(((s & 0xFF00) >>8))/255.0 blue:((s & 0xFF))/255.0 alpha:1.0]
+#define TextColor DYGColorFromHex(0x333333)
+#define SubTextColor DYGColorFromHex(0xC9C9C9)
+
+#endif /* PrefixHeader_h */

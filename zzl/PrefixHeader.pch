@@ -1,0 +1,136 @@
+//
+//  PrefixHeader.pch
+//  
+//
+//  Created by DoDoDo.D on 2017/5/18.
+//
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+
+#define safe_async_main(block)\
+if ([NSThread isMainThread]) {\
+block();\
+} else {\
+dispatch_async(dispatch_get_main_queue(), block);\
+}
+
+#ifndef weakify
+#if DEBUG
+#if __has_feature(objc_arc)
+#define weakify(object) autoreleasepool{} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) autoreleasepool{} __block __typeof__(object) block##_##object = object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define weakify(object) try{} @finally{} {} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) try{} @finally{} {} __block __typeof__(object) block##_##object = object;
+#endif
+#endif
+#endif
+
+#ifndef strongify
+#if DEBUG
+#if __has_feature(objc_arc)
+#define strongify(object) autoreleasepool{} __typeof__(object) object = weak##_##object;
+#else
+#define strongify(object) autoreleasepool{} __typeof__(object) object = block##_##object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define strongify(object) try{} @finally{} __typeof__(object) object = weak##_##object;
+#else
+#define strongify(object) try{} @finally{} __typeof__(object) object = block##_##object;
+#endif
+#endif
+#endif
+
+//第三方框架
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+/*****自己分类相关*********/
+#import "UIView+DYGAdd.h"
+#import "UIButton+DYGAdd.h"
+#import "UILabel+DYGAdd.h"
+#import "UIColor+DYGAdd.h"
+#import "MBProgressHUD+RY.h"
+#import "LSJHasNetwork.h"//网络监听
+/*****第三方框架相关*********/
+#import <AFNetworking/AFNetworking.h>
+#import <Masonry/Masonry.h>
+#import <MBProgressHUD.h>
+#import <YYModel.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <MJRefresh/MJRefresh.h>
+#import <TZImagePickerController.h>
+#import <WXApi.h>
+#import <MJExtension.h>
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+#import <UMMobClick/MobClick.h>
+//腾讯开放平台（对应QQ和QQ空间）SDK头文件
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+//微信SDK头文件
+#import "WXApi.h"
+//新浪微博SDK头文件
+#import "WeiboSDK.h"
+
+/*****网络请求******/
+#import "DYGHttpTool.h"
+#import "DYGEnCode.h"
+/*****娃娃机框架相关******/
+#import <WawaSDK/WawaSDK.h>
+/*****通知******/
+#define kSDKNotifyKey @"SDKNotifyKey"
+
+////////屏幕适配7为标准
+#define iPhone7W 375
+#define iPhone7H 667
+#define kScreenWidth ([UIScreen mainScreen].bounds.size.width)
+#define kScreenHeight ([UIScreen mainScreen].bounds.size.height)
+#define ScaleX  kScreenWidth/iPhone7W
+#define ScaleY  kScreenHeight/iPhone7H
+#define Px(x)   ScaleX * x
+#define Py(y)   ScaleY * y
+
+//系统版本
+#define kUIDevice [[[UIDevice currentDevice] systemVersion] floatValue]
+
+#define kBundleVersionKey @"CFBundleShortVersionString"
+
+//NSLog
+#ifdef DEBUG
+#define DYGLog(...)  NSLog(__VA_ARGS__)
+#else
+#define DYGLog(...)
+#endif
+
+// 颜色
+#define DVLColorGen(aColorString) [UIColor colorFromString:aColorString]
+#define DVLColorGenAlpha(aColorString, aAlpha) [UIColor colorFromString:aColorString alpha:aAlpha]
+#define DYGColor(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+#define randomColor [UIColor colorWithRed:arc4random_uniform(256)/255.0 green:arc4random_uniform(256)/255.0 blue:arc4random_uniform(256)/255.0 alpha:1.0]
+#define DYGColorFromHex(s)  [UIColor colorWithRed:(((s & 0xFF0000) >> 16))/255.0 green:(((s & 0xFF00) >>8))/255.0 blue:((s & 0xFF))/255.0 alpha:1.0]
+#define DYGRandomColor randomColor
+#define TextColor DYGColorFromHex(0x333333)
+#define systemColor DYGColorFromHex(0xeabe29)
+#define BGColor DYGColorFromHex(0xf2f2f2)
+#endif
+
+//微信信息
+#define WXAppID @"wxbb1e9958d032b2aa"
+#define WXAppSecret @"60cb56e19151b1fb1a6a422655acce29"
+
+#define KUser_ID @"user_id"
+#define KLoginStatus @"loginStatus"
+#define KisLogin [[NSUserDefaults standardUserDefaults] boolForKey:KLoginStatus]
+#define KUID [[NSUserDefaults standardUserDefaults] objectForKey:KUser_ID]
+
+#endif /* PrefixHeader_pch */

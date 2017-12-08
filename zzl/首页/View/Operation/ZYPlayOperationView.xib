@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZYPlayOperationView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="185"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="game_bg" translatesAutoresizingMaskIntoConstraints="NO" id="n3Q-yV-mi3">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="185"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Id-YA-spP" userLabel="downBtn" customClass="OBShapedButton">
+                    <rect key="frame" x="75" y="99.5" width="85.5" height="85.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="2Id-YA-spP" secondAttribute="height" multiplier="1:1" id="lMQ-CR-csx"/>
+                    </constraints>
+                    <state key="normal" title="↓" image="op_normal_down">
+                        <color key="titleColor" red="1" green="0.90688729290000003" blue="0.50686848159999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled" image="op_disable_down"/>
+                    <connections>
+                        <action selector="onDownButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="yI7-16-tE5"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZSK-QU-9d1" userLabel="leftBtn" customClass="OBShapedButton">
+                    <rect key="frame" x="14.5" y="50" width="85.5" height="85.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ZSK-QU-9d1" secondAttribute="height" multiplier="1:1" id="Kmd-zR-DQh"/>
+                    </constraints>
+                    <state key="normal" title="←" image="op_normal_left">
+                        <color key="titleColor" red="0.99905937909999998" green="0.89526432749999996" blue="0.47324430940000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled" image="op_disable_left"/>
+                    <connections>
+                        <action selector="onLeftButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="WeW-Jj-9cI"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e8D-EB-UuR" userLabel="rightBtn" customClass="OBShapedButton">
+                    <rect key="frame" x="135.5" y="50" width="85.5" height="85.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="e8D-EB-UuR" secondAttribute="height" multiplier="1:1" id="lm2-28-Hea"/>
+                    </constraints>
+                    <state key="normal" title="→" image="op_normal_right">
+                        <color key="titleColor" red="0.99905937909999998" green="0.89526432749999996" blue="0.47324430940000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled" image="op_disable_right"/>
+                    <connections>
+                        <action selector="onRightButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="e61-5X-hXZ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sqe-cT-8gi" userLabel="confirmBtn" customClass="OBShapedButton">
+                    <rect key="frame" x="236" y="35" width="115" height="115"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Sqe-cT-8gi" secondAttribute="height" multiplier="1:1" id="ixx-ei-ZaH"/>
+                    </constraints>
+                    <state key="normal" image="op_normal_confirm"/>
+                    <state key="disabled" image="op_disable_confirm"/>
+                    <connections>
+                        <action selector="onConfirmButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="5ps-XP-lhp"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejv-BE-HE6" userLabel="upBtn" customClass="OBShapedButton">
+                    <rect key="frame" x="75" y="0.0" width="85.5" height="85.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ejv-BE-HE6" secondAttribute="height" id="zal-0A-xCX"/>
+                    </constraints>
+                    <state key="normal" title="↑" image="op_normal_up">
+                        <color key="titleColor" red="0.99905937909999998" green="0.89526432749999996" blue="0.47324430940000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled" image="op_disable_up"/>
+                    <connections>
+                        <action selector="onUpButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="vav-zm-BFz"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="e8D-EB-UuR" firstAttribute="centerY" secondItem="n3Q-yV-mi3" secondAttribute="centerY" id="4Mn-kH-RvU"/>
+                <constraint firstItem="Sqe-cT-8gi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="35" id="76C-Gv-TeI"/>
+                <constraint firstItem="ZSK-QU-9d1" firstAttribute="centerY" secondItem="e8D-EB-UuR" secondAttribute="centerY" id="96P-eB-wlI"/>
+                <constraint firstAttribute="bottom" secondItem="Sqe-cT-8gi" secondAttribute="bottom" constant="35" id="9SA-BB-WP1"/>
+                <constraint firstItem="2Id-YA-spP" firstAttribute="top" secondItem="ejv-BE-HE6" secondAttribute="bottom" constant="14" id="Bmg-Wb-LWW"/>
+                <constraint firstItem="ejv-BE-HE6" firstAttribute="leading" secondItem="ZSK-QU-9d1" secondAttribute="trailing" constant="-25" id="Den-ex-1OK"/>
+                <constraint firstItem="n3Q-yV-mi3" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="HbV-mR-QKb"/>
+                <constraint firstAttribute="trailing" secondItem="Sqe-cT-8gi" secondAttribute="trailing" constant="24.5" id="Jql-h9-wme"/>
+                <constraint firstItem="ejv-BE-HE6" firstAttribute="width" secondItem="e8D-EB-UuR" secondAttribute="width" id="Lce-17-lUY"/>
+                <constraint firstItem="n3Q-yV-mi3" firstAttribute="leading" secondItem="ZSK-QU-9d1" secondAttribute="trailing" constant="-100" id="PmF-sz-3Bp"/>
+                <constraint firstItem="n3Q-yV-mi3" firstAttribute="centerY" secondItem="Sqe-cT-8gi" secondAttribute="centerY" id="T37-4O-QfQ"/>
+                <constraint firstItem="ejv-BE-HE6" firstAttribute="width" secondItem="2Id-YA-spP" secondAttribute="width" id="TGx-pX-vN4"/>
+                <constraint firstItem="2Id-YA-spP" firstAttribute="leading" secondItem="ZSK-QU-9d1" secondAttribute="trailing" constant="-25" id="ajf-ve-3qv"/>
+                <constraint firstItem="n3Q-yV-mi3" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="oDx-3m-7vF"/>
+                <constraint firstAttribute="bottom" secondItem="2Id-YA-spP" secondAttribute="bottom" id="qlF-yo-eo7"/>
+                <constraint firstItem="e8D-EB-UuR" firstAttribute="width" secondItem="ZSK-QU-9d1" secondAttribute="width" id="tST-ym-fKt"/>
+                <constraint firstItem="n3Q-yV-mi3" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="wHe-io-8ZX"/>
+                <constraint firstItem="e8D-EB-UuR" firstAttribute="leading" secondItem="ejv-BE-HE6" secondAttribute="trailing" constant="-25" id="wiO-tM-4Dg"/>
+                <constraint firstItem="ejv-BE-HE6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yTP-VN-092"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="confirmBtn" destination="Sqe-cT-8gi" id="MVn-S7-LXx"/>
+                <outlet property="confirmBtn_trailing" destination="Jql-h9-wme" id="87A-CF-29t"/>
+                <outlet property="downBtn" destination="2Id-YA-spP" id="civ-dh-jg7"/>
+                <outlet property="leftBtn" destination="ZSK-QU-9d1" id="5hX-Re-yEd"/>
+                <outlet property="rightBtn" destination="e8D-EB-UuR" id="IMG-X9-fWP"/>
+                <outlet property="upBtn" destination="ejv-BE-HE6" id="sHj-sn-f14"/>
+            </connections>
+            <point key="canvasLocation" x="371" y="63"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="game_bg" width="375" height="149"/>
+        <image name="op_disable_confirm" width="103" height="103"/>
+        <image name="op_disable_down" width="87" height="87"/>
+        <image name="op_disable_left" width="87" height="87"/>
+        <image name="op_disable_right" width="87" height="87"/>
+        <image name="op_disable_up" width="87" height="87"/>
+        <image name="op_normal_confirm" width="103" height="103"/>
+        <image name="op_normal_down" width="87" height="87"/>
+        <image name="op_normal_left" width="87" height="87"/>
+        <image name="op_normal_right" width="87" height="87"/>
+        <image name="op_normal_up" width="87" height="87"/>
+    </resources>
+</document>
