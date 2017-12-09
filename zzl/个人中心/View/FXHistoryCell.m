@@ -74,16 +74,8 @@
 
 - (void)setModel:(FXRechargeRecordModel *)model{
     _model = model;
-    if ([model.state integerValue] == 1) {//充值
-        _name.text = @"充值";
-        _money.text = [NSString stringWithFormat:@"%zd",[model.money integerValue]];
-    }else if ([model.state integerValue] == 2){//消费
-        _name.text = @"消费";
-        _money.text = [NSString stringWithFormat:@"-%zd",[model.money integerValue]];
-    }else{//活动奖励
-        _name.text = @"活动奖励";
-        _money.text = [NSString stringWithFormat:@"%zd",[model.money integerValue]];
-    }
+    _name.text = model.name;
+    _money.text = [NSString stringWithFormat:@"%@%@ 钻石",model.symbol,model.money];
     _time.text = [self dataStrWithTimesp:model.time];
 }
 

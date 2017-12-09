@@ -781,6 +781,16 @@
 - (void)gameManagerError:(UserInfoError)error{
     
 }
+
+
+- (void)onSlaveStreamReady{
+    
+}   /**< 辅摄像头的流已经加载成功了*/
+
+// IM
+- (void)reciveWatchNumber:(NSInteger)number{
+    
+} /**< 收到 观看人数*/
 @end
 
 

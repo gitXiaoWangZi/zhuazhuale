@@ -12,6 +12,8 @@
 
 @property (nonatomic,copy) NSString *indent;
 @property (nonatomic,copy) NSString *money;
+@property (nonatomic,copy) NSString *name;
 @property (nonatomic,copy) NSString *state;
+@property (nonatomic,copy) NSString *symbol;
 @property (nonatomic,copy) NSString *time;
 @end
