@@ -208,8 +208,10 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
-            [self.navigationController popViewControllerAnimated:YES];
+            [MBProgressHUD showMessage:@"提交成功" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);

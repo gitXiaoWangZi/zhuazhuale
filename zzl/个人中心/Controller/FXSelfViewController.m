@@ -59,7 +59,6 @@
         return;
     }
     [self loadUserInfoData];
-
 }
 
 // 160 106
@@ -125,7 +124,6 @@
             [self.navigationController pushViewController:rechargeVC animated:YES];
             
         }
-            
             break;
         case 1:
         {

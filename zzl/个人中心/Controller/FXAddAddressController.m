@@ -13,7 +13,7 @@
 #import "DYGTextView.h"
 #import <ContactsUI/ContactsUI.h>
 #import "MOFSPickerManager.h"
-@interface FXAddAddressController ()<UITableViewDelegate,UITableViewDataSource,CNContactPickerDelegate>
+@interface FXAddAddressController ()<UITableViewDelegate,UITableViewDataSource,CNContactPickerDelegate,UITextViewDelegate>
 
 @property(nonatomic,strong)UITableView * tableView;
 @property (nonatomic,strong) UIView * chooseView;
@@ -240,6 +240,8 @@
     if (section==0) {
         self.addressView = [[DYGTextView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, Py(85))];
         self.addressView.placeholder =@"请填写详细地址";
+        self.addressView.returnKeyType = UIReturnKeyDone;
+        self.addressView.delegate = self;
         if (!self.isAdd) {
             self.addressView.text = self.model.address;
         }
@@ -264,6 +266,13 @@
     return 0;
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if ([text isEqualToString:@"\n"]) {
+        [self.view endEditing:YES];
+        return NO;
+    }
+    return YES;
+}
 
 #pragma mark lazy load
 
@@ -283,12 +292,5 @@
     }
     return _titleArr;
 }
-
-
-
-
-
-
-
 
 @end
