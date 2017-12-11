@@ -1308,7 +1308,7 @@
 				TargetAttributes = {
 					9260ABC01FA73AE200EA1881 = {
 						CreatedOnToolsVersion = 9.0;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1668,8 +1668,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dan Shao (Z36KG2ZTDX)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1803,8 +1803,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "551dcb28-69ba-4b60-b2ad-f4790231bca3";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhualewawa_develop_PP;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
@@ -1820,8 +1820,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dan Shao (Z36KG2ZTDX)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1955,8 +1955,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "551dcb28-69ba-4b60-b2ad-f4790231bca3";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhualewawa_develop_PP;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
