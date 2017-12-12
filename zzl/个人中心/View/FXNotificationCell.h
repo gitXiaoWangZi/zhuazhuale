@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface FXNotificationCell : UITableViewCell
-
+@property (nonatomic,copy) NSString *message1;
 @end

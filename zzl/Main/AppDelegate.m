@@ -17,6 +17,10 @@
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
+
+#define AppID @"2017112318102887"
+#define AppKey @"552b92dc67b646d5b9d1576799545f4c"
+
 @interface AppDelegate ()<WXApiDelegate,JPUSHRegisterDelegate>
 
 @end
@@ -26,6 +30,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    /*******娃娃机SDK注册*********/
+    [[WawaSDK WawaSDKInstance] registerApp:AppID appKey:AppKey complete:^(BOOL success, int code, NSString * _Nullable message) {
+        if (success == NO) {
+            NSLog(@"游戏服务正在准备中,请稍后尝试");
+        } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSDKNotifyKey object:nil];
+        }
+        
+    }];
     
     /*******向极光推送注册*********/
     JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
@@ -200,10 +214,18 @@
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
-    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        [JPUSHService handleRemoteNotification:userInfo];
+    if (@available(iOS 10.0, *)) {
+        if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+            [JPUSHService handleRemoteNotification:userInfo];
+        }
+    } else {
+        // Fallback on earlier versions
     }
-    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+    if (@available(iOS 10.0, *)) {
+        completionHandler(UNNotificationPresentationOptionAlert);
+    } else {
+        // Fallback on earlier versions
+    } // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
     
     // iOS 10 Support
@@ -211,8 +233,12 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
-    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        [JPUSHService handleRemoteNotification:userInfo];
+    if (@available(iOS 10.0, *)) {
+        if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+            [JPUSHService handleRemoteNotification:userInfo];
+        }
+    } else {
+        // Fallback on earlier versions
     }
     completionHandler();  // 系统要求执行这个方法
 }

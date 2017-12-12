@@ -113,6 +113,8 @@
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [[WwUserInfoManager UserInfoMgrInstance] logout];
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KLoginStatus];
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"KWAWAUSER"];

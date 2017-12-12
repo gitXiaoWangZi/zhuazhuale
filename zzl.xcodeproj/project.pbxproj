@@ -141,10 +141,10 @@
 		92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B573FC1FD9370000B32C02 /* UMMobClick.framework */; };
 		92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A921FD925DD00CDEDC4 /* CoreTelephony.framework */; };
 		92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B574001FD937CD00B32C02 /* UMMobClick.framework */; };
+		92B5D7AD1FDED32400B72543 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; };
+		92B5D7AE1FDED32B00B72543 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; };
+		92B5D7AF1FDED32B00B72543 /* WawaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92B918E31FCFB67E009B0CE9 /* UIButton+Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B918E21FCFB67E009B0CE9 /* UIButton+Position.m */; };
-		92B918ED1FCFF81E009B0CE9 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B918EC1FCFF818009B0CE9 /* WawaSDK.framework */; };
-		92B918EE1FCFF822009B0CE9 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B918EC1FCFF818009B0CE9 /* WawaSDK.framework */; };
-		92B918EF1FCFF822009B0CE9 /* WawaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92B918EC1FCFF818009B0CE9 /* WawaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92C0479F1FCC0B3100636F15 /* FXRechargeRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0479E1FCC0B3100636F15 /* FXRechargeRecordModel.m */; };
 		92C047A21FCC1AF500636F15 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C047A11FCC187E00636F15 /* WelcomeViewController.m */; };
 		92D99AB71FD92D6D00CDEDC4 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A9A1FD92D6C00CDEDC4 /* MOBFoundation.framework */; };
@@ -194,7 +194,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				92B918EF1FCFF822009B0CE9 /* WawaSDK.framework in Embed Frameworks */,
+				92B5D7AF1FDED32B00B72543 /* WawaSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,9 +454,9 @@
 		92B573FC1FD9370000B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMMobClick.framework; path = "zzl/Supporting Files/UMeng/UMMobClick.framework"; sourceTree = "<group>"; };
 		92B574001FD937CD00B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
 		92B574021FD955F400B32C02 /* zzl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = zzl.entitlements; sourceTree = "<group>"; };
+		92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WawaSDK.framework; sourceTree = "<group>"; };
 		92B918E11FCFB67E009B0CE9 /* UIButton+Position.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+Position.h"; sourceTree = "<group>"; };
 		92B918E21FCFB67E009B0CE9 /* UIButton+Position.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Position.m"; sourceTree = "<group>"; };
-		92B918EC1FCFF818009B0CE9 /* WawaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WawaSDK.framework; sourceTree = "<group>"; };
 		92C0479D1FCC0B3100636F15 /* FXRechargeRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXRechargeRecordModel.h; sourceTree = "<group>"; };
 		92C0479E1FCC0B3100636F15 /* FXRechargeRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXRechargeRecordModel.m; sourceTree = "<group>"; };
 		92C047A01FCC187E00636F15 /* WelcomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
@@ -518,13 +518,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B5D7AD1FDED32400B72543 /* WawaSDK.framework in Frameworks */,
 				92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */,
 				92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */,
-				92B918ED1FCFF81E009B0CE9 /* WawaSDK.framework in Frameworks */,
 				928A907C1FC7FFC9000B621E /* libsqlite3.tbd in Frameworks */,
 				92D99AC41FD92D6D00CDEDC4 /* libWeChatSDK.a in Frameworks */,
 				928A907A1FC7FFB8000B621E /* ImageIO.framework in Frameworks */,
 				928A90781FC7FFA2000B621E /* JavaScriptCore.framework in Frameworks */,
+				92B5D7AE1FDED32B00B72543 /* WawaSDK.framework in Frameworks */,
 				92D99ABF1FD92D6D00CDEDC4 /* SinaWeiboConnector.framework in Frameworks */,
 				928A90761FC7FF81000B621E /* libstdc++.tbd in Frameworks */,
 				928A90741FC7FF72000B621E /* libz.tbd in Frameworks */,
@@ -539,7 +540,6 @@
 				92FCBEAF1FBD5EAE00BE88A7 /* libbz2.tbd in Frameworks */,
 				92D99ABA1FD92D6D00CDEDC4 /* ShareSDKConfigFile.framework in Frameworks */,
 				92FCBEAD1FBD5EA100BE88A7 /* libiconv.2.4.0.tbd in Frameworks */,
-				92B918EE1FCFF822009B0CE9 /* WawaSDK.framework in Frameworks */,
 				92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */,
 				92FCBEAB1FBD5E9000BE88A7 /* libstdc++.6.0.9.tbd in Frameworks */,
 				92D99AB71FD92D6D00CDEDC4 /* MOBFoundation.framework in Frameworks */,
@@ -1256,7 +1256,7 @@
 		92FCBECA1FBD65B500BE88A7 /* wawaSDK */ = {
 			isa = PBXGroup;
 			children = (
-				92B918EC1FCFF818009B0CE9 /* WawaSDK.framework */,
+				92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */,
 				927478C41FBEAEE0005C5772 /* libcrypto.a */,
 				927478C51FBEAEE0005C5772 /* libssl.a */,
 			);
@@ -1602,7 +1602,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1652,7 +1652,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1667,8 +1667,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dan Shao (Z36KG2ZTDX)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
@@ -1803,8 +1804,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "551dcb28-69ba-4b60-b2ad-f4790231bca3";
-				PROVISIONING_PROFILE_SPECIFIER = zhuazhualewawa_develop_PP;
+				PROVISIONING_PROFILE = "e8cbe65d-7788-4984-a1ef-0fece1a71723";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhuale_distribution_pp;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
@@ -1819,8 +1820,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dan Shao (Z36KG2ZTDX)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
@@ -1955,8 +1956,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "551dcb28-69ba-4b60-b2ad-f4790231bca3";
-				PROVISIONING_PROFILE_SPECIFIER = zhuazhualewawa_develop_PP;
+				PROVISIONING_PROFILE = "e8cbe65d-7788-4984-a1ef-0fece1a71723";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhuale_distribution_pp;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";

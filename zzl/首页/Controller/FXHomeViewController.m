@@ -20,8 +20,6 @@
 #import "FXHomeLoginSuccessPopView.h" //登录成功页面
 #import "LSJHasNetwork.h"
 
-//#define AppID @"2017111515302844"
-//#define AppKey @"1c8e5f1c06d09d431ec59dca8c7abe18"
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
 @interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomListManagerDelegate>
@@ -61,6 +59,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sdkPassValidity) name:kSDKNotifyKey object:nil];
     self.defaultImageV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_noInter_default"]];
     self.defaultImageV.contentMode = UIViewContentModeCenter;
     [self.view addSubview:self.defaultImageV];
@@ -68,28 +67,15 @@
         make.centerX.equalTo(self.view);
         make.centerY.equalTo(self.view);
     }];
-    [self initData];
-}
-
-- (void)initData{
-    NSDictionary *wawaUserDic = (NSDictionary *)[[NSUserDefaults standardUserDefaults] objectForKey:@"KWAWAUSER"];
-    [WwUserInfoManager UserInfoMgrInstance].userInfo = ^UserInfo *{
-        UserInfo * user = [UserInfo new];
-        user.uid = wawaUserDic[@"ID"];// 接入方用户ID
-        user.name = wawaUserDic[@"name"];// 接入方用户昵称
-        user.avatar = wawaUserDic[@"img"]; // 接入方
-        
-        //        user.uid = @"1245555284";// 接入方用户ID
-        //        user.name = @"测试账号cc";// 接入方用户昵称
-        //        user.avatar = @""; // 接入方
-        return user;
-        
-    };
-    
     self.automaticallyAdjustsScrollViewInsets = YES;
     self.view.backgroundColor = BGColor;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     [self.view addSubview:self.header];
+    [self initData];
+    
+}
+
+- (void)initData{
     
     [LSJHasNetwork lsj_hasNetwork:^(bool has) {
         if (has) {//有网
@@ -101,19 +87,18 @@
             return ;
         }
     }];
+
     
-    /*******娃娃机SDK注册*********/
-    _hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    _hud.label.text = @"加载中";
-    [[WawaSDK WawaSDKInstance] registerApp:AppID appKey:AppKey complete:^(BOOL success, int code, NSString * _Nullable message) {
-        if (success == NO) {
-            [_hud hideAnimated:YES];
-            NSLog(@"游戏服务正在准备中,请稍后尝试");
-        } else {
-            [self sdkPassValidity];
-        }
-        
-    }];
+    NSDictionary *wawaUserDic = (NSDictionary *)[[NSUserDefaults standardUserDefaults] objectForKey:@"KWAWAUSER"];
+    [WwUserInfoManager UserInfoMgrInstance].userInfo = ^UserInfo *{
+        UserInfo * user = [UserInfo new];
+        user.uid = wawaUserDic[@"ID"];// 接入方用户ID
+        user.name = wawaUserDic[@"name"];// 接入方用户昵称
+        user.avatar = wawaUserDic[@"img"]; // 接入方
+        return user;
+    };
+    
+    [self sdkPassValidity];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -142,15 +127,18 @@
         [_hud hideAnimated:YES];
         return;
     }
+    
+    
     //必须等到鉴权成功之后调用
     [[WawaSDK WawaSDKInstance].userInfoMgr loginUserWithCompleteHandler:^(int code, NSString *message) {
         NSLog(@"%@,%zd",message,code);
         if (code != 0) {
             [_hud hideAnimated:YES];
         }else{
-            [self loadRoomList];
         }
     }];
+    
+    [self loadRoomList];
 }
 
 - (DYGHomeHeaderView *)header{
@@ -277,6 +265,7 @@
 
 #pragma mark NewPagedFlowView Delegate
 - (void)didSelectCell:(UIView *)subView withSubViewIndex:(NSInteger)subIndex {
+    
     FXGameWaitController * vc = [[FXGameWaitController alloc]init];
     vc.model = self.roomsArray[subIndex];
     [self.navigationController pushViewController:vc animated:YES];

@@ -51,6 +51,7 @@
 
 @property (nonatomic,strong) NSMutableArray *dataArray;//抓中娃娃记录数据数组
 @property (nonatomic,strong) NSTimer *timer;
+@property (nonatomic,assign) dispatch_source_t timer0;
 
 @end
 
@@ -371,6 +372,10 @@
     
     [self.timer invalidate];
     self.timer = nil;
+    if (_timer0) {
+        dispatch_source_cancel(_timer0);
+        _timer0 = nil;
+    }
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kQuitEnter"]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kQuitEnter"];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -537,27 +542,24 @@
 }
 
 - (void)countDownAction{
-
     num = 6;
     // 获取全局队列
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     // 创建定时器
-    dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    
+    __block dispatch_source_t timer0 = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    _timer0 = timer0;
     dispatch_time_t start = dispatch_walltime(NULL, 0);
     
     // 重复间隔
     uint64_t interval = (uint64_t)(1.0 * NSEC_PER_SEC);
     
     // 设置定时器
-    dispatch_source_set_timer(_timer, start, interval, 0);
+    dispatch_source_set_timer(timer0, start, interval, 0);
     
     // 设置需要执行的事件
-    dispatch_source_set_event_handler(_timer, ^{
+    dispatch_source_set_event_handler(timer0, ^{
         
         //在这里执行事件
-        static NSInteger num = 6;
-        
         NSLog(@"%ld", (long)num);
         num--;
         
@@ -570,14 +572,13 @@
                 [self.resultPopView removeFromSuperview];
             });
             NSLog(@"end");
-            
             // 关闭定时器
-            dispatch_source_cancel(_timer);
-            //            _timer = NULL;
+            dispatch_source_cancel(timer0);
+            timer0 = nil;
         }
     });
     // 开启定时器
-    dispatch_resume(_timer);
+    dispatch_resume(timer0);
 }
 
 #pragma mark 玩游戏成功后的接口
@@ -603,12 +604,16 @@
 #pragma mark FXGameResultViewDelegate -- 领取操作和再次游戏操作
 - (void)receiveWawaAction{
     NSLog(@"领取操作");
+    dispatch_source_cancel(_timer0);
+    _timer0 = nil;
     FXSpoilsController *spoilsVC = [[FXSpoilsController alloc] init];
     [self.navigationController pushViewController:spoilsVC animated:YES];
 }
 
 - (void)gameAgainAction{
     NSLog(@"再次游戏");
+    dispatch_source_cancel(_timer0);
+    _timer0 = nil;
     [self.timer invalidate];
     self.timer = nil;
     [self.resultPopView removeFromSuperview];

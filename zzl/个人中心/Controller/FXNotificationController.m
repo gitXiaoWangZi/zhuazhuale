@@ -34,6 +34,7 @@
     if (!cell) {
         cell = [[FXNotificationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseId];
     }
+    
     return cell;
 }
 
