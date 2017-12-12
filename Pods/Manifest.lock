@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
+  - FCFileManager (1.0.20)
   - JCore (1.1.3)
   - JPush (3.0.5):
     - JCore (~> 1.1.1)
@@ -30,6 +31,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - FCFileManager (~> 1.0.17)
   - JPush
   - Masonry
   - MBProgressHUD
@@ -42,6 +44,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  FCFileManager: e0f73316e6aa2eb04d2ff4caa75fe7df1ae44270
   JCore: dff3c50e9a7522a508cd9096ca79165968e1aed3
   JPush: dd0b776998aa705a6242b947bf72e5a640387cfe
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
@@ -53,6 +56,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK: cbd332148eb792d444ed4eec94f421d98f2046ee
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 840368b6af7e3960691c95184a7733607b83f3a2
+PODFILE CHECKSUM: 192bee0d7f7236c8666ad9a2b704248d9ecc9f91
 
 COCOAPODS: 1.2.1

@@ -38,7 +38,6 @@
         } else {
             [[NSNotificationCenter defaultCenter] postNotificationName:kSDKNotifyKey object:nil];
         }
-        
     }];
     
     /*******向极光推送注册*********/

@@ -12,6 +12,10 @@
 #import "FXAboutUsController.h"
 #import "FXLoginHomeController.h"
 #import "FXNavigationController.h"
+#import <FCFileManager/FCFileManager.h>
+
+
+#define kSYAccompanyFolderPath [FCFileManager pathForDocumentsDirectoryWithPath:@"SYAccompany"]
 @interface FXSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong)UITableView * tableView;
@@ -63,6 +67,9 @@
         cell.textLabel.text = self.titleArr[indexPath.row];
         cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
         cell.textLabel.textColor =DYGColorFromHex(0x4c4c4c);
+        if (indexPath.row == 0) {
+            cell.detailTextLabel.text = [self getCacheSize];
+        }
         return cell;
 //        resueId= @"switchCell";
 //        FXSwitchCell * cell = [[FXSwitchCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
@@ -101,7 +108,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0&&indexPath.row==0) {
-        [self cleanCaches];
+        [self clearCache];
     }
     if (indexPath.section==0&&indexPath.row==1) {
         FXAboutUsController * vc = [FXAboutUsController new];
@@ -125,7 +132,6 @@
         [alterC addAction:cancelAction];
         [alterC addAction:okAction];
         [self presentViewController:alterC animated:YES completion:nil];
-        
     }
 }
 
@@ -141,43 +147,44 @@
     return _tableView;
 }
 
+- (NSString *)getCacheSize {
+    NSUInteger cacheSize = ([[SDImageCache sharedImageCache] getSize] + [[FCFileManager sizeOfDirectoryAtPath:[FCFileManager pathForDocumentsDirectoryWithPath:@"SYAccompany"]] integerValue]) >> 10;
+    NSString *size = @"";
+    if (cacheSize<1024) {
+        size = [NSString stringWithFormat:@"%dK", (int)cacheSize];
+    }
+    else if (cacheSize < 1024*1024) {
+        size = [NSString stringWithFormat:@"%0.1fM", cacheSize/1024.0f];
+    }
+    else {
+        size = [NSString stringWithFormat:@"%0.1fG", cacheSize/(1024*1024.0f)];
+    }
+    return size;
+}
+
+
 #pragma mark - 清除缓存
-- (void)cleanCaches
+- (void)clearCache
 {
-    NSString *cachPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSArray *files = [[NSFileManager defaultManager] subpathsAtPath:cachPath];
-    for (NSString *p in files) {
-        NSError *error;
-        NSString *path = [cachPath stringByAppendingPathComponent:p];
-//        float fileSize = [self sizeOfFolderAtPath:cachPath];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-            [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-        }
-        [MBProgressHUD showSuccess:@"清除成功" toView:self.tableView];
-    }
+    UIAlertController *actionSheetVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *action0 = [UIAlertAction actionWithTitle:@"确定清除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        SDImageCache *imageCache = [SDWebImageManager sharedManager].imageCache;
+        [imageCache clearMemory];
+        [imageCache clearDiskOnCompletion:^{
+            [MBProgressHUD showMessage:@"清理完毕" toView:self.tableView];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            [cell.detailTextLabel setText:@"0K"];
+        }];
+        
+        [FCFileManager removeItemsInDirectoryAtPath:kSYAccompanyFolderPath];
+    }];
+    
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [actionSheetVC addAction:action0];
+    [actionSheetVC addAction:action1];
+    [self presentViewController:actionSheetVC animated:YES completion:nil];
+
 }
-
-- (float)sizeOfFolderAtPath:(NSString*)folderPath{
-    NSFileManager* manager = [NSFileManager defaultManager];
-    if (![manager fileExistsAtPath:folderPath]) return 0;
-    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:folderPath] objectEnumerator];
-    NSString* fileName;
-    long long folderSize = 0;
-    while ((fileName = [childFilesEnumerator nextObject]) != nil){
-        NSString* fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
-        folderSize += [self sizeOfFileAtPath:fileAbsolutePath];
-    }
-    return folderSize/(1024.0*1024.0);
-}
-
-
-- (long long)sizeOfFileAtPath:(NSString *)filePath
-{
-    NSFileManager *manager = [NSFileManager defaultManager];
-    if ([manager fileExistsAtPath:filePath]) {
-        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
-    }
-    return 0;
-}
-
 @end
