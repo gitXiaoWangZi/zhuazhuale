@@ -56,7 +56,8 @@
 
 -(NSArray *)payCell{
     if (!_payCell) {
-        _payCell = @[@{@"img":@"wechat",@"payType":@"微信"}];
+        _payCell = @[@{@"img":@"wechat",@"payType":@"微信"},
+                     @{@"img":@"alipay",@"payType":@"支付宝"}];
     }
     return _payCell;
 }
@@ -71,7 +72,7 @@
             return 1;
             break;
         case 1:
-            return 1;
+            return 2;
             break;
         default:
             return 1;
@@ -93,8 +94,12 @@
         cell.icon.image =[UIImage imageNamed:str];
         cell.payType.text = self.payCell[indexPath.row][@"payType"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //临时只有这一个支付方式，不能修改
-        cell.seletBtn.selected = YES;
+        
+        if (indexPath.row == 0) {
+            cell.seletBtn.selected = YES;
+            self.tempCell = cell;
+        }
+        
         return cell;
     }
 //    else{
@@ -162,26 +167,29 @@
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if (indexPath.section==1) {
-//        FXRechargeCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-//        self.isClick = 1;
-//        if (self.isClick==1) {
-//            if (self.tempCell==cell) {
-//            }else{
-//                cell.seletBtn.selected = !cell.seletBtn.selected;
-//                self.tempCell.seletBtn.selected = !self.tempCell.seletBtn.selected;
-//                self.tempCell = cell;
-//            }
-//        }else{
-//            cell.seletBtn.selected = !cell.seletBtn.selected;
-//            self.tempCell = cell;
-//
-//        }
-//    }
+    if (indexPath.section==1) {
+        FXRechargeCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+        self.isClick = 1;
+        if (self.isClick==1) {
+            if (self.tempCell==cell) {
+            }else{
+                cell.seletBtn.selected = NO;
+                cell.seletBtn.selected = !cell.seletBtn.selected;
+                self.tempCell.seletBtn.selected = !self.tempCell.seletBtn.selected;
+                self.tempCell = cell;
+            }
+        }else{
+            cell.seletBtn.selected = !cell.seletBtn.selected;
+            self.tempCell = cell;
+
+        }
+    }
 }
 
 #pragma mark FXRechargeCellDelegate 支付
 - (void)payActionWithMoney:(NSString *)num{//钻石数
+    
+    FXRechargeCell *cell = (FXRechargeCell *)self.tempCell;
     NSLog(@"%@",num);
     NSString *path = @"pay";
     int money = [num intValue]/100;
@@ -198,10 +206,19 @@
             req.sign = dic[@"data"][@"sign"];
             
             _indent = dic[@"data"][@"indent"];
-            //调起微信支付
-            if ([WXApi sendReq:req]) {
-                NSLog(@"调起成功");
+            if ([cell.payType.text isEqualToString:@"微信"]) {
+                //调起微信支付
+                if ([WXApi sendReq:req]) {
+                    NSLog(@"调起成功");
+                }
+            }else{
+                //调起支付宝支付
+//                if ([WXApi sendReq:req]) {
+                    NSLog(@"调起支付宝");
+//                }
             }
+            
+            
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -220,6 +237,7 @@
                 if ([self.firstpunch integerValue] == 1) {//首冲
                     [self loadRechargeSuccessData];
                 }
+                [MobClick event:@"wecat_pay"];
                 [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
             }else if ([dic[@"code"] integerValue] == 502){

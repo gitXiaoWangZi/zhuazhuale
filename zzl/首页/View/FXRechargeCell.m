@@ -120,7 +120,6 @@ static NSString * reuserId = @"priceCell";
         _seletBtn = [UIButton new];
         [_seletBtn setBackgroundImage:[UIImage imageNamed:@"select_no"] forState:UIControlStateNormal];
         [_seletBtn setBackgroundImage:[UIImage imageNamed:@"select"] forState:UIControlStateSelected];
-        _seletBtn.userInteractionEnabled = NO;
     }
     return _seletBtn;
 }
@@ -151,13 +150,13 @@ static NSString * reuserId = @"priceCell";
 }
 
 //-(void)setIsSelect:(NSInteger)isSelect{
-//    _isSelect = isSelect;
+//    isSelect = isSelect;
 //    self.seletBtn.selected = !self.seletBtn.selected;
-////    if (_isSelect==1) {
-////        self.seletBtn.selected = YES;
-////    }else{
-////        self.seletBtn.selected = NO;
-////    }
+//    if (_isSelect==1) {
+//        self.seletBtn.selected = YES;
+//    }else{
+//        self.seletBtn.selected = NO;
+//    }
 //}
 
 #pragma mark lazyload

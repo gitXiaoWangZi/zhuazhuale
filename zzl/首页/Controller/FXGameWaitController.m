@@ -296,6 +296,7 @@
         self.musicBtnStatue = 1;
     }
     if (indexPath.row==0) {
+        [MobClick event:@"goods_details"];
         self.popView = [[DYGPopDetailView alloc]initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight)];
         self.popView.model = self.model;
         self.popView.delegate = self;
@@ -305,6 +306,7 @@
         }];
     }
     if (indexPath.row > 1) {
+        [MobClick event:@"video"];
         FXGameWebController *webViewC = [[FXGameWebController alloc] init];
         webViewC.model = self.dataArray[indexPath.row - 2];
         [self.navigationController pushViewController:webViewC animated:YES];
@@ -355,6 +357,7 @@
     } else {
         self.musicBtnStatue = 1;
     }
+    [MobClick event:@"game_pay"];
     FXRechargeViewController * vc = [[FXRechargeViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }

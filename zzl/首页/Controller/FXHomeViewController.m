@@ -265,7 +265,7 @@
 
 #pragma mark NewPagedFlowView Delegate
 - (void)didSelectCell:(UIView *)subView withSubViewIndex:(NSInteger)subIndex {
-    
+    [MobClick event:@"home_page_click"];
     FXGameWaitController * vc = [[FXGameWaitController alloc]init];
     vc.model = self.roomsArray[subIndex];
     [self.navigationController pushViewController:vc animated:YES];
@@ -310,7 +310,7 @@
 
 #pragma self Delegate
 -(void)loadWebViewWithImgIndex:(NSInteger)index{
-    
+    [MobClick event:@"main_banner_clieck"];
     FXHomeBannerItem *item = self.bannerArray[index];
     FXGameWebController *webVC = [[FXGameWebController alloc] init];
     webVC.url = item.href;
@@ -319,6 +319,7 @@
 }
 
 -(void)moreBtnDidClick{
+    [MobClick event:@"more_btn_clieck"];
     FXZZLViewController * vc = [[FXZZLViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
     

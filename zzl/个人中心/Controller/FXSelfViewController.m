@@ -118,6 +118,7 @@
     switch (indexPath.section) {
         case 0:
         {
+            [MobClick event:@"click_pay"];
             FXRechargeViewController *rechargeVC = [[FXRechargeViewController alloc] init];
             rechargeVC.firstpunch = self.firstpunch;
             rechargeVC.item = self.item;

@@ -11,7 +11,6 @@
 #import "FXLoginHomeController.h"
 #import "WelcomeViewController.h"
 #import "FXNavigationController.h"
-#import "UMMobClick/MobClick.h"
 #import <JPUSHService.h>
 // iOS10注册APNs所需头文件
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
