@@ -87,6 +87,8 @@ dispatch_async(dispatch_get_main_queue(), block);\
 #import "DYGEnCode.h"
 /*****娃娃机框架相关******/
 #import <WawaSDK/WawaSDK.h>
+/*****支付宝******/
+#import <AlipaySDK/AlipaySDK.h>
 /*****通知******/
 #define kSDKNotifyKey @"SDKNotifyKey"
 

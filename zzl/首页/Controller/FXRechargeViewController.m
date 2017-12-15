@@ -52,6 +52,23 @@
         // 监听一个通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderPayResult:) name:@"ORDER_PAY_NOTIFICATION" object:nil];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderzfbPayResult:) name:@"ORDER_ZFBPAY_NOTIFICATION" object:nil];
+    
+}
+
+//支付宝回调
+- (void)getOrderzfbPayResult:(NSNotification *)noti{
+    NSDictionary *dic= noti.object;
+    if ([dic[@"resultStatus"] integerValue] == 9000) {
+        if ([self.firstpunch integerValue] == 1) {//首冲
+            [self loadRechargeSuccessData];
+        }
+        [MobClick event:@"alipay_click"];
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    }else{
+        [MBProgressHUD showError:@"支付失败" toView:self.view];
+    }
 }
 
 -(NSArray *)payCell{
@@ -191,38 +208,46 @@
     
     FXRechargeCell *cell = (FXRechargeCell *)self.tempCell;
     NSLog(@"%@",num);
-    NSString *path = @"pay";
-    int money = [num intValue]/100;
-    NSDictionary *params = @{@"uid":KUID,@"money":@(money)};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-        NSDictionary *dic = (NSDictionary *)json;
-        if ([dic[@"code"] integerValue] == 200) {
-            PayReq *req = [[PayReq alloc] init];
-            req.partnerId = dic[@"data"][@"partnerid"];
-            req.prepayId = dic[@"data"][@"prepayid"];
-            req.package = dic[@"data"][@"package"];
-            req.nonceStr = dic[@"data"][@"noncestr"];
-            req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
-            req.sign = dic[@"data"][@"sign"];
-            
-            _indent = dic[@"data"][@"indent"];
-            if ([cell.payType.text isEqualToString:@"微信"]) {
-                //调起微信支付
+    if ([cell.payType.text isEqualToString:@"微信"]) {
+        NSString *path = @"pay";
+        int money = [num intValue]/100;
+        NSDictionary *params = @{@"uid":KUID,@"money":@(money)};
+        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+            NSDictionary *dic = (NSDictionary *)json;
+            if ([dic[@"code"] integerValue] == 200) {
+                PayReq *req = [[PayReq alloc] init];
+                req.partnerId = dic[@"data"][@"partnerid"];
+                req.prepayId = dic[@"data"][@"prepayid"];
+                req.package = dic[@"data"][@"package"];
+                req.nonceStr = dic[@"data"][@"noncestr"];
+                req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
+                req.sign = dic[@"data"][@"sign"];
+                
+                _indent = dic[@"data"][@"indent"];
                 if ([WXApi sendReq:req]) {
                     NSLog(@"调起成功");
                 }
-            }else{
-                //调起支付宝支付
-//                if ([WXApi sendReq:req]) {
-                    NSLog(@"调起支付宝");
-//                }
             }
-            
-            
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }else{
+        NSString *path = @"aliPay";
+        int money = [num intValue]/100;
+        NSDictionary *params = @{@"uid":KUID,@"money":@(money)};
+        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+            NSDictionary *dic = (NSDictionary *)json;
+            if ([dic[@"code"] integerValue] == 200) {
+                [[AlipaySDK defaultService] payOrder:dic[@"data"] fromScheme:@"zzlwwzfb" callback:^(NSDictionary *resultDic) {
+                        
+                }];
+                
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }
+    
 }
 
 #pragma mark - 收到支付成功的消息后作相应的处理
@@ -248,7 +273,7 @@
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];
-    } else {
+    }else {
         NSLog(@"支付失败");
     }
 }

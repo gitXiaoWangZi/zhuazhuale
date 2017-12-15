@@ -55,14 +55,24 @@
         [self.scrollView addSubview:imageView];
         
         if (i == kPage - 1) {
-            UIButton *startBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [startBtn setBackgroundImage:[UIImage imageNamed:@"welcome_btn"] forState:UIControlStateNormal];
-            startBtn.frame = CGRectMake(0, kScreenHeight - 100, kScreenWidth - 40, 40);
-            startBtn.centerX = self.view.centerX;
-            [startBtn addTarget:self action:@selector(startBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [imageView addSubview:startBtn];
+            
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startImgClicked:)];
+            [imageView addGestureRecognizer:tap];
+            
+//            UIButton *startBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//            [startBtn setBackgroundImage:[UIImage imageNamed:@"welcome_btn"] forState:UIControlStateNormal];
+//            startBtn.frame = CGRectMake(0, kScreenHeight - 100, kScreenWidth - 40, 40);
+//            startBtn.centerX = self.view.centerX;
+//            [startBtn addTarget:self action:@selector(startBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+//            [imageView addSubview:startBtn];
         }
     }
+}
+
+- (void)startImgClicked:(UITapGestureRecognizer *)tap{
+    FXLoginHomeController *logInVC = [[FXLoginHomeController alloc]init];
+    FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:logInVC];
+    self.view.window.rootViewController = nav;
 }
 
 - (void)startBtnClicked:(UIButton *)sender
