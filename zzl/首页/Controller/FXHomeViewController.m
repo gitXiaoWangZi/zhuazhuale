@@ -80,6 +80,7 @@
     [LSJHasNetwork lsj_hasNetwork:^(bool has) {
         if (has) {//有网
             [self loadBannerData];
+            
             //请求签到天数数据
             [self loadSignDayNumData];
         }else{//没网
@@ -265,10 +266,14 @@
 
 #pragma mark NewPagedFlowView Delegate
 - (void)didSelectCell:(UIView *)subView withSubViewIndex:(NSInteger)subIndex {
-    [MobClick event:@"home_page_click"];
-    FXGameWaitController * vc = [[FXGameWaitController alloc]init];
-    vc.model = self.roomsArray[subIndex];
-    [self.navigationController pushViewController:vc animated:YES];
+    if (![[VisiteTools shareInstance] isVisite]) {
+        [MobClick event:@"home_page_click"];
+        FXGameWaitController * vc = [[FXGameWaitController alloc]init];
+        vc.model = self.roomsArray[subIndex];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
 }
 
 #pragma mark NewPagedFlowView Datasource
@@ -310,19 +315,27 @@
 
 #pragma self Delegate
 -(void)loadWebViewWithImgIndex:(NSInteger)index{
-    [MobClick event:@"main_banner_clieck"];
-    FXHomeBannerItem *item = self.bannerArray[index];
-    FXGameWebController *webVC = [[FXGameWebController alloc] init];
-    webVC.url = item.href;
-    webVC.titleName = item.title;
-    [self.navigationController pushViewController:webVC animated:YES];
+    if (![[VisiteTools shareInstance] isVisite]) {
+        [MobClick event:@"main_banner_clieck"];
+        FXHomeBannerItem *item = self.bannerArray[index];
+        FXGameWebController *webVC = [[FXGameWebController alloc] init];
+        webVC.url = item.href;
+        webVC.titleName = item.title;
+        [self.navigationController pushViewController:webVC animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
+    
 }
 
 -(void)moreBtnDidClick{
-    [MobClick event:@"more_btn_clieck"];
-    FXZZLViewController * vc = [[FXZZLViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
-    
+    if (![[VisiteTools shareInstance] isVisite]) {
+        [MobClick event:@"more_btn_clieck"];
+        FXZZLViewController * vc = [[FXZZLViewController alloc]init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
 }
 
 #pragma mark FXHomePopViewDelegate 第一注册App进入首页送钻石view
@@ -361,7 +374,10 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             if ([dic[@"today"] integerValue] == 0) {//未签到
-                [self showLoginSignViewWithDic:dic];
+                
+                if (![[VisiteTools shareInstance] isVisite]) {
+                    [self showLoginSignViewWithDic:dic];
+                }
             }else{//已签到
                 NSLog(@"已签到");
             }

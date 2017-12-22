@@ -61,6 +61,7 @@ dispatch_async(dispatch_get_main_queue(), block);\
 #import "UIColor+DYGAdd.h"
 #import "MBProgressHUD+RY.h"
 #import "LSJHasNetwork.h"//网络监听
+#import "VisiteTools.h"
 /*****第三方框架相关*********/
 #import <AFNetworking/AFNetworking.h>
 #import <Masonry/Masonry.h>

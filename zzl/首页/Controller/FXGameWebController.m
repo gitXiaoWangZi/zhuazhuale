@@ -174,6 +174,9 @@
         [self.progressView removeFromSuperview];
     }];
 }
+
+
+
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [UIView animateWithDuration:0.2 animations:^{

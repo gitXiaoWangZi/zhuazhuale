@@ -21,6 +21,7 @@
 @property(nonatomic,strong)UIImageView * gifImg;
 @property (nonatomic,strong) UIButton * weChat;
 @property (nonatomic,strong) UIButton * phone;
+@property (nonatomic,strong) UIButton * visiteBtn;
 @property (nonatomic,strong) UILabel * textLabel;
 @property (nonatomic,strong) UILabel * xyLabel;
 @property (nonatomic,strong) UIButton *back;
@@ -36,6 +37,20 @@
     self.view.backgroundColor =[UIColor whiteColor];
     
     [self creatUI];
+    
+    
+    [DYGHttpTool postWithURL:@"appeal" params:nil sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            if ([dic[@"data"] integerValue] == 0) {
+                self.visiteBtn.hidden = YES;
+            }else{
+                self.visiteBtn.hidden = NO;
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
 }
 -(void)creatUI{
     
@@ -63,8 +78,14 @@
     [self.view addSubview:self.phone];
     [self.phone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.weChat);
-        make.top.equalTo(self.weChat.mas_bottom).offset(Py(16));
+        make.top.equalTo(self.weChat.mas_bottom).offset(Py(5));
         make.size.equalTo(self.weChat);
+    }];
+    [self.view addSubview:self.visiteBtn];
+    [self.visiteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.phone);
+        make.top.equalTo(self.phone.mas_bottom).offset(Py(5));
+        make.size.equalTo(self.phone);
     }];
     [self.view addSubview:self.textLabel];
     [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -203,7 +224,13 @@
     }
     return _phone;
 }
-
+-(UIButton *)visiteBtn{
+    if (!_visiteBtn) {
+        _visiteBtn = [UIButton buttonWithTitle:@"游客登录" titleColor:DYGColorFromHex(0x999999) font:14];
+        [_visiteBtn addTarget:self action:@selector(visiteBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _visiteBtn;
+}
 -(UILabel *)textLabel{
     if (!_textLabel) {
         _textLabel = [UILabel labelWithFont:13 WithTextColor:DYGColorFromHex(0x999999)];
@@ -228,5 +255,26 @@
     return _back;
 }
 
-
+- (void)visiteBtnClick{
+    NSString *path = @"vLoginUser";
+    NSDictionary *params = @{@"phone":[DYGEnCode EncodeWithString:@"15223439862"],@"vercode":@"123456",@"appsour":@"appStore"};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        [_hud hideAnimated:YES];
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            NSDictionary *userDic = dic[@"data"][0];
+            NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
+            [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
+            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+            window.rootViewController = [[FXTabBarController alloc] init];
+            [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
+            
+        }else{
+            [MBProgressHUD showError:dic[@"msg"] toView:self.view];
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
 @end

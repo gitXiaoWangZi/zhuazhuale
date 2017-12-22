@@ -33,7 +33,12 @@
     
     [LSJHasNetwork lsj_hasNetwork:^(bool hasNet) {
         if (hasNet) {
-            [self jumpRooms];
+            
+            if (![[VisiteTools shareInstance] isVisite]) {
+                [self jumpRooms];
+            }else{
+                [[VisiteTools shareInstance] outLogin];
+            }
         }else{
             [MBProgressHUD showMessage:@"暂无网络，请连接网络后再试" toView:self.view];
         }
@@ -95,9 +100,27 @@
     if ([viewController isKindOfClass:[FXNavigationController class]]) {
         FXNavigationController *nav = (FXNavigationController *)viewController;
         if ([nav.viewControllers[0] isKindOfClass:[FXSelfViewController class]]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:@"isSlef"];
+            if (![[VisiteTools shareInstance] isVisite]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:@"isSlef"];
+            }else{
+                [[VisiteTools shareInstance] outLogin];
+            }
         }
     }
 }
 
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+    if ([viewController isKindOfClass:[FXNavigationController class]]) {
+        FXNavigationController *nav = (FXNavigationController *)viewController;
+        if ([nav.viewControllers[0] isKindOfClass:[FXSelfViewController class]]) {
+            if (![[VisiteTools shareInstance] isVisite]) {
+                return YES;
+            }else{
+                [[VisiteTools shareInstance] outLogin];
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
 @end
