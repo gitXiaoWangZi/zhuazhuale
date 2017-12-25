@@ -31,11 +31,11 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     /*******娃娃机SDK注册*********/
-    [[WawaSDK WawaSDKInstance] registerApp:AppID appKey:AppKey complete:^(BOOL success, int code, NSString * _Nullable message) {
-        if (success == NO) {
-            NSLog(@"游戏服务正在准备中,请稍后尝试");
-        } else {
+    [[WawaSDK WawaSDKInstance] registerApp:AppID appKey:AppKey complete:^(int code, NSString * _Nullable message) {
+        if (code == WwCodeSuccess) {
             [[NSNotificationCenter defaultCenter] postNotificationName:kSDKNotifyKey object:nil];
+        } else {
+            NSLog(@"游戏服务正在准备中,请稍后尝试");
         }
     }];
     

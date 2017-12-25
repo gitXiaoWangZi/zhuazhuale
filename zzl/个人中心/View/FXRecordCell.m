@@ -102,7 +102,7 @@
     return _money;
 }
 
-- (void)setModel:(WwGameRecordModel *)model{
+- (void)setModel:(WwGameHistory *)model{
     _model = model;
     [self.photo sd_setImageWithURL:[NSURL URLWithString:model.wawa.pic] placeholderImage:nil];
     self.name.text = model.wawa.name;

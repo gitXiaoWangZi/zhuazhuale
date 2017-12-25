@@ -10,5 +10,5 @@
 @class WwGameRecordModel;
 @interface FXRecordCell : UITableViewCell
 
-@property (nonatomic,strong) WwGameRecordModel *model;
+@property (nonatomic,strong) WwGameHistory *model;
 @end

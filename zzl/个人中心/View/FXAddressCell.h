@@ -20,5 +20,5 @@
 @property (nonatomic,weak) id<FXAddressCellDelegate> delegate;
 
 @property (nonatomic,strong) NSIndexPath *indexPath;
-@property (nonatomic,strong) WwAddressModel *model;
+@property (nonatomic,strong) WwAddress *model;
 @end

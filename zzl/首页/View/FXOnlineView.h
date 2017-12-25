@@ -37,7 +37,7 @@
 @property (nonatomic,strong) UILabel *gameState;
 @property (nonatomic,strong) UIView *playView;
 
-@property (nonatomic,strong) WwUserModel *model;
+@property (nonatomic,strong) WwUser *model;
 /*
  *围观列表数组
  */

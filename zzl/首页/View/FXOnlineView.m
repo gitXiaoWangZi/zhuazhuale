@@ -189,7 +189,7 @@ static NSString * reuserId= @"roomCell";
     cell.cornerRadius = Px(12.5);
     cell.layer.masksToBounds = YES;
     cell.backgroundColor = DYGRandomColor;
-    WwUserModel *model = self.dataArray[indexPath.row];
+    WwUser *model = self.dataArray[indexPath.row];
     [cell.iconImgV sd_setImageWithURL:[NSURL URLWithString:model.portrait] placeholderImage:[UIImage imageNamed:@"user_default"]];
     return cell;
 }
@@ -452,22 +452,22 @@ static NSString * reuserId= @"roomCell";
     if (self.dataArray.count > 0) {
         [self.dataArray removeAllObjects];
     }
-    [[WwGameManager GameMgrInstance] requestAudienceListWithRoomID:roomID page:1 complete:^(BOOL success, NSInteger code, NSArray<WwUserModel *> *waInfo) {
-        if (!success) {
-            NSLog(@"获取围观列表失败");
-        }else{
-            for (WwUserModel *model in waInfo) {
+    [[WwRoomManager RoomMgrInstance] requestViewerWithRoomId:roomID page:1 withComplete:^(NSInteger code, NSString *message, NSArray<WwUser *> *userList) {
+        if (code == WwCodeSuccess) {
+            for (WwUser *model in userList) {
                 [self.dataArray addObject:model];
             }
             NSString *num = [NSString stringWithFormat:@"%zd人围观",self.dataArray.count];
             [_peopleNum setTitle:num forState:UIControlStateNormal];
             [_peopleNum xm_setImagePosition:XMImagePositionRight titleFont:[UIFont systemFontOfSize:10] spacing:10];
             [self.collectionView reloadData];
+        }else{
+            NSLog(@"获取围观列表失败");
         }
     }];
 }
 
-- (void)setModel:(WwUserModel *)model{
+- (void)setModel:(WwUser *)model{
     _model = model;
     if (model == nil) {
         self.nameL.text = @"虚位以待";

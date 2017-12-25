@@ -8,6 +8,7 @@
 
 #import "FXAboutUsController.h"
 #import "FXGameWebController.h"
+#import "FXHomeBannerItem.h"
 
 @interface FXAboutUsController ()
 
@@ -105,9 +106,11 @@
 }
 
 - (void)clikWeb:(UITapGestureRecognizer *)tap {
+    FXHomeBannerItem *item = [FXHomeBannerItem new];
+    item.title = @"用户协议";
+    item.href = @"http://openapi.wawa.zhuazhuale.xin/agreement";
     FXGameWebController *web = [[FXGameWebController alloc] init];
-    web.titleName = @"用户协议";
-    web.url = @"http://openapi.wawa.zhuazhuale.xin/agreement";
+    web.item = item;
     [self.navigationController pushViewController:web animated:YES];
 }
 @end

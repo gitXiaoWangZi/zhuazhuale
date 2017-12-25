@@ -151,12 +151,11 @@
     }
 }
 
-- (void)setModel:(WwRoomModel *)model{
+- (void)setModel:(WwRoom *)model{
     _model = model;
     NSInteger wawaID = model.wawa.ID;
-    
-    [[WwGameManager GameMgrInstance] requestWawaInfo:wawaID complete:^(BOOL success, NSInteger code, WwWaWaDetailInfo *waInfo) {
-        if (success) {
+    [[WwRoomManager RoomMgrInstance] requestWawaDetail:wawaID withComplete:^(NSInteger code, NSString *message, WwWaWaDetail *waInfo) {
+        if (code == WwCodeSuccess) {
             [self.picArr removeAllObjects];
             [self.dataArr addObject:waInfo.name];
             [self.dataArr addObject:waInfo.size];

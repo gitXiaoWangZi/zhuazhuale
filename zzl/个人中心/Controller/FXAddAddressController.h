@@ -12,5 +12,5 @@
 @interface FXAddAddressController : UIViewController
 
 @property (nonatomic,assign) BOOL isAdd;
-@property (nonatomic,strong) WwAddressModel *model;
+@property (nonatomic,strong) WwAddress *model;
 @end

@@ -39,7 +39,7 @@
         make.left.equalTo(self.view).offset(Px(16));
         make.top.equalTo(self.view).offset(Py(13));
         make.right.equalTo(self.view).offset(-Px(16));
-        make.height.equalTo(@(Py(280)));
+        make.height.equalTo(@(Py(200)));
     }];
     [self.view addSubview:self.imgCollecView];
     [self.imgCollecView mas_makeConstraints:^(MASConstraintMaker *make) {

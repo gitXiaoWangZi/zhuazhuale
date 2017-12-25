@@ -69,16 +69,17 @@
         return;
     }
     if (self.isAdd) {
-        [[WwUserInfoManager UserInfoMgrInstance] addUserAddress:^(WwAddressModel *address) {
-            NSLog(@"%@",address);
-            address.name = cell0.inputTF.text;
-            address.phone = cell1.inputTF.text;
-            address.province = adressArr[0];
-            address.city = adressArr[1];
-            address.district = adressArr[2];
-            address.address = self.addressView.text;
-            address.isDefault = cell3.open.on;
-        } withCompleteHandler:^(int code, NSString *message) {
+        
+        WwAddress *address = [[WwAddress alloc] init];
+        address.name = cell0.inputTF.text;
+        address.phone = cell1.inputTF.text;
+        address.province = adressArr[0];
+        address.city = adressArr[1];
+        address.district = adressArr[2];
+        address.address = self.addressView.text;
+        address.isDefault = cell3.open.on;
+        
+        [[WwUserInfoManager UserInfoMgrInstance] requestAddAddress:address complete:^(int code, NSString *message) {
             NSLog(@"%zd----%@",code,message);
             if (code == 0) {
                 [MBProgressHUD showSuccess:@"添加成功" toView:self.view];
@@ -91,18 +92,18 @@
             }
         }];
     }else{
-        [[WwUserInfoManager UserInfoMgrInstance] updateUserAddress:^(WwAddressModel *upAddress) {
-            upAddress.name = cell0.inputTF.text;
-            upAddress.phone = cell1.inputTF.text;
-            upAddress.province = adressArr[0];
-            upAddress.city = adressArr[1];
-            upAddress.district = adressArr[2];
-            upAddress.address = self.addressView.text;
-            upAddress.isDefault = cell3.open.on;
-            upAddress.aID = self.model.aID;
-        } withCompleteHandler:^(int code, NSString *message) {
-            NSLog(@"%zd----%@",code,message);
-            if (code == 0) {
+        
+        WwAddress *upAddress = [[WwAddress alloc] init];
+        upAddress.name = cell0.inputTF.text;
+        upAddress.phone = cell1.inputTF.text;
+        upAddress.province = adressArr[0];
+        upAddress.city = adressArr[1];
+        upAddress.district = adressArr[2];
+        upAddress.address = self.addressView.text;
+        upAddress.isDefault = cell3.open.on;
+        upAddress.ID = self.model.ID;
+        [[WwUserInfoManager UserInfoMgrInstance] requestUpdateAddress:upAddress complete:^(int code, NSString *message) {
+            if (code == WwCodeSuccess) {
                 [MBProgressHUD showSuccess:@"修改成功" toView:self.view];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshAddress" object:nil];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

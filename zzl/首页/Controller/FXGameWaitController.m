@@ -176,8 +176,8 @@
 
 #pragma mark ---请求最近抓中记录数据
 - (void)loadLatesRecordData{
-    [[WwGameManager GameMgrInstance] requestLatestRecordInRoom:self.model.ID atPage:1 complete:^(BOOL success, NSInteger code, NSArray<WwRoomRecordInfo *> *list) {
-        for (WwRoomRecordInfo *info in list) {
+    [[WwRoomManager RoomMgrInstance] requestCatchHistory:self.model.ID atPage:1 withComplete:^(NSInteger code, NSString *message, NSArray<WwRoomCatchRecordItem *> *list) {
+        for (WwRoomCatchRecordItem *info in list) {
             FXLatesRecordModel *model = [[FXLatesRecordModel alloc] init];
             model.userIcon = info.user.portrait;
             model.userName = info.user.nickname;
@@ -370,7 +370,7 @@
 
 -(void)popToView{
     //销毁房间, 离开房间时务必调用, 否则会影响之后的逻辑
-    [[WwGameManager GameMgrInstance] destoryRoom];
+    [[WwGameManager GameMgrInstance] exitRoom];
     [self.player stop];
     
     [self.timer invalidate];
@@ -412,21 +412,20 @@
     self.playOperationBar.hidden = YES;
     
     @weakify(self);
-    [[WwGameManager GameMgrInstance] requestOnBoard:_model.ID complete:^(BOOL success, NSInteger code, NSString *msg, NSString *orderID) {
-        
+    [[WwGameManager GameMgrInstance] requestStartGameWithComplete:^(NSInteger code, NSString *msg, NSString *orderID) {
         dispatch_async(dispatch_get_main_queue(), ^{
             @strongify(self);
-            self.playOperationBar.hidden = !success;
-            if (success) {
+            
+            if (code == WwCodeSuccess) {
+                self.playOperationBar.hidden = NO;
                 self.countDownV.hidden = NO;
                 [self.countDownV updateProgressTimer:30];
                 
                 //游戏开始 页面不可以滑动并置顶
                 self.tableView.scrollEnabled = NO;
                 [self.tableView setContentOffset:CGPointMake(0, -20)];
-                
-                
-            } else {
+            }else{
+                self.playOperationBar.hidden = YES;
                 UIAlertController * alertVC = [UIAlertController alertControllerWithTitle:@"上机结果"
                                                                                   message:msg
                                                                            preferredStyle:UIAlertControllerStyleAlert];
@@ -495,35 +494,31 @@
     if (direction == PlayDirection_Confirm) {
         [self clawAction];
     } else {
-        [[WwGameManager GameMgrInstance] requestOperation:direction
-                                            operationType:type
-                                                 complete:^(BOOL success, NSInteger code, NSString *msg) {
-                                                     NSString * result = [NSString stringWithFormat:@"%@ %@",string,success ? @"成功" : @"失败"];
-                                                     NSLog(@"WwSDKOperation:%@",result);
-                                                     
-                                                 }];
+        [[WwGameManager GameMgrInstance] requestOperation:direction operationType:type withComplete:^(NSInteger code, NSString *msg) {
+            NSString * result = [NSString stringWithFormat:@"%@ %@",string,code == WwCodeSuccess ? @"成功" : @"失败"];
+            NSLog(@"WwSDKOperation:%@",result);
+        }];
     }
 }
 
 - (void)clawAction {
     self.countDownV.status = ZYCountDownStatusRequestResultIng;
-    [[WwGameManager GameMgrInstance] requestClawWithForceRelease:NO
-                                                        complete:^(BOOL requestSuccess, NSInteger code, WwGameResultModel *resultM) {
+    [[WwGameManager GameMgrInstance] requestClawWithForceRelease:NO withComplete:^(NSInteger code, NSString *msg, WwGameResult *resultM) {
+        //游戏结束 页面可以滑动
+        self.tableView.scrollEnabled = YES;
+        
+        if (resultM.state == 2) {
+            [self showResultPopViewWithResult:YES];
+        } else {
+            [self showResultPopViewWithResult:NO];
+        }
+        safe_async_main((^{
+            self.countDownV.status = ZYCountDownStatusCountDown;
+            self.countDownV.hidden = YES;
+            self.playOperationBar.hidden = YES;
+        }));
+    }];
                                                             
-                                                            //游戏结束 页面可以滑动
-                                                            self.tableView.scrollEnabled = YES;
-                                                            
-                                                            if (resultM.state == 2) {
-                                                                [self showResultPopViewWithResult:YES];
-                                                            } else {
-                                                                [self showResultPopViewWithResult:NO];
-                                                            }
-                                                            safe_async_main((^{
-                                                                self.countDownV.status = ZYCountDownStatusCountDown;
-                                                                self.countDownV.hidden = YES;
-                                                                self.playOperationBar.hidden = YES;
-                                                            }));
-                                                        }];
 }
 
 - (void)showResultPopViewWithResult:(BOOL)isSuccess{
@@ -539,7 +534,7 @@
     self.resultPopView.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.4];
     self.resultPopView.delegate = self;
     self.resultPopView.isSuccess = isSuccess;
-    [[UIApplication sharedApplication].keyWindow addSubview:self.resultPopView];
+    [self.tableView addSubview:self.resultPopView];
     
     [self countDownAction];
 }
@@ -713,12 +708,12 @@
 
 #pragma mark---WwGameManagerDelegate实现一些回调方法
 /**< 房间观众列表变更回调, 每次均会回调当前请求到的全部的用户列表*/
-- (void)audienceListDidChanged:(NSArray <WwUserModel *>*)array{
+- (void)audienceListDidChanged:(NSArray <WwUser *>*)array{
     NSLog(@"全部的用户列表----%@",array);
     if (self.onlineView.dataArray.count > 0) {
         [self.onlineView.dataArray removeAllObjects];
     }
-    for (WwUserModel *model in array) {
+    for (WwUser *model in array) {
         [self.onlineView.dataArray addObject:model];
     }
     NSString *num = [NSString stringWithFormat:@"%zd人围观",array.count];
@@ -728,11 +723,11 @@
 }
 
 /**< 收到聊天回调*/
-- (void)reciveRemoteMsg:(WwChatModel *)chatM{
+- (void)reciveRemoteMsg:(WwChatMessage *)chatM{
     NSLog(@"收到聊天回调----%@",chatM);
     NSMutableArray *msgArray = [NSMutableArray array];
-    WwUserModel *model = chatM.user;
-    NSString *msg = [NSString stringWithFormat:@"%@:%@",model.nickname,chatM.msg];
+    WwUser *model = chatM.fromUser;
+    NSString *msg = [NSString stringWithFormat:@"%@:%@",model.nickname,chatM.content];
     if (![msg isEqualToString:@""] && msg != nil) {
         [msgArray addObject:msg];
         self.bulletManager.comments = [msgArray mutableCopy];
@@ -740,10 +735,10 @@
 }
 
 /**< 收到 房间状态更新*/
-- (void)reciveRoomUpdateData:(WwRoomLiveData *)liveData{
+- (void)reciveRoomUpdateData:(WwRoomDataMessage *)liveData{
     NSLog(@"收到 房间状态更新--%@",liveData);
     if (liveData.state >= 3 && liveData.state <= 6) {
-        WwUserModel *model = liveData.user;
+        WwUser *model = liveData.user;
         self.onlineView.model = model;
         self.onlineView.gameState.text = @"玩家游戏中";
         self.onlineView.playView.userInteractionEnabled = NO;
@@ -760,7 +755,7 @@
 }
 
 /**< 房间内收到 抓娃娃结果通知*/
-- (void)reciveClawResult:(WwClawResult *)result{
+- (void)reciveClawResult:(WwClawResultMessage *)result{
     NSLog(@"房间内收到 抓娃娃结果通知--%@",result);
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //
@@ -770,7 +765,7 @@
 }
 
 /**< 收到全平台 抓娃娃结果通知*/
-- (void)reciveGlobleMessage:(WwGlobalNotify *)notify{
+- (void)reciveGlobleMessage:(WwGlobalMessage *)notify{
     NSLog(@"收到全平台 抓娃娃结果通知--%@",notify);
 }
 

@@ -22,7 +22,7 @@
 
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
-@interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomListManagerDelegate>
+@interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomManagerDelegate>
 
 /**
  *  轮播图
@@ -80,7 +80,6 @@
     [LSJHasNetwork lsj_hasNetwork:^(bool has) {
         if (has) {//有网
             [self loadBannerData];
-            
             //请求签到天数数据
             [self loadSignDayNumData];
         }else{//没网
@@ -131,21 +130,20 @@
     
     
     //必须等到鉴权成功之后调用
-    [[WawaSDK WawaSDKInstance].userInfoMgr loginUserWithCompleteHandler:^(int code, NSString *message) {
+    [[WawaSDK WawaSDKInstance].userInfoMgr loginWithComplete:^(int code, NSString *message) {
         NSLog(@"%@,%zd",message,code);
         if (code != 0) {
             [_hud hideAnimated:YES];
         }else{
         }
     }];
-    
     [self loadRoomList];
 }
 
 - (DYGHomeHeaderView *)header{
     if (!_header) {
         _header = [[DYGHomeHeaderView alloc]init];
-        _header.frame = CGRectMake(0, -20, kScreenWidth,Py(200));
+        _header.frame = CGRectMake(0, 0, kScreenWidth,Py(200));
         _header.delegate =self;
     }
     return _header;
@@ -153,9 +151,9 @@
 
 #pragma mark ---请求最近抓中记录数据
 - (void)loadLatesRecordDataWithRoomID:(NSInteger)ID{
-    [[WwGameManager GameMgrInstance] requestLatestRecordInRoom:ID atPage:1 complete:^(BOOL success, NSInteger code, NSArray<WwRoomRecordInfo *> *list) {
+    [[WwRoomManager RoomMgrInstance] requestCatchHistory:ID atPage:1 withComplete:^(NSInteger code, NSString *message, NSArray<WwRoomCatchRecordItem *> *list) {
         NSMutableArray *tempArr = [NSMutableArray array];
-        for (WwRoomRecordInfo *info in list) {
+        for (WwRoomCatchRecordItem *info in list) {
             NSDictionary *tempDic = @{@"username":info.user.nickname};
             [tempArr addObject:tempDic];
         }
@@ -164,7 +162,7 @@
 }
 
 - (void)setupUI {
-    NewPagedFlowView *pageFlowView = [[NewPagedFlowView alloc] initWithFrame:CGRectMake(0, Py(184), kScreenWidth, Py(380))];
+    NewPagedFlowView *pageFlowView = [[NewPagedFlowView alloc] initWithFrame:CGRectMake(0, Py(204), kScreenWidth, Py(380))];
     pageFlowView.backgroundColor = [UIColor whiteColor];
     pageFlowView.delegate = self;
     pageFlowView.dataSource = self;
@@ -188,17 +186,17 @@
 }
 #pragma mark 加载数据
 -(void)loadRoomList {
-    [[WwRoomListManager RoomListMgrInstance] requestRoomListByIds:@[@"270",@"300",@"269",@"239",@"263"] withCompleteHandler:^(int code, NSString *message, NSArray<WwRoomModel *> *list) {
+    [[WwRoomManager RoomMgrInstance] requestRoomListByIds:@[@"270",@"300",@"269",@"239",@"263"] withComplete:^(NSInteger code, NSString *message, NSArray<WwRoom *> *list) {
         [_hud hideAnimated:YES];
         self.defaultImageV.hidden = YES;
         
-        [[WwRoomListManager RoomListMgrInstance] setDelegate:self];
+        [[WwRoomManager RoomMgrInstance] setDelegate:self];
         [self.roomsArray removeAllObjects];
         if (code == 0) {
             // 成功
-            self.roomsArray = [WwRoomModel mj_objectArrayWithKeyValuesArray:list];
+            self.roomsArray = [WwRoom mj_objectArrayWithKeyValuesArray:list];
             
-            WwRoomModel *model = list[0];
+            WwRoom *model = list[0];
             [self loadLatesRecordDataWithRoomID:model.ID];
             NSString *path = @"getGoodsBanner";
             NSDictionary *params = @{@"uid":KUID};
@@ -206,7 +204,7 @@
                 NSDictionary *dic = (NSDictionary *)json;
                 if ([dic[@"code"] integerValue] == 200) {
                     self.roomPicArray = [FXHomeHouseItem mj_objectArrayWithKeyValuesArray:dic[@"data"]];
-
+                    
                     [self setupUI];
                 }
             } failure:^(NSError *error) {
@@ -226,10 +224,10 @@
 /**
  * 通知接入方客户端，当前房间列表首页数据有变化(主要是房间状态)
  */
-- (void)onRoomListChange:(NSArray <WwRoomModel *> *)roomList{
+- (void)onRoomListChange:(NSArray <WwRoom *> *)roomList{
     [self.roomsArray removeAllObjects];
     [self.roomPicArray removeAllObjects];
-    self.roomsArray = [WwRoomModel mj_objectArrayWithKeyValuesArray:roomList];
+    self.roomsArray = [WwRoom mj_objectArrayWithKeyValuesArray:roomList];
     NSString *path = @"getGoodsBanner";
     NSDictionary *params = @{@"uid":KUID};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
@@ -287,7 +285,7 @@
 
 - (UIView *)flowView:(NewPagedFlowView *)flowView cellForPageAtIndex:(NSInteger)index{
     PGIndexBannerSubiew *bannerView = (PGIndexBannerSubiew *)[flowView dequeueReusableCell];
-    WwRoomModel *model = self.roomsArray[index];
+    WwRoom *model = self.roomsArray[index];
     if (!bannerView) {
         bannerView = [[PGIndexBannerSubiew alloc] initWithFrame:CGRectMake(0, 0, Px(233), Py(360))];
         bannerView.layer.cornerRadius = 4;
@@ -319,8 +317,7 @@
         [MobClick event:@"main_banner_clieck"];
         FXHomeBannerItem *item = self.bannerArray[index];
         FXGameWebController *webVC = [[FXGameWebController alloc] init];
-        webVC.url = item.href;
-        webVC.titleName = item.title;
+        webVC.item = item;
         [self.navigationController pushViewController:webVC animated:YES];
     }else{
         [[VisiteTools shareInstance] outLogin];

@@ -60,9 +60,9 @@
 #pragma mark 请求收货地址列表
 - (void)loadAdressListData{
     self.dataArr = [NSArray array];
-    [[WwUserInfoManager UserInfoMgrInstance] requestUserAddressWithCompleteHandler:^(int code, NSString *message, NSArray<WwAddressModel *> *list) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestMyAddressListWithComplete:^(int code, NSString *message, NSArray<WwAddress *> *list) {
         [self.tableView.mj_header endRefreshing];
-        self.dataArr = [WwAddressModel mj_objectArrayWithKeyValuesArray:list];
+        self.dataArr = [WwAddress mj_objectArrayWithKeyValuesArray:list];
         if (self.dataArr.count==0) {
             [self creatHeader];
         }else{
@@ -70,7 +70,6 @@
         }
         [self.tableView reloadData];
     }];
-    [self.tableView reloadData];
 }
 
 #pragma mark tablview Delegate
@@ -85,7 +84,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString * reuseId =@"adressCell";
-    WwAddressModel *model = self.dataArr[indexPath.row];
+    WwAddress *model = self.dataArr[indexPath.row];
     FXAddressCell * cell =[tableView dequeueReusableCellWithIdentifier:reuseId];
     
     if (!cell) {
@@ -100,7 +99,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([self.isMine isEqualToString:@"yes"]) {//从战利品进来的
-        WwAddressModel *model = self.dataArr[indexPath.row];
+        WwAddress *model = self.dataArr[indexPath.row];
         if (self.getAddressModelBlock) {
             self.getAddressModelBlock(model);
         }
@@ -150,8 +149,8 @@
     UIAlertAction *alertAction0 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     UIAlertAction *alertAction1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        WwAddressModel *model = self.dataArr[path.row];
-        [[WwUserInfoManager UserInfoMgrInstance] deleteUserAddress:model.aID withCompleteHandler:^(int code, NSString *message) {
+        WwAddress *model = self.dataArr[path.row];
+        [[WwUserInfoManager UserInfoMgrInstance] requestDeleteAddress:model.ID complete:^(int code, NSString *message) {
             [self loadAdressListData];
         }];
     }];

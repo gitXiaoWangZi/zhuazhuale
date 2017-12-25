@@ -149,12 +149,19 @@
 		92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B573FC1FD9370000B32C02 /* UMMobClick.framework */; };
 		92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A921FD925DD00CDEDC4 /* CoreTelephony.framework */; };
 		92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B574001FD937CD00B32C02 /* UMMobClick.framework */; };
-		92B5D7AD1FDED32400B72543 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; };
-		92B5D7AE1FDED32B00B72543 /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; };
-		92B5D7AF1FDED32B00B72543 /* WawaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92B918E31FCFB67E009B0CE9 /* UIButton+Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B918E21FCFB67E009B0CE9 /* UIButton+Position.m */; };
 		92C0479F1FCC0B3100636F15 /* FXRechargeRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0479E1FCC0B3100636F15 /* FXRechargeRecordModel.m */; };
 		92C047A21FCC1AF500636F15 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C047A11FCC187E00636F15 /* WelcomeViewController.m */; };
+		92D723101FECDEBC0031F7EB /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D7230F1FECDEAE0031F7EB /* WawaSDK.framework */; };
+		92D723111FECDEC10031F7EB /* WawaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D7230F1FECDEAE0031F7EB /* WawaSDK.framework */; };
+		92D723121FECDEC10031F7EB /* WawaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92D7230F1FECDEAE0031F7EB /* WawaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		92D723161FECFC320031F7EB /* FXMinePageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D723141FECFC320031F7EB /* FXMinePageCell.m */; };
+		92D723171FECFC320031F7EB /* FXMinePageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D723151FECFC320031F7EB /* FXMinePageCell.xib */; };
+		92D7231B1FED0E130031F7EB /* FXGameDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D723191FED0E130031F7EB /* FXGameDetailViewController.m */; };
+		92D7231C1FED0E130031F7EB /* FXGameDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D7231A1FED0E130031F7EB /* FXGameDetailViewController.xib */; };
+		92D7231F1FED0E910031F7EB /* FXGameDetailContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D7231E1FED0E910031F7EB /* FXGameDetailContentView.m */; };
+		92D723211FED0EB50031F7EB /* FXGameDetailContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D723201FED0EB40031F7EB /* FXGameDetailContentView.xib */; };
+		92D723241FEDE92F0031F7EB /* FXComplainReasonListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D723231FEDE92F0031F7EB /* FXComplainReasonListViewController.m */; };
 		92D99AB71FD92D6D00CDEDC4 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A9A1FD92D6C00CDEDC4 /* MOBFoundation.framework */; };
 		92D99AB81FD92D6D00CDEDC4 /* ShareSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A9C1FD92D6C00CDEDC4 /* ShareSDK.framework */; };
 		92D99AB91FD92D6D00CDEDC4 /* ShareSDKConfigFile.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92D99A9F1FD92D6C00CDEDC4 /* ShareSDKConfigFile.bundle */; };
@@ -202,7 +209,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				92B5D7AF1FDED32B00B72543 /* WawaSDK.framework in Embed Frameworks */,
+				92D723121FECDEC10031F7EB /* WawaSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,13 +479,24 @@
 		92B573FC1FD9370000B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMMobClick.framework; path = "zzl/Supporting Files/UMeng/UMMobClick.framework"; sourceTree = "<group>"; };
 		92B574001FD937CD00B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
 		92B574021FD955F400B32C02 /* zzl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = zzl.entitlements; sourceTree = "<group>"; };
-		92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WawaSDK.framework; sourceTree = "<group>"; };
 		92B918E11FCFB67E009B0CE9 /* UIButton+Position.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+Position.h"; sourceTree = "<group>"; };
 		92B918E21FCFB67E009B0CE9 /* UIButton+Position.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Position.m"; sourceTree = "<group>"; };
 		92C0479D1FCC0B3100636F15 /* FXRechargeRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXRechargeRecordModel.h; sourceTree = "<group>"; };
 		92C0479E1FCC0B3100636F15 /* FXRechargeRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXRechargeRecordModel.m; sourceTree = "<group>"; };
 		92C047A01FCC187E00636F15 /* WelcomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		92C047A11FCC187E00636F15 /* WelcomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		92D7230F1FECDEAE0031F7EB /* WawaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WawaSDK.framework; sourceTree = "<group>"; };
+		92D723131FECFC320031F7EB /* FXMinePageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXMinePageCell.h; sourceTree = "<group>"; };
+		92D723141FECFC320031F7EB /* FXMinePageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXMinePageCell.m; sourceTree = "<group>"; };
+		92D723151FECFC320031F7EB /* FXMinePageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FXMinePageCell.xib; sourceTree = "<group>"; };
+		92D723181FED0E130031F7EB /* FXGameDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXGameDetailViewController.h; sourceTree = "<group>"; };
+		92D723191FED0E130031F7EB /* FXGameDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXGameDetailViewController.m; sourceTree = "<group>"; };
+		92D7231A1FED0E130031F7EB /* FXGameDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FXGameDetailViewController.xib; sourceTree = "<group>"; };
+		92D7231D1FED0E910031F7EB /* FXGameDetailContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXGameDetailContentView.h; sourceTree = "<group>"; };
+		92D7231E1FED0E910031F7EB /* FXGameDetailContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXGameDetailContentView.m; sourceTree = "<group>"; };
+		92D723201FED0EB40031F7EB /* FXGameDetailContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FXGameDetailContentView.xib; sourceTree = "<group>"; };
+		92D723221FEDE92F0031F7EB /* FXComplainReasonListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXComplainReasonListViewController.h; sourceTree = "<group>"; };
+		92D723231FEDE92F0031F7EB /* FXComplainReasonListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXComplainReasonListViewController.m; sourceTree = "<group>"; };
 		92D99A921FD925DD00CDEDC4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		92D99A941FD9265700CDEDC4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		92D99A9A1FD92D6C00CDEDC4 /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -536,6 +554,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92D723101FECDEBC0031F7EB /* WawaSDK.framework in Frameworks */,
 				9248550F1FE3D9F700CC8B00 /* AlipaySDK.framework in Frameworks */,
 				9248550B1FE3D71D00CC8B00 /* CoreMotion.framework in Frameworks */,
 				92FCBEB11FBD5EC100BE88A7 /* CFNetwork.framework in Frameworks */,
@@ -544,14 +563,12 @@
 				924855051FE3D6D500CC8B00 /* CoreGraphics.framework in Frameworks */,
 				924855031FE3D6AA00CC8B00 /* CoreText.framework in Frameworks */,
 				924855011FE3D69500CC8B00 /* QuartzCore.framework in Frameworks */,
-				92B5D7AD1FDED32400B72543 /* WawaSDK.framework in Frameworks */,
 				92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */,
 				92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */,
 				928A907C1FC7FFC9000B621E /* libsqlite3.tbd in Frameworks */,
 				92D99AC41FD92D6D00CDEDC4 /* libWeChatSDK.a in Frameworks */,
 				928A907A1FC7FFB8000B621E /* ImageIO.framework in Frameworks */,
 				928A90781FC7FFA2000B621E /* JavaScriptCore.framework in Frameworks */,
-				92B5D7AE1FDED32B00B72543 /* WawaSDK.framework in Frameworks */,
 				92D99ABF1FD92D6D00CDEDC4 /* SinaWeiboConnector.framework in Frameworks */,
 				928A90761FC7FF81000B621E /* libstdc++.tbd in Frameworks */,
 				928A90741FC7FF72000B621E /* libz.tbd in Frameworks */,
@@ -568,6 +585,7 @@
 				92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */,
 				92FCBEAB1FBD5E9000BE88A7 /* libstdc++.6.0.9.tbd in Frameworks */,
 				92D99AB71FD92D6D00CDEDC4 /* MOBFoundation.framework in Frameworks */,
+				92D723111FECDEC10031F7EB /* WawaSDK.framework in Frameworks */,
 				92D99AB81FD92D6D00CDEDC4 /* ShareSDK.framework in Frameworks */,
 				92FCBEA91FBD5E7600BE88A7 /* libc++.tbd in Frameworks */,
 				92FCBEA71FBD5E6500BE88A7 /* OpenAL.framework in Frameworks */,
@@ -892,6 +910,11 @@
 				9248B7001FBA855A00633CDA /* FXTaskViewController.m */,
 				9248B7051FBABEBB00633CDA /* FXLogisticsController.h */,
 				9248B7061FBABEBB00633CDA /* FXLogisticsController.m */,
+				92D723181FED0E130031F7EB /* FXGameDetailViewController.h */,
+				92D723191FED0E130031F7EB /* FXGameDetailViewController.m */,
+				92D7231A1FED0E130031F7EB /* FXGameDetailViewController.xib */,
+				92D723221FEDE92F0031F7EB /* FXComplainReasonListViewController.h */,
+				92D723231FEDE92F0031F7EB /* FXComplainReasonListViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -950,6 +973,12 @@
 				9248B6CD1FB30C8100633CDA /* FXNotificationCell.m */,
 				9248B7021FBA8B0B00633CDA /* FXTaskCell.h */,
 				9248B7031FBA8B0B00633CDA /* FXTaskCell.m */,
+				92D723131FECFC320031F7EB /* FXMinePageCell.h */,
+				92D723141FECFC320031F7EB /* FXMinePageCell.m */,
+				92D723151FECFC320031F7EB /* FXMinePageCell.xib */,
+				92D7231D1FED0E910031F7EB /* FXGameDetailContentView.h */,
+				92D7231E1FED0E910031F7EB /* FXGameDetailContentView.m */,
+				92D723201FED0EB40031F7EB /* FXGameDetailContentView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1299,7 +1328,7 @@
 		92FCBECA1FBD65B500BE88A7 /* wawaSDK */ = {
 			isa = PBXGroup;
 			children = (
-				92B5D7AC1FDED31C00B72543 /* WawaSDK.framework */,
+				92D7230F1FECDEAE0031F7EB /* WawaSDK.framework */,
 				927478C41FBEAEE0005C5772 /* libcrypto.a */,
 				927478C51FBEAEE0005C5772 /* libssl.a */,
 			);
@@ -1391,6 +1420,7 @@
 				92D99AC31FD92D6D00CDEDC4 /* WeiboSDK.bundle in Resources */,
 				9260ABCC1FA73AE200EA1881 /* Main.storyboard in Resources */,
 				9248B6F31FB42E0100633CDA /* 胜利1.mp3 in Resources */,
+				92D723171FECFC320031F7EB /* FXMinePageCell.xib in Resources */,
 				92D99ABC1FD92D6D00CDEDC4 /* ShareSDKUI.bundle in Resources */,
 				928282691FC2FEE8001B3092 /* DYGPersonInfoTbCell.xib in Resources */,
 				9248B6ED1FB42E0100633CDA /* gameWait.mp3 in Resources */,
@@ -1403,6 +1433,8 @@
 				92D99AC51FD92D6D00CDEDC4 /* README.txt in Resources */,
 				9248B6F21FB42E0100633CDA /* 机械1.wav in Resources */,
 				928EC8231FB1818A0072C68B /* province_data.xml in Resources */,
+				92D723211FED0EB50031F7EB /* FXGameDetailContentView.xib in Resources */,
+				92D7231C1FED0E130031F7EB /* FXGameDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1465,8 +1497,10 @@
 				92744F3D1FC001FD00F8D42C /* ZYCountDownView.m in Sources */,
 				92B918E31FCFB67E009B0CE9 /* UIButton+Position.m in Sources */,
 				92744F461FC039A200F8D42C /* OBShapedButton.m in Sources */,
+				92D7231F1FED0E910031F7EB /* FXGameDetailContentView.m in Sources */,
 				92744F3E1FC001FD00F8D42C /* ZYPlayOperationView.m in Sources */,
 				92EF42691FAC030100889B20 /* FXLabelCollectionCell.m in Sources */,
+				92D723241FEDE92F0031F7EB /* FXComplainReasonListViewController.m in Sources */,
 				92679FCF1FA745D70058AA70 /* FXSelfViewController.m in Sources */,
 				9267A0391FA9976B0058AA70 /* FXZZLViewController.m in Sources */,
 				9248B6F81FB576C900633CDA /* FXLoginHomeController.m in Sources */,
@@ -1503,6 +1537,7 @@
 				9217B53B1FC40D3300B506EB /* NSData+Encryption.m in Sources */,
 				929EC8321FD27E2B0008FE14 /* FXMineHeaderView.m in Sources */,
 				923820B11FD1364300D58B07 /* FXLoginController.m in Sources */,
+				92D723161FECFC320031F7EB /* FXMinePageCell.m in Sources */,
 				9248B6C51FB2F09400633CDA /* FXSettingViewController.m in Sources */,
 				924AEBE81FB063DD00E0DD8C /* FXBgView.m in Sources */,
 				9248B6B31FB2B74F00633CDA /* FXHistoryCell.m in Sources */,
@@ -1573,6 +1608,7 @@
 				9248B6B61FB2CBF400633CDA /* FXHistoryHeader.m in Sources */,
 				92EF426C1FAC588F00889B20 /* FXRechargeViewController.m in Sources */,
 				9267A02D1FA804DE0058AA70 /* DYGHomeHeaderView.m in Sources */,
+				92D7231B1FED0E130031F7EB /* FXGameDetailViewController.m in Sources */,
 				92570DDE1FAB54AC00232AE0 /* UILabel+DYGAdd.m in Sources */,
 				92C047A21FCC1AF500636F15 /* WelcomeViewController.m in Sources */,
 				9248B6C21FB2DC3A00633CDA /* FXSpoilsCell.m in Sources */,

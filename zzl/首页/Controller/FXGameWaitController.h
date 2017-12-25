@@ -10,5 +10,5 @@
 
 @interface FXGameWaitController : UIViewController
 
-@property (nonatomic,strong) WwRoomModel *model;
+@property (nonatomic,strong) WwRoom *model;
 @end

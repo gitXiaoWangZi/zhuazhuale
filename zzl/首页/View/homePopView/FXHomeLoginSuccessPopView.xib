@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3oi-1R-ukm">
-                    <rect key="frame" x="45" y="248.5" width="285" height="190"/>
+                    <rect key="frame" x="45" y="238.5" width="285" height="190"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登录成功" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QGU-Xi-uQo">
                             <rect key="frame" x="103.5" y="30" width="77.5" height="23"/>
@@ -71,12 +70,11 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.4006932218" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="3oi-1R-ukm" firstAttribute="leading" secondItem="OKy-DJ-skw" secondAttribute="leading" constant="45" id="5Vf-Ng-UJY"/>
-                <constraint firstItem="3oi-1R-ukm" firstAttribute="centerY" secondItem="OKy-DJ-skw" secondAttribute="centerY" id="67N-5u-v2S"/>
-                <constraint firstItem="3oi-1R-ukm" firstAttribute="centerX" secondItem="OKy-DJ-skw" secondAttribute="centerX" id="s9n-Gm-4Hl"/>
+                <constraint firstItem="3oi-1R-ukm" firstAttribute="leading" secondItem="Ta0-tU-xyv" secondAttribute="leading" constant="45" id="5Vf-Ng-UJY"/>
+                <constraint firstItem="3oi-1R-ukm" firstAttribute="centerY" secondItem="Ta0-tU-xyv" secondAttribute="centerY" id="67N-5u-v2S"/>
+                <constraint firstItem="3oi-1R-ukm" firstAttribute="centerX" secondItem="Ta0-tU-xyv" secondAttribute="centerX" id="s9n-Gm-4Hl"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="OKy-DJ-skw"/>
             <connections>
                 <outlet property="detailL" destination="frb-3y-rwc" id="ek1-vb-pM1"/>
                 <outlet property="diamoBtn" destination="6D9-iy-MTu" id="152-HQ-fqp"/>

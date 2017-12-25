@@ -11,5 +11,5 @@
 @interface FXAddressManageController : UIViewController
 
 @property (nonatomic,copy) NSString *isMine;
-@property (nonatomic,copy) void(^getAddressModelBlock)(WwAddressModel *model);
+@property (nonatomic,copy) void(^getAddressModelBlock)(WwAddress *model);
 @end

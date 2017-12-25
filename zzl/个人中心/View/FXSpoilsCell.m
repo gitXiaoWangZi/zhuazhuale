@@ -121,14 +121,14 @@
     }
 }
 
-- (void)setItem:(WwWawaOrderItem *)item{
+- (void)setItem:(WwOrderItem *)item{
     _item = item;
     [_photo sd_setImageWithURL:[NSURL URLWithString:item.pic] placeholderImage:[UIImage imageNamed:@""]];
     _name.text = item.name;
     _time.hidden = YES;
 }
 
-- (void)setModel:(WwWawaDepositModel *)model{
+- (void)setModel:(WwDepositItem *)model{
     _model = model;
     [_photo sd_setImageWithURL:[NSURL URLWithString:model.pic] placeholderImage:[UIImage imageNamed:@""]];
     _name.text = model.name;

@@ -47,7 +47,7 @@
     self.placeholderColor = [UIColor lightGrayColor];
     
     // 设置默认的字体
-    self.font = [UIFont systemFontOfSize:14];
+    self.font = [UIFont systemFontOfSize:16];
     
     // 监听内部文字改变
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:self];

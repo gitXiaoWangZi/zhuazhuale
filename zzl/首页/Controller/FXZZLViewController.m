@@ -180,7 +180,7 @@
 }
 
 - (void)loadDataWithPage:(NSInteger)page{
-    [[WwRoomListManager RoomListMgrInstance] requestRoomListAtPage:page size:100 withCompleteHandler:^(int code, NSString *message, NSArray<WwRoomModel *> *list) {
+    [[WwRoomManager RoomMgrInstance] requestRoomList:page size:100 withComplete:^(NSInteger code, NSString *message, NSArray<WwRoom *> *list) {
         [self.collectionView.mj_header endRefreshing];
         [self.collectionView.mj_footer endRefreshing];
         if (!code) {
@@ -188,7 +188,7 @@
             if (page == 1) {
                 [self.roomsArray removeAllObjects];
             }
-            for (WwRoomModel *model in list) {
+            for (WwRoom *model in list) {
                 [self.roomsArray addObject:model];
             }
             [self.collectionView reloadData];

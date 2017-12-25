@@ -18,5 +18,6 @@
 @property (nonatomic,copy) NSString *sort;
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *type;
+@property (nonatomic,copy) NSString *banner_type;
 
 @end

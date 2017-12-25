@@ -30,7 +30,7 @@
 @property (nonatomic,strong) UILabel *numLabel;
 @property (nonatomic,strong) UIButton *sureBtn;
 
-@property (nonatomic,strong) WwAddressModel *addressModel;
+@property (nonatomic,strong) WwAddress *addressModel;
 @end
 
 @implementation FXOrdingListViewController
@@ -56,22 +56,20 @@
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     
     [self setUpUI];
-    
-    [[WwUserInfoManager UserInfoMgrInstance] requestAddressListComplete:^(int code, NSString *message, NSArray<WwAddressModel *> *addressList) {
-        if (addressList.count == 0) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestMyAddressListWithComplete:^(int code, NSString *message, NSArray<WwAddress *> *list) {
+        if (list.count == 0) {
             self.nBgView.frame = CGRectMake(0, 0, kScreenWidth, Py(80));
             self.tableView.tableHeaderView = self.nBgView;
         }else{
             self.yBgView.frame = CGRectMake(0, 0, kScreenWidth, Py(90));
             self.tableView.tableHeaderView = self.yBgView;
-            WwAddressModel *model = addressList[0];
+            WwAddress *model = list[0];
             self.addressModel = model;
             self.nameL.text = [NSString stringWithFormat:@"收货人:%@",model.name];
             self.phoneL.text = model.phone;
             self.adressL.text = [NSString stringWithFormat:@"收货地址:%@%@%@%@",model.province,model.city,model.district,model.address];
         }
     }];
-    
     [self.numLabel setText:[NSString stringWithFormat:@"共%zd件",self.dataArray.count]];
 }
 
@@ -193,7 +191,7 @@
     FXAddressManageController *addressVC = [[FXAddressManageController alloc] init];
     addressVC.isMine = @"yes";//做标识，从战利品进去的
     __weak typeof(self) weakSelf = self;
-    addressVC.getAddressModelBlock = ^(WwAddressModel *model) {
+    addressVC.getAddressModelBlock = ^(WwAddress *model) {
         weakSelf.yBgView.frame = CGRectMake(0, 0, kScreenWidth, Py(90));
         weakSelf.tableView.tableHeaderView = weakSelf.yBgView;
         weakSelf.addressModel = model;
@@ -209,11 +207,11 @@
         [MBProgressHUD showMessage:@"请选择地址" toView:self.view];
     }
     NSMutableArray *tempArr = [NSMutableArray array];
-    for (WwWawaDepositModel *model in self.dataArray) {
+    for (WwDepositItem *model in self.dataArray) {
         [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
     }
     
-    [[WwUserInfoManager UserInfoMgrInstance] requetCreateOrderWithWawaIds:tempArr address:self.addressModel withCompleteHandler:^(int code, NSString *message) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler      :^(int code, NSString *message) {
         [MBProgressHUD showMessage:message toView:self.view];
         if (code == 0) {
             [self.navigationController popViewControllerAnimated:YES];

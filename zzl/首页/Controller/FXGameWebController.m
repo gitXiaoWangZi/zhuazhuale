@@ -10,12 +10,14 @@
 #import "FXLatesRecordModel.h"
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "FXRechargeViewController.h"
+#import "FXHomeBannerItem.h"
 
 @interface FXGameWebController ()<UIWebViewDelegate>
 
 @property (nonatomic,strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *progressView;
 @property (nonatomic, strong) CADisplayLink *displayLink;
+@property (nonatomic,assign) BOOL isChristmasList;
 @end
 
 @implementation FXGameWebController
@@ -23,30 +25,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self addWebView];
-    
 }
 
 -(void)addWebView
 {
+    _isChristmasList = NO;
     self.webView=[[UIWebView alloc]initWithFrame:(CGRectMake(0, 0, kScreenWidth, kScreenHeight-64))];
     self.webView.delegate=self;
     self.webView.scalesPageToFit = YES;
     self.webView.backgroundColor = [UIColor whiteColor];
     self.progressView.y = self.webView.y;
-    self.title = self.titleName;
-    if (self.url != nil) {
-        if ([self.url isEqualToString:@"http://wawa.api.fanx.xin/share"]) {
-            self.url = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/share",KUID];
+    self.title = self.item.title;
+    if (self.item) {
+        if ([self.item.banner_type isEqualToString:@"2"]) {//分享
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/share",KUID];
         }
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
+        if ([self.item.banner_type isEqualToString:@"5"]) {//大转盘
+            _isChristmasList = YES;
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/turntable",KUID];
+        }
+        if ([self.item.banner_type isEqualToString:@"6"]) {//冲榜
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/christmasList",KUID];
+        }
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.item.href]];
         [self.webView loadRequest:request];
         [self.view addSubview:self.webView];
     }else{
         self.title = @"视频";
         NSString *path = @"videoShare";
-        NSDictionary *params = @{@"orderId":self.model.orderId};
+        NSString *orderID = @"";
+        if (self.model.orderId) {
+            orderID = self.model.orderId;
+        }else{
+            orderID = self.orderId;
+        }
+        NSDictionary *params = @{@"orderId":orderID};
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {
@@ -139,12 +154,27 @@
 
 #pragma mark 分享成功后的接口
 - (void)loadShareSuccessData{
+    if (_isChristmasList) {
+        NSString *path = @"turntableSharing";
+        NSDictionary *params = @{@"uid":KUID};
+        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+            NSDictionary *dic = (NSDictionary *)json;
+            if ([dic[@"code"] integerValue] == 200) {
+                self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/turntable",KUID];
+                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.item.href]];
+                [self.webView loadRequest:request];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }
     NSString *path = @"raw_award";
     NSDictionary *params = @{@"uid":KUID,@"type":@"share_game"};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+    
 }
 
 - (UIView *)progressView

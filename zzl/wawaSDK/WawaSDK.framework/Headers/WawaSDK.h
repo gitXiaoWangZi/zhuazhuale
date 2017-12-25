@@ -7,17 +7,17 @@
 
 #import <Foundation/Foundation.h>
 #import "WwUserInfoManager.h"
-#import "WwRoomListManager.h"
+#import "WwRoomManager.h"
 #import "WwGameManager.h"
 
-#import "WwErrorDef.h"
+#import "WwCodeDef.h"
 #import "WwDataDef.h"
 
 
 @interface WawaSDK : NSObject
 
 @property (nonatomic, strong, nonnull) WwUserInfoManager *userInfoMgr;
-@property (nonatomic, strong, nonnull) WwRoomListManager *roomListMgr;
+@property (nonatomic, strong, nonnull) WwRoomManager *roomMgr;
 @property (nonatomic, strong, nonnull) WwGameManager *gameMgr;
 
 /**
@@ -46,7 +46,7 @@
  @param appKey 商户后台注册的appkey
  @param completeHandle 结果状态回调
  */
-- (void)registerApp:(NSString *_Nonnull)appId appKey:(NSString *_Nonnull)appKey complete:(void (^ __nullable)(BOOL success, int code, NSString * __nullable message))completeHandle;
+- (void)registerApp:(NSString *_Nonnull)appId appKey:(NSString *_Nonnull)appKey complete:(void (^ __nullable)(int code, NSString * __nullable message))completeHandle;
 
 @end
 

@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -39,16 +38,15 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="mjg-re-cPD" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="5QW-AY-72W"/>
-                <constraint firstItem="KBB-mZ-dd6" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="9xc-Jr-6se"/>
+                <constraint firstItem="mjg-re-cPD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="5QW-AY-72W"/>
+                <constraint firstItem="KBB-mZ-dd6" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="9xc-Jr-6se"/>
                 <constraint firstItem="KBB-mZ-dd6" firstAttribute="leading" secondItem="im3-OU-PZ3" secondAttribute="trailing" constant="8" id="chu-9Z-FCF"/>
                 <constraint firstItem="mjg-re-cPD" firstAttribute="leading" secondItem="KBB-mZ-dd6" secondAttribute="trailing" constant="8" id="hN0-Kq-0ib"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="mjg-re-cPD" secondAttribute="trailing" constant="10" id="kQo-fl-7pG"/>
-                <constraint firstItem="im3-OU-PZ3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="q26-9I-BK1"/>
-                <constraint firstItem="im3-OU-PZ3" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="vUG-np-w1X"/>
+                <constraint firstAttribute="trailing" secondItem="mjg-re-cPD" secondAttribute="trailing" constant="10" id="kQo-fl-7pG"/>
+                <constraint firstItem="im3-OU-PZ3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="q26-9I-BK1"/>
+                <constraint firstItem="im3-OU-PZ3" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="vUG-np-w1X"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="iconImgV" destination="im3-OU-PZ3" id="9hB-kU-d77"/>
                 <outlet property="nickNameL" destination="KBB-mZ-dd6" id="n1Q-4g-Ejd"/>

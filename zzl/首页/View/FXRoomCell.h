@@ -12,6 +12,6 @@
 
 @property (nonatomic,assign) NSInteger state;
 
-@property (nonatomic,strong) WwRoomModel *model;
+@property (nonatomic,strong) WwRoom *model;
 
 @end

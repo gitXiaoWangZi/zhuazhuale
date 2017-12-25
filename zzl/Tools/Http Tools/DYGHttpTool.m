@@ -47,7 +47,7 @@ static AFHTTPSessionManager * mgr;
 //     forHTTPHeaderField:@"Content-Type"];
     mgr.requestSerializer = [AFHTTPRequestSerializer serializer];
     mgr.responseSerializer = [AFHTTPResponseSerializer serializer];
-   
+    mgr.requestSerializer.timeoutInterval = 10;
     [mgr POST:url parameters:[self encryptSign:params] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         //获得access_token，然后根据access_token获取用户信息请求。

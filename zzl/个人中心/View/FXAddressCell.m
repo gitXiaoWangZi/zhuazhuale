@@ -144,7 +144,7 @@
     }
 }
 
-- (void)setModel:(WwAddressModel *)model{
+- (void)setModel:(WwAddress *)model{
     _model = model;
     _name.text = model.name;
     _phone.text = model.phone;

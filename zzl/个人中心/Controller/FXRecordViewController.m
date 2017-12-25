@@ -8,6 +8,7 @@
 
 #import "FXRecordViewController.h"
 #import "FXRecordCell.h"
+#import "FXGameDetailViewController.h"
 
 
 @interface FXRecordViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -54,6 +55,11 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return Py(90);
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    FXGameDetailViewController *gameVC = [[FXGameDetailViewController alloc] init];
+    gameVC.model = self.dataArray[indexPath.row];
+    [self.navigationController pushViewController:gameVC animated:YES];
+}
 
 - (void)loadNewData{
     _currentPage = 1;
@@ -67,10 +73,10 @@
 
 #pragma mark 请求战绩数据
 - (void)loadDataWithPage:(NSInteger)page{
-    [[WwUserInfoManager UserInfoMgrInstance] requestGameRecordAtPage:page withCompleteHandler:^(int code, NSString *message, NSArray<WwGameRecordModel *> *list) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestGameHistoryAtPage:page complete:^(int code, NSString *message, NSArray<WwGameHistory *> *list) {
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
-        NSArray *tempArr = [WwGameRecordModel mj_objectArrayWithKeyValuesArray:list];
+        NSArray *tempArr = [WwGameHistory mj_objectArrayWithKeyValuesArray:list];
         if (page == 1) {
             [self.dataArray removeAllObjects];
         }

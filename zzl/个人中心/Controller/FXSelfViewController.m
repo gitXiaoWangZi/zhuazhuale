@@ -21,12 +21,17 @@
 #import "AccountItem.h"
 #import "FXGameWebController.h"
 #import "FXMineHeaderView.h"
+#import "FXMinePageCell.h"
+#import "FXHomeBannerItem.h"
+
+static NSString *cellId = @"FXMinePageCell";
 @interface FXSelfViewController ()<UITableViewDelegate,UITableViewDataSource,FXMineHeaderViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSArray *titleArr;
 @property (nonatomic,strong) NSArray *pushArr;
 @property (nonatomic,strong) NSArray *topPushArr;
 @property (nonatomic,strong) AccountItem *item;
+@property (nonatomic,copy) NSString *receive;
 
 //@property (nonatomic,strong) FXSelfHeaderView *header;
 @property (nonatomic,strong) FXMineHeaderView *header1;
@@ -47,6 +52,7 @@
     header.delegate = self;
     _header1 = header;
     self.tableView.tableHeaderView = header;
+    [self.tableView registerNib:[UINib nibWithNibName:@"FXMinePageCell" bundle:nil] forCellReuseIdentifier:cellId];
     
     //请求用户信息
     [self loadUserInfoData];
@@ -55,9 +61,9 @@
 
 //个人资料中修改信息通知本页进行刷新数据
 - (void)refreshUserData:(NSNotification *)noti{
-    if ([noti.object isEqualToString:@"isSlef"] && _item!=nil) {
-        return;
-    }
+//    if ([noti.object isEqualToString:@"isSlef"] && _item!=nil) {
+//        return;
+//    }
     [self loadUserInfoData];
 }
 
@@ -83,30 +89,30 @@
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString * reuseId = @"selfCell";
-    UITableViewCell * cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseId];
-    if (!cell) {
-        cell = [tableView dequeueReusableCellWithIdentifier:reuseId];
-    }
+    FXMinePageCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     switch (indexPath.section) {
         case 0:
-            cell.imageView.image = [UIImage imageNamed:self.titleArr[indexPath.row][@"img"]];
-            cell.textLabel.text = self.titleArr[indexPath.row][@"title"];
+            cell.icon.image = [UIImage imageNamed:self.titleArr[indexPath.row][@"img"]];
+            cell.title.text = self.titleArr[indexPath.row][@"title"];
             break;
         case 1:
-            cell.imageView.image = [UIImage imageNamed:self.titleArr[indexPath.row+1][@"img"]];
-            cell.textLabel.text = self.titleArr[indexPath.row+1][@"title"];
+            cell.icon.image = [UIImage imageNamed:self.titleArr[indexPath.row+1][@"img"]];
+            cell.title.text = self.titleArr[indexPath.row+1][@"title"];
+            if (indexPath.row == 1 && [_receive integerValue] == 1) {
+                cell.warn.hidden = NO;
+            }else{
+                cell.warn.hidden = YES;
+            }
             break;
         case 2:
-            cell.imageView.image = [UIImage imageNamed:self.titleArr[indexPath.row+3][@"img"]];
-            cell.textLabel.text = self.titleArr[indexPath.row+3][@"title"];
+            cell.icon.image = [UIImage imageNamed:self.titleArr[indexPath.row+3][@"img"]];
+            cell.title.text = self.titleArr[indexPath.row+3][@"title"];
             break;
         case 3:
-            cell.imageView.image = [UIImage imageNamed:self.titleArr[indexPath.row+5][@"img"]];
-            cell.textLabel.text = self.titleArr[indexPath.row+5][@"title"];
+            cell.icon.image = [UIImage imageNamed:self.titleArr[indexPath.row+5][@"img"]];
+            cell.title.text = self.titleArr[indexPath.row+5][@"title"];
             break;
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -129,9 +135,11 @@
         case 1:
         {
             if (indexPath.row == 0) {
+                FXHomeBannerItem *item = [FXHomeBannerItem new];
+                item.href = @"http://wawa.api.fanx.xin/share";
+                item.title = @"邀请好友";
                 FXGameWebController *vc = [[FXGameWebController alloc] init];
-                vc.url = @"http://wawa.api.fanx.xin/share";
-                vc.titleName = @"邀请好友";
+                vc.item = item;
                 [self.navigationController pushViewController:vc animated:YES];
             }else{
                 [self pushVcWithIndexpath:indexPath.row+1];
@@ -232,6 +240,8 @@
             _item = [AccountItem mj_objectWithKeyValues:dic[@"data"][0]];
             _header1.item = _item;
             _firstpunch = dic[@"firstpunch"];
+            _receive = dic[@"receive"];
+            [self.tableView reloadData];
         }
     } failure:^(NSError *error) {
         

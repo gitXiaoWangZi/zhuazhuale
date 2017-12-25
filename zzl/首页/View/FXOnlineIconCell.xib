@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,7 +29,6 @@
                 <constraint firstAttribute="bottom" secondItem="Uld-No-qfK" secondAttribute="bottom" id="UUu-zG-tSQ"/>
                 <constraint firstAttribute="trailing" secondItem="Uld-No-qfK" secondAttribute="trailing" id="mRx-LU-6Py"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <connections>
                 <outlet property="iconImgV" destination="Uld-No-qfK" id="Yur-pd-9n5"/>
             </connections>

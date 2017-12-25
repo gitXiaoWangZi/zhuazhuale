@@ -305,9 +305,9 @@
 
 #pragma mark 请求战利品数据
 - (void)loadData{
-    [[WwUserInfoManager UserInfoMgrInstance] requestUserWawaList:WawaList_All withCompleteHandler:^(int code, NSString *message, WwUserWawaModel *model) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_All completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
         NSInteger deposit = model.depositTotalCount;
-        NSInteger deliver = model.deliverTotalCount;
+        NSInteger deliver = model.expressTotalCount;
         NSInteger exchange = model.exchangeTotalCount;
         
         NSString *depositStr = [NSString stringWithFormat:@"寄存中(%zd)",deposit];
@@ -321,7 +321,7 @@
         }
         
         self.depositArr = model.depositList;
-        self.deliverArr = model.deliverList;
+        self.deliverArr = model.expressList;
         self.exchangeArr = model.exchangeList;
         
         [self.collectionView reloadData];
@@ -352,18 +352,15 @@
 
 //申请兑换按钮
 - (void)applyExchangeAction:(UIButton *)sender{
-    NSString *ids = @"";
     NSString *coins = @"";
     NSMutableArray *idsArr = [NSMutableArray array];
     NSMutableArray *coinArr = [NSMutableArray array];
-    for (WwWawaDepositModel *model in self.cell.selectArray) {
+    for (WwDepositItem *model in self.cell.selectArray) {
         [idsArr addObject:@(model.wid)];
         [coinArr addObject:@(model.coin)];
     }
-    ids = [idsArr componentsJoinedByString:@","];
     coins = [coinArr componentsJoinedByString:@","];
-    NSDictionary *idsDic = @{@"ids":ids};
-    [[WwUserInfoManager UserInfoMgrInstance] requestWawaExchangeCoin:idsDic withCompleteHandler:^(int code, NSString *message) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithType:WawaList_Deposit IdArr:idsArr complete:^(int code, NSString *message) {
         if (code == 0) {
             [self sendMsgToServesWithCoin:coins];
         }

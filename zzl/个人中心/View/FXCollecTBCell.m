@@ -39,7 +39,7 @@
 
 - (void)allRefreshData:(BOOL)isSelect{
     [self.selectArray removeAllObjects];
-    for (WwWawaDepositModel *model in self.dataArray) {
+    for (WwDepositItem *model in self.dataArray) {
         model.selected = isSelect;
         if (isSelect) {
             [self.selectArray addObject:model];
@@ -60,7 +60,7 @@
     if (self.colectType == WawaList_Deposit) {
         return self.dataArray.count;
     }else{
-        WwWawaOrderModel *model = self.dataArray[section];
+        WwOrderModel *model = self.dataArray[section];
         return model.records.count;
     }
 }
@@ -75,8 +75,8 @@
     if (self.colectType == WawaList_Deposit) {
         cell.model = self.dataArray[indexPath.row];
     }else{
-        WwWawaOrderModel *model = self.dataArray[indexPath.section];
-        WwWawaOrderItem *item = model.records[indexPath.row];
+        WwOrderModel *model = self.dataArray[indexPath.section];
+        WwOrderItem *item = model.records[indexPath.row];
         cell.item = item;
     }
     return cell;
@@ -88,11 +88,11 @@
     FXSpoilsCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (self.colectType == WawaList_Deposit) {
         cell.isSelectBtn.selected = !cell.isSelectBtn.selected;
-        WwWawaDepositModel *model = self.dataArray[indexPath.row];
+        WwDepositItem *model = self.dataArray[indexPath.row];
         model.selected = cell.isSelectBtn.selected;
         
         [self.selectArray removeAllObjects];
-        for (WwWawaDepositModel *model in self.dataArray) {
+        for (WwDepositItem *model in self.dataArray) {
             if (model.selected) {
                 [self.selectArray addObject:model];
             }

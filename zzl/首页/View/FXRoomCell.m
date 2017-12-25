@@ -131,7 +131,7 @@
     return _diamond;
 }
 
-- (void)setModel:(WwRoomModel *)model{
+- (void)setModel:(WwRoom *)model{
     _model = model;
     [self.bgImgView sd_setImageWithURL:[NSURL URLWithString:model.wawa.pic] placeholderImage:[UIImage imageNamed:@"鱿鱼center"]];
     if (model.state < 1) { /**< 房间状态: 小于1:故障 1：补货 2:空闲 大于2:游戏中*/
@@ -155,16 +155,10 @@
 }
 
 #pragma mark - Helper
-- (NSString *)getCostDescribeByWawaInfo:(WwWawaItem *)item {
+- (NSString *)getCostDescribeByWawaInfo:(WwWawa *)item {
     NSString * des = nil;
     if (item.coin > 0) {
         des = [NSString stringWithFormat:@"%zi", item.coin];
-    }
-    else if (item.fishball > 0) {
-        des = [NSString stringWithFormat:@"%zi", item.fishball];
-    }
-    else if (item.coupon > 0){
-        des = [NSString stringWithFormat:@"%zi", item.coupon];
     }
     return des;
 }

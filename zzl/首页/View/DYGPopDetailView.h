@@ -20,6 +20,6 @@
 
 @interface DYGPopDetailView : UIView
 
-@property (nonatomic,strong) WwRoomModel *model;
+@property (nonatomic,strong) WwRoom *model;
 @property (nonatomic,weak) id<DYGPopDetailViewDelegate> delegate;
 @end

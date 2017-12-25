@@ -49,8 +49,7 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.label.text = @"查找房间中……";
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        
-        [[WwGameManager GameMgrInstance] requestQuickOnBoardWithComplete:^(BOOL success, NSInteger code, NSString *msg, WwRoomModel *room) {
+        [[WwRoomManager RoomMgrInstance] requestQuickStartWithComplete:^(NSInteger code, NSString *msg, WwRoom *room) {
             if (room == nil) {
                 [MBProgressHUD showError:@"没有房间可以进入" toView:[UIApplication sharedApplication].keyWindow];
             }else{
