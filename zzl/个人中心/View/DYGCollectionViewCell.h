@@ -19,8 +19,6 @@
 
 @interface DYGCollectionViewCell : UICollectionViewCell
 @property(nonatomic,strong)UIImageView *imgView;
-//@property(nonatomic,strong)NSMutableArray * imgArray;
-//@property (nonatomic,strong) UIImageView * photoImg;
 @property (nonatomic,weak) id<DYGDelectCellDelegate> delegate;
 
 @end

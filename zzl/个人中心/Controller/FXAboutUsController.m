@@ -55,6 +55,8 @@
         make.centerX.equalTo(self.view);
         make.bottom.equalTo(self.Tk.mas_top).offset(-Py(20));
     }];
+    NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][kBundleVersionKey];
+    self.version.text = [NSString stringWithFormat:@"V%@",currentVersion];
 }
 
 
@@ -70,7 +72,7 @@
 -(UILabel *)name{
     if (!_name) {
         _name = [UILabel labelWithMediumFont:16 WithTextColor:systemColor];
-        _name.text = @"抓抓乐";
+        _name.text = @"抓抓乐娃娃";
         _name.textAlignment = NSTextAlignmentCenter;
     }
     return _name;
@@ -78,7 +80,6 @@
 -(UILabel *)version{
     if (!_version) {
         _version = [UILabel labelWithMediumFont:14 WithTextColor:DYGColorFromHex(0x4c4c4c)];
-        _version.text = @"V1.0";
         _version.textAlignment = NSTextAlignmentCenter;
     }
     return _version;

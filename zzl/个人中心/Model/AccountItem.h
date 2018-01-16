@@ -18,4 +18,5 @@
 @property (nonatomic,copy) NSString *profession;
 @property (nonatomic,copy) NSString *sex;
 @property (nonatomic,copy) NSString *username;
+@property (nonatomic,copy) NSString *firstpunch;
 @end

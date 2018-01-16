@@ -35,8 +35,8 @@
 -(void)creatUI{
     [self addSubview:self.name];
     [self.name mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(Px(16));
-        make.top.equalTo(self).offset(Py(14));
+        make.left.equalTo(self).offset(Px(15));
+        make.top.equalTo(self).offset(Py(23));
     }];
     [self addSubview:self.phone];
     [self.phone mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -72,13 +72,21 @@
         make.top.bottom.equalTo(self.delete);
         make.right.equalTo(self.delete.mas_left).offset(-Px(20));
     }];
+    [self addSubview:self.botoomV];
+    [self.botoomV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.defaultBtn.mas_bottom).offset(15);
+        make.left.right.equalTo(self);
+        make.height.equalTo(@(10));
+    }];
 }
 
 #pragma mark lazy load
 
 -(UILabel *)name{
     if (!_name) {
-        _name = [UILabel labelWithMediumFont:15 WithTextColor:TextColor];
+        _name = [[UILabel alloc] init];
+        _name.font = [UIFont fontWithName:@"PingFang-SC-Bold" size:18];
+        _name.textColor = DYGColorFromHex(0x333333);
         _name.text = @"";
     }
     return _name;
@@ -86,14 +94,16 @@
 
 -(UILabel *)phone{
     if (!_phone) {
-        _phone = [UILabel labelWithMediumFont:15 WithTextColor:TextColor];
+        _phone = [[UILabel alloc] init];
+        _phone.font = [UIFont systemFontOfSize:15];
+        _phone.textColor = DYGColorFromHex(0x333333);
         _phone.text =@"";
     }
     return _phone;
 }
 -(UILabel *)address{
     if (!_address) {
-        _address = [UILabel labelWithMediumFont:14 WithTextColor:DYGColorFromHex(0x666666)];
+        _address = [UILabel labelWithMediumFont:14 WithTextColor:DYGColorFromHex(0x797979)];
         _address.text = @"";
         _address.numberOfLines = 0;
     }
@@ -101,14 +111,14 @@
 }
 -(UIView *)line{
     if (!_line) {
-        _line = [UIView viewWithFrame:CGRectZero WithBackGroundColor:BGColor];
+        _line = [UIView viewWithFrame:CGRectZero WithBackGroundColor:DYGColorFromHex(0xe6e6e6)];
     }
     return _line;
 }
 -(UIButton *)defaultBtn{
     if (!_defaultBtn) {
-        _defaultBtn = [UIButton buttonWithTitle:@"默认地址" titleColor:TextColor font:12];
-        [_defaultBtn setTitleColor:systemColor forState:UIControlStateSelected];
+        _defaultBtn = [UIButton buttonWithTitle:@"默认地址" titleColor:DYGColorFromHex(0x797979) font:12];
+        [_defaultBtn setTitleColor:DYGColorFromHex(0xfed811) forState:UIControlStateSelected];
         [_defaultBtn setImage:[UIImage imageNamed:@"address_selected"] forState:UIControlStateSelected];
         [_defaultBtn setImage:[UIImage imageNamed:@"address_normal"] forState:UIControlStateNormal];
         _defaultBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -Px(6), 0, 0);
@@ -117,7 +127,7 @@
 }
 -(UIButton *)edit{
     if (!_edit) {
-        _edit = [UIButton buttonWithImage:@"edite" WithTitle:@"编辑" WithColor:TextColor WithFont:12];
+        _edit = [UIButton buttonWithImage:@"edite" WithTitle:@"编辑" WithColor:DYGColorFromHex(0x797979) WithFont:12];
         _edit.imageEdgeInsets = UIEdgeInsetsMake(0, -Px(6), 0, 0);
         [_edit addTarget:self action:@selector(editClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -125,11 +135,19 @@
 }
 -(UIButton *)delete{
     if (!_delete) {
-        _delete = [UIButton buttonWithImage:@"delete" WithTitle:@"删除" WithColor:TextColor WithFont:12];
+        _delete = [UIButton buttonWithImage:@"delete" WithTitle:@"删除" WithColor:DYGColorFromHex(0x797979) WithFont:12];
         _delete.imageEdgeInsets = UIEdgeInsetsMake(0, -Px(6), 0, 0);
         [_delete addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _delete;
+}
+
+- (UIView *)botoomV{
+    if (!_botoomV) {
+        _botoomV = [UIView new];
+        _botoomV.backgroundColor = DYGColorFromHex(0xf7f7f7);
+    }
+    return _botoomV;
 }
 
 - (void)editClick:(UIButton *)sender {

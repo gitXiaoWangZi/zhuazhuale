@@ -27,9 +27,14 @@
 }
 
 -(void)creatUI{
+    [self addSubview:self.icon];
+    [self.icon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(Px(14));
+        make.centerY.equalTo(self);
+    }];
     [self addSubview:self.title];
     [self.title mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(Px(16));
+        make.left.equalTo(self.icon.mas_right).offset(Px(10));
         make.centerY.equalTo(self);
     }];
     [self addSubview:self.open];
@@ -42,7 +47,9 @@
 
 -(UILabel *)title{
     if (!_title) {
-        _title = [UILabel labelWithMediumFont:16 WithTextColor:DYGColorFromHex(0x4c4c4c)];
+        _title = [[UILabel alloc] init];
+        _title.font = [UIFont systemFontOfSize:15];
+        _title.textColor = DYGColorFromHex(0x3b3b3b);
         _title.text =@"设为默认";
     }
     return _title;
@@ -51,10 +58,16 @@
     if (!_open) {
         _open = [[UISwitch alloc]init];
         _open.on = NO;
-        _open.onTintColor =systemColor;
+        _open.onTintColor =DYGColorFromHex(0xfed811);
         [_open addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     }
     return _open;
+}
+-(UIImageView *)icon{
+    if (!_icon) {
+        _icon = [[UIImageView alloc] init];
+    }
+    return _icon;
 }
 -(void)switchAction:(id)sender
 {

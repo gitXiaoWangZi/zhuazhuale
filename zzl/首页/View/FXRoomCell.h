@@ -14,4 +14,5 @@
 
 @property (nonatomic,strong) WwRoom *model;
 
+- (void)dealLineWithIndex:(NSIndexPath *)index;
 @end

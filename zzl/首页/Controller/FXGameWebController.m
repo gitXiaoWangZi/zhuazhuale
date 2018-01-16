@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UIView *progressView;
 @property (nonatomic, strong) CADisplayLink *displayLink;
 @property (nonatomic,assign) BOOL isChristmasList;
+@property (nonatomic,assign) BOOL isShare;
+@property (nonatomic,assign) BOOL isOtherPay;
 @end
 
 @implementation FXGameWebController
@@ -32,6 +34,8 @@
 -(void)addWebView
 {
     _isChristmasList = NO;
+    _isShare = NO;
+    _isOtherPay = NO;
     self.webView=[[UIWebView alloc]initWithFrame:(CGRectMake(0, 0, kScreenWidth, kScreenHeight-64))];
     self.webView.delegate=self;
     self.webView.scalesPageToFit = YES;
@@ -40,6 +44,7 @@
     self.title = self.item.title;
     if (self.item) {
         if ([self.item.banner_type isEqualToString:@"2"]) {//分享
+            _isShare = YES;
             self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/share",KUID];
         }
         if ([self.item.banner_type isEqualToString:@"5"]) {//大转盘
@@ -53,7 +58,7 @@
         [self.webView loadRequest:request];
         [self.view addSubview:self.webView];
     }else{
-        self.title = @"视频";
+        self.title = @"精彩视频";
         NSString *path = @"videoShare";
         NSString *orderID = @"";
         if (self.model.orderId) {
@@ -90,7 +95,26 @@
         [self.navigationController pushViewController:rechargeVC animated:YES];
         return NO;
     }
+    if ([urlString containsString:@"friendspay"] || [urlString containsString:@"mine"]) {
+        [self submitOtherPay];
+        return NO;
+    }
     return YES;
+}
+
+#pragma mark 代购
+- (void)submitOtherPay{
+    NSString *path = @"friendSharePay";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            _isOtherPay = YES;
+            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (void)shareActionData{
@@ -99,18 +123,14 @@
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {
-                [self shareActionWithHref:dic[@"data"][@"linkurl"]];
+                [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
             }
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];
 }
 
-- (void)shareActionWithHref:(NSString *)href{
-    
-    NSString *content = @"超萌娃娃免费抓，全国免邮送到家";
-    NSString *title = @"我又抓到了一只娃娃，送你600钻石一起抓";
-    NSArray* images0 = @[@"http://openapi.wawa.zhuazhuale.xin/img/imgdata/wawalogo.png"];
+- (void)shareActionWithHref:(NSString *)href title:(NSString *)title content:(NSString *)content imageArr:(NSArray *)images0{
     NSMutableDictionary *shareParams0 = [NSMutableDictionary dictionary];
     NSURL *url = [NSURL URLWithString:href];
     [shareParams0 SSDKSetupShareParamsByText:content images:images0 url:url title:title type:SSDKContentTypeAuto];
@@ -168,6 +188,20 @@
             NSLog(@"%@",error);
         }];
     }
+    if (_isShare) {
+        NSString *path = @"turntableSharing";
+        NSDictionary *params = @{@"uid":KUID,@"type":@"2"};
+        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        } failure:^(NSError *error) {
+        }];
+    }
+    if (_isOtherPay) {
+        NSString *path = @"turntableSharing";
+        NSDictionary *params = @{@"uid":KUID,@"type":@"3"};
+        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        } failure:^(NSError *error) {
+        }];
+    }
     NSString *path = @"raw_award";
     NSDictionary *params = @{@"uid":KUID,@"type":@"share_game"};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
@@ -189,21 +223,22 @@
     return _progressView;
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(progressValueMonitor)];
-    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-}
-- (void)webViewDidFinishLoad:(UIWebView *)webView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    [self.displayLink invalidate];
-    [UIView animateWithDuration:0.2 animations:^{
-        self.progressView.width = kScreenWidth;
-    } completion:^(BOOL finished) {
-        [self.progressView removeFromSuperview];
-    }];
-}
+//- (void)webViewDidStartLoad:(UIWebView *)webView{
+//    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(progressValueMonitor)];
+//    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+//}
+//- (void)webViewDidFinishLoad:(UIWebView *)webView{
+//    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+//
+//    [self.displayLink invalidate];
+//    [self.progressView removeFromSuperview];
+//    [UIView animateWithDuration:0.2 animations:^{
+//        self.progressView.width = kScreenWidth;
+//    } completion:^(BOOL finished) {
+//        [self.progressView removeFromSuperview];
+//    }];
+//}
 
 
 

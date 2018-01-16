@@ -32,10 +32,10 @@ static NSString *cellId = @"FXMinePageCell";
 @property (nonatomic,strong) NSArray *topPushArr;
 @property (nonatomic,strong) AccountItem *item;
 @property (nonatomic,copy) NSString *receive;
+@property (nonatomic,copy) NSString *firstpunch;
 
 //@property (nonatomic,strong) FXSelfHeaderView *header;
 @property (nonatomic,strong) FXMineHeaderView *header1;
-@property (nonatomic,copy) NSString *firstpunch;
 @end
 
 @implementation FXSelfViewController
@@ -138,6 +138,7 @@ static NSString *cellId = @"FXMinePageCell";
                 FXHomeBannerItem *item = [FXHomeBannerItem new];
                 item.href = @"http://wawa.api.fanx.xin/share";
                 item.title = @"邀请好友";
+                item.banner_type = @"2";
                 FXGameWebController *vc = [[FXGameWebController alloc] init];
                 vc.item = item;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -220,7 +221,7 @@ static NSString *cellId = @"FXMinePageCell";
 
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, -20, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, -20, kScreenWidth, kScreenHeight + 20) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorColor = BGColor;

@@ -11,7 +11,8 @@
 #import "FXLoginHomeController.h"
 #import "WelcomeViewController.h"
 #import "FXNavigationController.h"
-#import <JPUSHService.h>
+#import "FXHomeViewController.h"
+#import "XHLaunchAd.h"
 // iOS10注册APNs所需头文件
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
@@ -21,15 +22,13 @@
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
 
 @interface AppDelegate ()<WXApiDelegate,JPUSHRegisterDelegate>
-
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    
+    [self.window makeKeyAndVisible];
     /*******娃娃机SDK注册*********/
     [[WawaSDK WawaSDKInstance] registerApp:AppID appKey:AppKey complete:^(int code, NSString * _Nullable message) {
         if (code == WwCodeSuccess) {
@@ -48,7 +47,8 @@
         // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
     }
     [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
-    [JPUSHService setupWithOption:launchOptions appKey:@"a07cd2a354fdb609b05196fa" channel:@"App Store" apsForProduction:1];//0是开发1是发布
+    [JPUSHService setupWithOption:launchOptions appKey:@"a07cd2a354fdb609b05196fa" channel:@"App Store" apsForProduction:0];//0是开发1是发布
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     /*******向友盟注册  统计功能*********/
     UMConfigInstance.appKey = @"5a28eb48b27b0a2633000206";
@@ -104,7 +104,9 @@
     NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][kBundleVersionKey];
     if ([currentVersion isEqualToString:saveVersion]) {
         if (KisLogin) {
-            self.window.rootViewController = [FXTabBarController new];
+            [JPUSHService setTags:nil alias:[KUID stringValue] fetchCompletionHandle:nil];
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            self.window.rootViewController = nav;
         }else{
             FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXLoginHomeController new]];
             self.window.rootViewController = nav;
@@ -117,12 +119,8 @@
         //保存Version
         [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:kBundleVersionKey];
     }
-    
-    
-    [self.window makeKeyAndVisible];
     return YES;
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -245,6 +243,7 @@
     
     // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
@@ -259,7 +258,7 @@
 }
     
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
@@ -267,7 +266,7 @@
 }
     
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];

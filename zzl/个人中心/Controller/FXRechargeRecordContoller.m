@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title =@"消费记录";
+    self.title =@"我的钻石";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadNewData) name:@"refreshUserData" object:nil];
     [self.view addSubview:self.tableView];
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
@@ -34,7 +34,7 @@
 }
 
 -(void)creatHeader{
-    self.header = [[FXHistoryHeader alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, Py(90))];
+    self.header = [[FXHistoryHeader alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, Py(176))];
     self.header.money.text = self.moneyStr;
     self.tableView.tableHeaderView = self.header;
 }
@@ -54,17 +54,17 @@
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return Py(72);
+    return Py(50);
 }
 #pragma mark lazy load
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
-        _tableView.backgroundColor = BGColor;
+        _tableView.backgroundColor = DYGColorFromHex(0xf7f7f7);
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.separatorColor = DYGColorFromHex(0xececec);
     }
     return _tableView;
 }

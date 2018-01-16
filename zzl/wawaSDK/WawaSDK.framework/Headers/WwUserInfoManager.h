@@ -109,8 +109,8 @@ typedef NS_OPTIONS(NSUInteger, WwWawaListType) {
  * @param complete 回调block
  */
 - (void)requestCreateOrderWithWawaIds:(NSArray <NSString *> *)wawaIds
-                             address:(WwAddress *)addressModel
-                     completeHandler:(void (^)(int code, NSString *message))complete;
+                              address:(WwAddress *)addressModel
+                      completeHandler:(void (^)(int code, NSString *message))complete;
 
 
 /**
@@ -171,14 +171,15 @@ typedef NS_OPTIONS(NSUInteger, WwWawaListType) {
 
 
 #pragma mark - 兑换我的娃娃
+
 /**
  * 将娃娃兑换成金币
- *
- * @param IdArr 要兑换的娃娃ID数组
+ * @param IDs 寄存中的娃娃ID数组, 可为空
+ * @param orderIds 发货准备中的订单号数组, 可为空
  */
-- (void)requestExchangeWawaWithType:(WwWawaListType)type
-                              IdArr:(NSArray <NSString *> *)IdArr
-                complete:(void (^)(int code, NSString *message))complete;
+- (void)requestExchangeWawaWithDepositIds:(NSArray <NSString *>*)IDs
+                               deliverIds:(NSArray <NSString *>*)orderIds
+                                 complete:(void (^)(int code, NSString *message))complete;
 
 /**
  * 请求积分商城列表

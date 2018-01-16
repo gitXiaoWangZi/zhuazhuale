@@ -69,19 +69,18 @@ static NSString *subviewClassName;
      */
     UIView *superViewOfScrollView = [[UIView alloc] initWithFrame:self.bounds];
     [superViewOfScrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-    [superViewOfScrollView setBackgroundColor:[UIColor clearColor]];
     [superViewOfScrollView addSubview:self.scrollView];
     [self addSubview:superViewOfScrollView];
     
 }
 
 - (void)setLeftRightMargin:(CGFloat)leftRightMargin {
-    _leftRightMargin = leftRightMargin * 0.5;
+    _leftRightMargin = leftRightMargin;
     
 }
 
 - (void)setTopBottomMargin:(CGFloat)topBottomMargin {
-    _topBottomMargin = topBottomMargin * 0.5;
+    _topBottomMargin = topBottomMargin;
 }
 
 - (void)startTimer {
@@ -161,7 +160,6 @@ static NSString *subviewClassName;
                 CGRect originCellFrame = CGRectMake(_pageSize.width * i, 0, _pageSize.width, _pageSize.height);//如果没有缩小效果的情况下的本该的Frame
                 
                 if (delta < _pageSize.width) {
-                    
                     cell.coverView.alpha = (delta / _pageSize.width) * _minimumPageAlpha;
                     
                     CGFloat leftRightInset = self.leftRightMargin * delta / _pageSize.width;

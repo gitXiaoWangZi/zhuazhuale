@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.2</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -56,7 +56,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>5</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mqqopensdkapiV4</string>
@@ -93,11 +93,16 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>需要使用您的相机</string>
+	<string>需要使用您的相机来更改头像</string>
 	<key>NSContactsUsageDescription</key>
-	<string>需要访问您的通讯录</string>
+	<string>需要访问您的通讯录来获取收货人信息</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>需要打开您的相册</string>
+	<string>需要打开您的相册来获取照片修改头像或者进行投诉</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>华文圆体 Regular.TTF</string>
+		<string>华文圆体 Bold.TTF</string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

@@ -65,6 +65,8 @@
 {
     [super awakeFromNib];
     [self setup];
+    self.showsTouchWhenHighlighted = YES;
+    self.adjustsImageWhenHighlighted = NO;
 }
 
 - (void)setup

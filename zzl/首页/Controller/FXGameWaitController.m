@@ -379,12 +379,12 @@
         dispatch_source_cancel(_timer0);
         _timer0 = nil;
     }
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kQuitEnter"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kQuitEnter"];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kQuitEnter"]) {
+//        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kQuitEnter"];
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//    }else{
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
 }
 
 #pragma mark--点击开始游戏按钮
@@ -447,6 +447,10 @@
 }
 
 #pragma mark - ZYPlayOperationViewDelegate
+- (void)changePerspective:(BOOL)isSelect{
+    
+}
+
 - (void)onPlayDirection:(PlayDirection)direction operationType:(PlayOperationType)type {
     NSMutableString *string = [NSMutableString stringWithFormat:@"单击事件，"];
     switch (type) {
@@ -533,7 +537,6 @@
     self.resultPopView = [[FXGameResultView alloc] initWithFrame:self.view.bounds];
     self.resultPopView.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.4];
     self.resultPopView.delegate = self;
-    self.resultPopView.isSuccess = isSuccess;
     [self.tableView addSubview:self.resultPopView];
     
     [self countDownAction];
@@ -562,7 +565,7 @@
         num--;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.resultPopView.cornerL.text = [NSString stringWithFormat:@"%zd",num];
+//            self.resultPopView.cornerL.text = [NSString stringWithFormat:@"%zd",num];
         });
         
         if (num == 0) {
@@ -691,7 +694,7 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, -20, kScreenWidth, kScreenHeight+20) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.showsVerticalScrollIndicator = YES;
         _tableView.backgroundColor = [UIColor colorWithHexString:@"ffea00" alpha:1];
         [_tableView registerNib:[UINib nibWithNibName:@"DYGPersonInfoTbCell" bundle:nil] forCellReuseIdentifier:@"perCell"];
         _tableView.separatorColor = BGColor;

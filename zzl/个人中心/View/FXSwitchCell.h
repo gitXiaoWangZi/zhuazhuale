@@ -10,5 +10,6 @@
 
 @interface FXSwitchCell : UITableViewCell
 @property(nonatomic,strong)UILabel * title;
+@property(nonatomic,strong)UIImageView * icon;
 @property (nonatomic,strong) UISwitch * open;
 @end

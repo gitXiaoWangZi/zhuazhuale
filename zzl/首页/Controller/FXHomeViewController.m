@@ -19,6 +19,10 @@
 #import "FXHomeSignPopView.h"//连续登录签到页面
 #import "FXHomeLoginSuccessPopView.h" //登录成功页面
 #import "LSJHasNetwork.h"
+#import "FXSelfViewController.h"
+#import "FXZZLViewController.h"
+#import "LSJGameViewController.h"
+#import "LSJPersonalTableViewController.h"
 
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
@@ -30,7 +34,7 @@
 @property (nonatomic, strong) NewPagedFlowView *pageFlowView;
 
 @property (nonatomic,strong) DYGHomeHeaderView *header;
-
+@property (nonatomic,strong) NSArray *roomIdsArray;
 /**
  * 房间模型数组
  */
@@ -44,6 +48,7 @@
 @property (nonatomic,strong) FXHomeLoginSuccessPopView *loginPopView;//登录成功页面
 @property (nonatomic,strong) MBProgressHUD *hud;
 @property (nonatomic,strong) UIImageView *defaultImageV;
+@property (nonatomic,strong) UIImageView *bgImageV;
 
 @end
 
@@ -53,6 +58,15 @@
     if (self.roomsArray.count == 0) {
         [self initData];
     }
+}
+
+- (void)loadView{
+    [super loadView];
+    _bgImageV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_bg"]];
+    _bgImageV.frame = self.view.bounds;
+    [self.view addSubview:_bgImageV];
+    [self.view sendSubviewToBack:_bgImageV];
+    self.roomIdsArray = @[@"590",@"562",@"508",@"321",@"335",@"262"];
 }
 
 #pragma  Controller Life
@@ -73,6 +87,98 @@
     [self.view addSubview:self.header];
     [self initData];
     
+    [self addbottomView];
+}
+
+- (void)addbottomView{
+    UIView *bottomV = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 105.5, kScreenWidth, 105.5)];
+    bottomV.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:bottomV];
+    
+    UIImageView *bottomImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_base"]];
+    bottomImgV.frame = CGRectMake(0, 32.5, kScreenWidth, 73);
+    bottomImgV.userInteractionEnabled = YES;
+    [bottomV addSubview:bottomImgV];
+    
+    UIButton *listBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    listBtn.frame = CGRectMake(20, 26.5, 92.5, 74);
+    [listBtn setBackgroundImage:[UIImage imageNamed:@"home_list"] forState:UIControlStateNormal];
+    [listBtn setBackgroundImage:[UIImage imageNamed:@"home_list_select"] forState:UIControlStateHighlighted];
+    [listBtn addTarget:self action:@selector(listAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomV addSubview:listBtn];
+    
+    UIButton *captureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    captureBtn.frame = CGRectMake(0, 5, 120, 95.5);
+    captureBtn.centerX = bottomImgV.centerX;
+    [captureBtn setBackgroundImage:[UIImage imageNamed:@"home_ capture"] forState:UIControlStateNormal];
+    [captureBtn setBackgroundImage:[UIImage imageNamed:@"home_ capture_select"] forState:UIControlStateHighlighted];
+    [captureBtn addTarget:self action:@selector(captureAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomV addSubview:captureBtn];
+    
+    UIButton *personalBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    personalBtn.frame = CGRectMake(kScreenWidth-112.5, 26.5, 92.5, 74);
+    [personalBtn setBackgroundImage:[UIImage imageNamed:@"home_personal"] forState:UIControlStateNormal];
+    [personalBtn setBackgroundImage:[UIImage imageNamed:@"home_personal_select"] forState:UIControlStateHighlighted];
+    [personalBtn addTarget:self action:@selector(personalAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomV addSubview:personalBtn];
+}
+
+- (void)personalAction:(UIButton *)sender{
+    if (![[VisiteTools shareInstance] isVisite]) {
+        LSJPersonalTableViewController *mineVC = [[LSJPersonalTableViewController alloc] init];
+        [self.navigationController pushViewController:mineVC animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
+}
+
+- (void)captureAction:(UIButton *)sender{
+    if (![[VisiteTools shareInstance] isVisite]) {
+        [LSJHasNetwork lsj_hasNetwork:^(bool hasNet) {
+            if (hasNet) {
+                if (![[VisiteTools shareInstance] isVisite]) {
+                    [self jumpRooms];
+                }else{
+                    [[VisiteTools shareInstance] outLogin];
+                }
+            }else{
+                [MBProgressHUD showMessage:@"暂无网络，请连接网络后再试" toView:self.view];
+            }
+        }];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
+}
+
+- (void)jumpRooms{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"查找房间中……";
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        [[WwRoomManager RoomMgrInstance] requestQuickStartWithComplete:^(NSInteger code, NSString *msg, WwRoom *room) {
+            if (room == nil) {
+                [MBProgressHUD showError:@"没有房间可以进入" toView:[UIApplication sharedApplication].keyWindow];
+            }else{
+//                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kQuitEnter"];
+                LSJGameViewController *game = [[LSJGameViewController alloc] init];
+                game.model = room;
+                [self.navigationController pushViewController:game animated:YES];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hideAnimated:YES];
+            });
+        }];
+        
+    });
+}
+
+- (void)listAction:(UIButton *)sender{
+    if (![[VisiteTools shareInstance] isVisite]) {
+        FXZZLViewController *moreVC = [[FXZZLViewController alloc] init];
+        [self.navigationController pushViewController:moreVC animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
 }
 
 - (void)initData{
@@ -103,6 +209,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.header beginScroll];
     [self.header starTimer];
     
 }
@@ -110,7 +217,7 @@
     [super viewDidDisappear:animated];
     [self.header.timer invalidate];
     self.header.timer = nil;
-    [self.header beginScroll];
+    [self.header stopScroll];
 }
 
 #pragma mark - Public
@@ -143,7 +250,7 @@
 - (DYGHomeHeaderView *)header{
     if (!_header) {
         _header = [[DYGHomeHeaderView alloc]init];
-        _header.frame = CGRectMake(0, 0, kScreenWidth,Py(200));
+        _header.frame = CGRectMake(12, 28, kScreenWidth - 24,Py(142));
         _header.delegate =self;
     }
     return _header;
@@ -162,22 +269,22 @@
 }
 
 - (void)setupUI {
-    NewPagedFlowView *pageFlowView = [[NewPagedFlowView alloc] initWithFrame:CGRectMake(0, Py(204), kScreenWidth, Py(380))];
-    pageFlowView.backgroundColor = [UIColor whiteColor];
+    NewPagedFlowView *pageFlowView = [[NewPagedFlowView alloc] initWithFrame:CGRectMake(0, kScreenHeight - Py(478), kScreenWidth, Py(380))];
     pageFlowView.delegate = self;
     pageFlowView.dataSource = self;
     pageFlowView.minimumPageAlpha = 0.1;
     pageFlowView.isCarousel = NO;
     pageFlowView.orientation = NewPagedFlowViewOrientationHorizontal;
     pageFlowView.isOpenAutoScroll = YES;
-    pageFlowView.backgroundColor = BGColor;
-    pageFlowView.leftRightMargin = Px(25);
+    pageFlowView.leftRightMargin = Px(15);
     [self.view addSubview:pageFlowView];
     [pageFlowView reloadData];
     self.pageFlowView = pageFlowView;
     if (self.roomPicArray.count>1) {
         [pageFlowView scrollToPage:1];
     }
+    pageFlowView.clipsToBounds = NO;
+    [self.view insertSubview:pageFlowView aboveSubview:_bgImageV];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -186,7 +293,8 @@
 }
 #pragma mark 加载数据
 -(void)loadRoomList {
-    [[WwRoomManager RoomMgrInstance] requestRoomListByIds:@[@"270",@"300",@"269",@"239",@"263"] withComplete:^(NSInteger code, NSString *message, NSArray<WwRoom *> *list) {
+    
+    [[WwRoomManager RoomMgrInstance] requestRoomListByIds:self.roomIdsArray withComplete:^(NSInteger code, NSString *message, NSArray<WwRoom *> *list) {
         [_hud hideAnimated:YES];
         self.defaultImageV.hidden = YES;
         
@@ -243,7 +351,7 @@
       
 #pragma mark 请求banner图数据
 - (void)loadBannerData{
-    NSString *path = @"getIndexBanner";
+    NSString *path = @"getIndexnewBanner";
     NSDictionary *params = @{@"uid":KUID,@"index":@(1),@"num":@(20)};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
@@ -266,9 +374,14 @@
 - (void)didSelectCell:(UIView *)subView withSubViewIndex:(NSInteger)subIndex {
     if (![[VisiteTools shareInstance] isVisite]) {
         [MobClick event:@"home_page_click"];
-        FXGameWaitController * vc = [[FXGameWaitController alloc]init];
-        vc.model = self.roomsArray[subIndex];
-        [self.navigationController pushViewController:vc animated:YES];
+        
+        LSJGameViewController *game = [[LSJGameViewController alloc] init];
+        game.model = self.roomsArray[subIndex];
+        [self.navigationController pushViewController:game animated:YES];
+        
+//        FXGameWaitController * vc = [[FXGameWaitController alloc]init];
+//        vc.model = self.roomsArray[subIndex];
+//        [self.navigationController pushViewController:vc animated:YES];
     }else{
         [[VisiteTools shareInstance] outLogin];
     }
@@ -276,11 +389,7 @@
 
 #pragma mark NewPagedFlowView Datasource
 - (NSInteger)numberOfPagesInFlowView:(NewPagedFlowView *)flowView {
-    if (self.roomsArray.count >= 5) {
-        return 5;
-    }else{
-        return self.roomsArray.count;
-    }
+    return self.roomsArray.count;
 }
 
 - (UIView *)flowView:(NewPagedFlowView *)flowView cellForPageAtIndex:(NSInteger)index{
@@ -288,16 +397,14 @@
     WwRoom *model = self.roomsArray[index];
     if (!bannerView) {
         bannerView = [[PGIndexBannerSubiew alloc] initWithFrame:CGRectMake(0, 0, Px(233), Py(360))];
-        bannerView.layer.cornerRadius = 4;
+        bannerView.layer.cornerRadius = 15;
         bannerView.layer.masksToBounds = YES;
         bannerView.delegate = self;
         bannerView.model = model;
     }
     for (FXHomeHouseItem *item in self.roomPicArray) {
-        
         if ([item.dicid isEqualToString:[NSString stringWithFormat:@"%zd",model.ID]]) {
             [bannerView.mainImageView sd_setImageWithURL:[NSURL URLWithString:item.img_path] placeholderImage:[UIImage imageNamed:@"鱿鱼"]];
-            bannerView.currentScore = [item.level floatValue];
         }
     }
     return bannerView;
@@ -308,7 +415,7 @@
     NSLog(@"TestViewController 滚动到了第%ld页",pageNumber);
 }
 - (CGSize)sizeForPageInFlowView:(NewPagedFlowView *)flowView {
-    return CGSizeMake(Px(233), Py(360));
+    return CGSizeMake(Px(298), Py(408));
 }
 
 #pragma self Delegate
@@ -323,16 +430,6 @@
         [[VisiteTools shareInstance] outLogin];
     }
     
-}
-
--(void)moreBtnDidClick{
-    if (![[VisiteTools shareInstance] isVisite]) {
-        [MobClick event:@"more_btn_clieck"];
-        FXZZLViewController * vc = [[FXZZLViewController alloc]init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }else{
-        [[VisiteTools shareInstance] outLogin];
-    }
 }
 
 #pragma mark FXHomePopViewDelegate 第一注册App进入首页送钻石view

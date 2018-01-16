@@ -13,9 +13,14 @@
 #import <SDWebImage/UIImage+GIF.h>
 #import "FXLoginController.h"
 #import "FXGameWebController.h"
+#import "FXNavigationController.h"
+#import "FXHomeViewController.h"
 #import "FXHomeBannerItem.h"
+#import "AccountItem.h"
 
 @interface FXLoginHomeController ()<wxDelegate>
+
+
 
 @property(nonatomic,weak)AppDelegate * appdelegate;
 @property(nonatomic,strong)UIImageView * bgImg;
@@ -28,6 +33,11 @@
 @property (nonatomic,strong) UIButton *back;
 @property (nonatomic,strong) FXLoginPopView * popView;
 @property (nonatomic,strong) MBProgressHUD *hud;
+@property (weak, nonatomic) IBOutlet UIImageView *downImagV;
+@property (weak, nonatomic) IBOutlet UIButton *phoneBtn;
+@property (weak, nonatomic) IBOutlet UIButton *wechatBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *domnImgV;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneRightCons;
 
 @end
 
@@ -37,8 +47,16 @@
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     
-    [self creatUI];
+    if (![WXApi isWXAppInstalled]) {//用户没有安装微信客户端
+        //构造SendAuthReq结构体
+        self.wechatBtn.hidden = YES;
+        self.phoneRightCons.constant = 58 - (kScreenWidth - 40)/2;
+    }else{//用户安装微信客户端
+        self.wechatBtn.hidden = NO;
+        self.phoneRightCons.constant = -21;
+    }
     
+    self.downImagV.layer.cornerRadius = 10;
     
     [DYGHttpTool postWithURL:@"appeal" params:nil sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
@@ -54,53 +72,6 @@
     }];
 }
 -(void)creatUI{
-    
-    [self.view addSubview:self.bgImg];
-    [self.bgImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.bottom.equalTo(self.view);
-    }];
-    [self.view addSubview:self.gifImg];
-    [self.gifImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@(Py(60)));
-        make.left.equalTo(@(28));
-        make.right.equalTo(@(-28));
-        make.height.equalTo(@((kScreenWidth - 56) * 0.75));
-    }];
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"importdribbble" ofType:@"gif"];
-    [self.gifImg sd_setImageWithURL:[NSURL fileURLWithPath:path]];
-
-    
-    [self.view addSubview:self.weChat];
-    [self.weChat mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.gifImg);
-        make.top.equalTo(self.gifImg.mas_bottom).offset(Py(68));
-        make.size.mas_equalTo(CGSizeMake(Px(185), Py(72)));
-    }];
-    [self.view addSubview:self.phone];
-    [self.phone mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.weChat);
-        make.top.equalTo(self.weChat.mas_bottom).offset(Py(5));
-        make.size.equalTo(self.weChat);
-    }];
-    [self.view addSubview:self.visiteBtn];
-    [self.visiteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.phone);
-        make.top.equalTo(self.phone.mas_bottom).offset(Py(5));
-        make.size.equalTo(self.phone);
-    }];
-    [self.view addSubview:self.textLabel];
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@(-60));
-        make.centerX.equalTo(self.weChat).offset(-30);
-    }];
-    [self.view addSubview:self.xyLabel];
-    [self.xyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.textLabel);
-        make.left.equalTo(self.textLabel.mas_right).offset(2);
-    }];
-    self.xyLabel.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(agreementAction:)];
-    [self.xyLabel addGestureRecognizer:tap];
 }
 
 - (void)agreementAction:(UITapGestureRecognizer *)tap {
@@ -119,6 +90,15 @@
     [self.navigationController pushViewController:loginV animated:YES];
 }
 
+- (IBAction)weixinAction:(UIButton *)sender {
+    [self weChatAction];
+}
+
+- (IBAction)phoneAction:(UIButton *)sender {
+    
+    [self.view addSubview:self.popView];
+}
+
 #pragma mark -------微信登录
 -(void)weChatAction {
     
@@ -134,7 +114,6 @@
 //    }else{//用户未安装微信客户端
 ////
 //    }
-    
 }
 
 - (void)loginSuccessByCode:(NSString *)code{
@@ -181,14 +160,18 @@
         [_hud hideAnimated:YES];
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
+            NSNumber *alias = dic[@"data"][0][@"id"];
+            [JPUSHService setTags:nil alias:[alias stringValue] fetchCompletionHandle:nil];
             //微信登录成功后
             NSDictionary *userDic = dic[@"data"][0];
             NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
             [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            window.rootViewController = [[FXTabBarController alloc] init];
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            window.rootViewController = nav;
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWChatLoginType];
         }
     } failure:^(NSError *error) {
         [_hud hideAnimated:YES];
@@ -196,66 +179,21 @@
 }
 
 #pragma mark lazy load
--(UIImageView *)gifImg{
-    if (!_gifImg) {
-        _gifImg = [[UIImageView alloc] init];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"importdribbble.gif" ofType:nil];
-        NSData *data = [NSData dataWithContentsOfFile:path];
-        UIImage *image = [UIImage sd_animatedGIFWithData:data];
-        _gifImg.image = image;
+- (FXLoginPopView *)popView{
+    if (!_popView) {
+        _popView = [[FXLoginPopView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        _popView.backgroundColor = DYGAColor(0, 0, 0, 0.5);
     }
-    return _gifImg;
+    return _popView;
 }
--(UIImageView *)bgImg{
-    if (!_bgImg) {
-        _bgImg = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"loginBG"]];
-    }
-    return _bgImg;
-}
--(UIButton *)weChat{
-    
-    if (!_weChat) {
-        _weChat = [UIButton buttonWithImage:@"weChatLogin" WithHighlightedImage:@"weChatLogin"];
-        [_weChat addTarget:self action:@selector(weChatAction) forControlEvents:(UIControlEventTouchUpInside)];
-    }
-    return _weChat;
-}
--(UIButton *)phone{
-    if (!_phone) {
-        _phone = [UIButton buttonWithImage:@"numLogin" WithHighlightedImage:@"numLogin"];
-        [_phone addTarget:self action:@selector(phoneClick) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _phone;
-}
+
+
 -(UIButton *)visiteBtn{
     if (!_visiteBtn) {
         _visiteBtn = [UIButton buttonWithTitle:@"游客登录" titleColor:DYGColorFromHex(0x999999) font:14];
         [_visiteBtn addTarget:self action:@selector(visiteBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _visiteBtn;
-}
--(UILabel *)textLabel{
-    if (!_textLabel) {
-        _textLabel = [UILabel labelWithFont:13 WithTextColor:DYGColorFromHex(0x999999)];
-        _textLabel.text = @"登录代表您同意抓抓乐";
-    }
-    return _textLabel;
-}
-
--(UILabel *)xyLabel{
-    if (!_xyLabel) {
-        _xyLabel = [UILabel labelWithMediumFont:13 WithTextColor:systemColor];
-        _xyLabel.text = @"用户协议";
-    }
-    return _xyLabel;
-}
--(UIButton *)back{
-    if (!_back) {
-        _back = [UIButton buttonWithImage:@"backArrow" WithHighlightedImage:@"backArrow"];
-        _back.size = _back.currentImage.size;
-        [_back addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _back;
 }
 
 - (void)visiteBtnClick{
@@ -272,7 +210,8 @@
             window.rootViewController = [[FXTabBarController alloc] init];
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
-            
+            AccountItem *account = [AccountItem mj_objectWithKeyValues:dic[@"data"][0]];
+            [[NSUserDefaults standardUserDefaults] setObject:account.firstpunch forKey:Kfirstpunch];
         }else{
             [MBProgressHUD showError:dic[@"msg"] toView:self.view];
         }

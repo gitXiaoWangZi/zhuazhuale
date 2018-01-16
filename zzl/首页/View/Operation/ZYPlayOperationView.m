@@ -18,6 +18,7 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
 @property (nonatomic, copy) NSArray *directionArray;
 @property (nonatomic, copy) NSArray *currDirs;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *confirmBtn_trailing;
+@property (nonatomic,strong) UIImageView *bgimgV;
 
 @end
 
@@ -25,20 +26,21 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
 
 + (instancetype)operationView {
     ZYPlayOperationView * view = [[NSBundle mainBundle] loadNibNamed:@"ZYPlayOperationView" owner:nil options:nil].lastObject;
-
     [view initUI];
     [view initData];
     
     return view;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        [self initUI];
+        [self initData];
+    }
+    return self;
+}
+
 - (void)initUI {
-    // 添加Disable图标
-    [_upBtn setImage:[UIImage imageNamed:@"op_disable_up"] forState:UIControlStateDisabled];
-    [_downBtn setImage:[UIImage imageNamed:@"op_disable_down"] forState:UIControlStateDisabled];
-    [_leftBtn setImage:[UIImage imageNamed:@"op_disable_left"] forState:UIControlStateDisabled];
-    [_rightBtn setImage:[UIImage imageNamed:@"op_disable_right"] forState:UIControlStateDisabled];
-    [_confirmBtn setImage:[UIImage imageNamed:@"op_disable_confirm"] forState:UIControlStateDisabled];
     
     if (kScreenWidth < 370) {
         for (UIButton * btn in @[_upBtn,_downBtn,_leftBtn,_rightBtn]) {
@@ -48,26 +50,69 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
         }
         self.confirmBtn_trailing.constant = 10;
     }
+    [self addSubview:self.bgimgV];
+    [self.bgimgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(0));
+        make.top.equalTo(@(0));
+        make.right.equalTo(@(0));
+        make.bottom.equalTo(@(0));
+    }];
+    [self addSubview:self.viewBtn];
+    [self.viewBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(Px(10)));
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.viewBtn.adjustsImageWhenHighlighted = NO;
+    [self addSubview:self.confirmBtn];
+    [self.confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(@(Px(-10)));
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.confirmBtn.adjustsImageWhenHighlighted = NO;
+    [self addSubview:self.upBtn];
+    [self.upBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@(Py(-10)));
+        make.centerX.equalTo(self.mas_centerX);
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.upBtn.adjustsImageWhenHighlighted = NO;
+    [self addSubview:self.leftBtn];
+    [self.leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.upBtn.mas_bottom).offset(Py(-14));
+        make.right.equalTo(self.upBtn.mas_left).offset(Px(20));
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.leftBtn.adjustsImageWhenHighlighted = NO;
+    [self addSubview:self.rightBtn];
+    [self.rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.upBtn.mas_bottom).offset(Py(-14));
+        make.left.equalTo(self.upBtn.mas_right).offset(Px(-20));
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.rightBtn.adjustsImageWhenHighlighted = NO;
+    [self addSubview:self.downBtn];
+    [self.downBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.rightBtn.mas_bottom).offset(Py(-14));
+        make.centerX.equalTo(self.mas_centerX);
+        make.width.equalTo(@(Px(68)));
+        make.height.equalTo(@(Py(53)));
+    }];
+    self.downBtn.adjustsImageWhenHighlighted = NO;
     
-    // 添加Target-Action
-    // 上
-    [_upBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
-    [_upBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // 下
-    [_downBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
-    [_downBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // 左
-    [_leftBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
-    [_leftBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // 右
-    [_rightBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
-    [_rightBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_confirmBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
-    [_confirmBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)changeView:(UIButton *)sender{
+    sender.selected = !sender.selected;
+    if ([self.delegate respondsToSelector:@selector(changePerspective:)]) {
+        [self.delegate changePerspective:sender.selected];
+    }
 }
 
 - (void)initData {
@@ -213,6 +258,7 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
 }
 
 - (void)onButtonTouchInside:(UIButton *)sender {
+    [self onButtonClicked:sender];
     OBShapedButton *button = (OBShapedButton *)sender;
     BOOL sendRelease = YES;
     if (!button.longPTimer) {
@@ -338,6 +384,74 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
     if ([self.delegate respondsToSelector:@selector(onPlayDirection:operationType:)]) {
         [self.delegate onPlayDirection:direction operationType:PlayOperationType_LongPress];
     }
+}
+
+#pragma mark lazyload
+- (OBShapedButton *)upBtn{
+    if (!_upBtn) {
+        _upBtn = [OBShapedButton buttonWithType:UIButtonTypeCustom];
+        [_upBtn setImage:[UIImage imageNamed:@"game_up_normal"] forState:UIControlStateNormal];
+        [_upBtn setImage:[UIImage imageNamed:@"game_up_select"] forState:UIControlStateHighlighted];
+        [_upBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
+        [_upBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _upBtn;
+}
+- (OBShapedButton *)downBtn{
+    if (!_downBtn) {
+        _downBtn = [OBShapedButton buttonWithType:UIButtonTypeCustom];
+        [_downBtn setImage:[UIImage imageNamed:@"game_down_normal"] forState:UIControlStateNormal];
+        [_downBtn setImage:[UIImage imageNamed:@"game_down_select"] forState:UIControlStateHighlighted];
+        [_downBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
+        [_downBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _downBtn;
+}
+- (OBShapedButton *)leftBtn{
+    if (!_leftBtn) {
+        _leftBtn = [OBShapedButton buttonWithType:UIButtonTypeCustom];
+        [_leftBtn setImage:[UIImage imageNamed:@"game_left_normal"] forState:UIControlStateNormal];
+        [_leftBtn setImage:[UIImage imageNamed:@"game_left_select"] forState:UIControlStateHighlighted];
+        [_leftBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
+        [_leftBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _leftBtn;
+}
+- (OBShapedButton *)rightBtn{
+    if (!_rightBtn) {
+        _rightBtn = [OBShapedButton buttonWithType:UIButtonTypeCustom];
+        [_rightBtn setImage:[UIImage imageNamed:@"game_right_normal"] forState:UIControlStateNormal];
+        [_rightBtn setImage:[UIImage imageNamed:@"game_right_select"] forState:UIControlStateHighlighted];
+        [_rightBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
+        [_rightBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rightBtn;
+}
+- (OBShapedButton *)confirmBtn{
+    if (!_confirmBtn) {
+        _confirmBtn = [OBShapedButton buttonWithType:UIButtonTypeCustom];
+        [_confirmBtn setImage:[UIImage imageNamed:@"game_game_normal"] forState:UIControlStateNormal];
+        [_confirmBtn setImage:[UIImage imageNamed:@"game_game_select"] forState:UIControlStateHighlighted];
+        [_confirmBtn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
+        [_confirmBtn addTarget:self action:@selector(onButtonTouchInside:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    return _confirmBtn;
+}
+- (UIButton *)viewBtn{
+    if (!_viewBtn) {
+        _viewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_viewBtn setImage:[UIImage imageNamed:@"game_normal_view_normal"] forState:UIControlStateNormal];
+        [_viewBtn setImage:[UIImage imageNamed:@"game_normal_view_select"] forState:UIControlStateHighlighted];
+        [_viewBtn addTarget:self action:@selector(changeView:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _viewBtn;
+}
+- (UIImageView *)bgimgV{
+    if (!_bgimgV) {
+        _bgimgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"game_bottom_game"]];
+    }
+    return _bgimgV;
 }
 
 @end

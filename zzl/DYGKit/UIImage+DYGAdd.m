@@ -14,4 +14,19 @@
     image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     return image;
 }
+
++ (instancetype)getLaunchImage {
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    NSString *orientation = @"Portrait";
+    NSString *launchImageName = nil;
+    NSArray *imagesDict = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"UILaunchImages"];
+    for (NSDictionary *dic in imagesDict) {
+        CGSize imageSize = CGSizeFromString(dic[@"UILaunchImageSize"]);
+        if (CGSizeEqualToSize(screenSize, imageSize) && [dic[@"UILaunchImageOrientation"] isEqualToString:orientation]) {
+            launchImageName = dic[@"UILaunchImageName"];
+            break;
+        }
+    }
+    return [UIImage imageNamed:launchImageName];
+}
 @end

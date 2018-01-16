@@ -11,10 +11,15 @@
 #define ViewHeight  self.bounds.size.height
 
 @interface HRAdView ()
+@property (nonatomic,strong) UIView *bgView;
 /**
  *  文字广告条前面的图标
  */
 @property (nonatomic, strong) UIImageView *headImageView;
+/**
+ *  背景图
+ */
+@property (nonatomic, strong) UIImageView *bgImageView;
 /**
  *  轮流显示的两个Label
  */
@@ -57,6 +62,11 @@
         self.isHaveTouchEvent = NO;
         
         index = 0;
+        
+        if (!_bgImageView) {
+            _bgImageView = [UIImageView new];
+            [self addSubview:_bgImageView];
+        }
         
         if (!_headImageView) {
             _headImageView = [UIImageView new];
@@ -126,21 +136,17 @@
     
     if (index%2 == 0) {
         [UIView animateWithDuration:1 animations:^{
-            self.oneLabel.frame = CGRectMake(margin+6, 0, ViewWidth, ViewHeight);
-//            [self.oneLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//                make.left.equalTo(self.headImageView.mas_right);
-//                make.centerY.equalTo(self.mas_centerY);
-//            }];
-            self.twoLabel.frame = CGRectMake(margin+6, -ViewHeight, ViewWidth, ViewHeight);
+            self.oneLabel.frame = CGRectMake(40, 0, ViewWidth, ViewHeight);
+            self.twoLabel.frame = CGRectMake(40, -ViewHeight, ViewWidth, ViewHeight);
         } completion:^(BOOL finished){
-            self.twoLabel.frame = CGRectMake(margin+6, ViewHeight, ViewWidth, ViewHeight);
+            self.twoLabel.frame = CGRectMake(40, ViewHeight, ViewWidth, ViewHeight);
         }];
     }else{
         [UIView animateWithDuration:1 animations:^{
-            self.twoLabel.frame = CGRectMake(margin+6, 0, ViewWidth, ViewHeight);
-            self.oneLabel.frame = CGRectMake(margin+6, -ViewHeight, ViewWidth, ViewHeight);
+            self.twoLabel.frame = CGRectMake(40, 0, ViewWidth, ViewHeight);
+            self.oneLabel.frame = CGRectMake(40, -ViewHeight, ViewWidth, ViewHeight);
         } completion:^(BOOL finished){
-            self.oneLabel.frame = CGRectMake(margin+6, ViewHeight, ViewWidth, ViewHeight);
+            self.oneLabel.frame = CGRectMake(40, ViewHeight, ViewWidth, ViewHeight);
         }];
     }
     
@@ -154,7 +160,7 @@
 //        self.headImageView.frame = CGRectMake(0, 0, ViewHeight,ViewHeight);
             [self.headImageView sizeToFit];
             [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.mas_left).offset(5);
+                make.left.equalTo(self.mas_left).offset(20);
                 make.centerY.equalTo(self.mas_centerY);
             }];
         margin = self.headImageView.bounds.size.width;
@@ -166,9 +172,19 @@
         }
         margin = 0;
     }
-    
-    self.oneLabel.frame = CGRectMake(margin+10, 0, ViewWidth, ViewHeight);
-    self.twoLabel.frame = CGRectMake(margin+10, ViewHeight, ViewWidth, ViewHeight);
+    [self.oneLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImageView.mas_right).offset(5);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.equalTo(@(ViewWidth));
+        make.height.equalTo(@(ViewHeight));
+    }];
+    [self.twoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImageView.mas_right).offset(5);
+        make.top.equalTo(self.oneLabel.mas_bottom).offset(0);
+        make.width.equalTo(@(ViewWidth));
+        make.height.equalTo(@(ViewHeight));
+    }];
+    self.bgImageView.frame = self.bounds;
 }
 
 
@@ -224,6 +240,11 @@
     _headImg = headImg;
     
     self.headImageView.image = headImg;
+}
+
+- (void)setBgImg:(UIImage *)bgImg{
+    _bgImg = bgImg;
+    self.bgImageView.image = bgImg;
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment{

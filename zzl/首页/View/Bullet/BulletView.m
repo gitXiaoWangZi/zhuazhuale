@@ -39,7 +39,7 @@
         self.lbComment.backgroundColor = [UIColor clearColor];
         self.lbComment.text = content;
         self.lbComment.font = [UIFont systemFontOfSize:14];
-        self.lbComment.textColor = [UIColor yellowColor];
+        self.lbComment.textColor = [UIColor whiteColor];
         [self addSubview:self.lbComment];
     }
     return self;

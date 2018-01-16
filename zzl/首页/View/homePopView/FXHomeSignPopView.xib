@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HYt-r4-sh9">
-                    <rect key="frame" x="25" y="148" width="324" height="391"/>
+                    <rect key="frame" x="25" y="138" width="324" height="391"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_sign_bg" translatesAutoresizingMaskIntoConstraints="NO" id="ayz-ha-JOT">
                             <rect key="frame" x="0.0" y="0.0" width="324" height="391"/>
@@ -331,7 +330,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="连续登录有更多惊喜哦" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6UO-Ov-Xnl">
-                    <rect key="frame" x="126" y="309" width="123" height="14.5"/>
+                    <rect key="frame" x="126" y="299" width="123" height="14.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
@@ -341,12 +340,11 @@
             <constraints>
                 <constraint firstItem="6UO-Ov-Xnl" firstAttribute="top" secondItem="xhe-xt-hLW" secondAttribute="bottom" constant="14" id="A3Y-3V-e1h"/>
                 <constraint firstItem="6UO-Ov-Xnl" firstAttribute="centerX" secondItem="HYt-r4-sh9" secondAttribute="centerX" id="Ti2-DY-Mfu"/>
-                <constraint firstItem="HYt-r4-sh9" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="e5H-r6-Ivj"/>
-                <constraint firstItem="HYt-r4-sh9" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="fja-7t-A6X"/>
-                <constraint firstItem="HYt-r4-sh9" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="v1x-c7-zX9"/>
+                <constraint firstItem="HYt-r4-sh9" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="e5H-r6-Ivj"/>
+                <constraint firstItem="HYt-r4-sh9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="fja-7t-A6X"/>
+                <constraint firstItem="HYt-r4-sh9" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="v1x-c7-zX9"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="diamoNumL" destination="njj-KM-Mc7" id="kIO-UY-Wuh"/>
                 <outlet property="loginBtn" destination="tgk-xi-6w3" id="41c-Nw-Ahu"/>

@@ -12,10 +12,10 @@
 
 @property(nonatomic,strong) UIView * bgView;
 @property(nonatomic,strong) UIImageView * bgImg;
-@property (nonatomic,strong) UIButton * quit;
+@property(nonatomic,strong) UIImageView * resultImg;
 @property (nonatomic,strong) UIButton *game;
 @property (nonatomic,strong) UIButton *cancel;
-@property(nonatomic,strong) UIImageView * cornerImgV;
+@property (nonatomic,strong) UILabel *titleL;
 @end
 
 @implementation FXGameResultView
@@ -30,53 +30,58 @@
 -(void)creatUI{
     [self addSubview:self.bgView];
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self);
-        make.centerY.equalTo(self);
-        make.left.equalTo(@(Px(40)));
-        make.right.equalTo(@(Px(-40)));
-        make.height.equalTo(@(Py((kScreenWidth - 80) * 523.0/518)));
+        make.top.left.right.bottom.equalTo(self);
     }];
-    
     [self.bgView addSubview:self.bgImg];
     [self.bgImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(0));
-        make.right.equalTo(@(0));
-        make.top.equalTo(@(0));
-        make.bottom.equalTo(@(0));
+        make.centerX.equalTo(self);
+        make.centerY.equalTo(self);
+        make.width.equalTo(@(Px(375)));
+        make.height.equalTo(@(Px(466.5)));
     }];
     
-    [self.bgView addSubview:self.quit];
-    [self.quit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.bgView).offset(Py(10));
-        make.right.equalTo(self.bgView).offset(Px(-10));
+    [self.bgView addSubview:self.resultImg];
+    [self.resultImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.centerY.equalTo(self);
+        make.width.equalTo(@(Px(264)));
+        make.height.equalTo(@(Px(355.5)));
     }];
-    
-    [self.bgView addSubview:self.cancel];
-    [self.cancel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@(Py(-40)));
-        make.left.equalTo(@(Px(30)));
+    [self.bgView addSubview:self.titleL];
+    [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.resultImg.mas_top).offset(Py(115));
+        make.centerX.equalTo(self.bgView);
+        make.height.equalTo(@(Py(21)));
     }];
-    
+    [self.bgView addSubview:self.desL];
+    [self.desL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.bgView);
+        make.top.equalTo(self.titleL.mas_bottom).offset(Py(5));
+        make.height.equalTo(@(Py(21)));
+    }];
     [self.bgView addSubview:self.game];
     [self.game mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@(Py(-40)));
-        make.right.equalTo(@(Px(-30)));
+        make.top.equalTo(self.desL.mas_bottom).offset(Py(20));
+        make.centerX.equalTo(self.bgView);
+    }];
+    [self.bgView addSubview:self.cancel];
+    [self.cancel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.game.mas_bottom).offset(Py(20));
+        make.centerX.equalTo(self.bgView);
     }];
     
-    [self.bgView addSubview:self.cornerImgV];
-    [self.cornerImgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.game.mas_right);
-        make.bottom.equalTo(self.game.mas_top).offset(5);
-    }];
-    
-    [self.bgView addSubview:self.cornerL];
-    [self.cornerL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.game.mas_right);
-        make.bottom.equalTo(self.game.mas_top).offset(5);
-        make.width.equalTo(self.cornerImgV.mas_width);
-        make.height.equalTo(self.cornerImgV.mas_height);
-    }];
-    
+}
+
+- (void)showStatusView:(BOOL)isSuccess{
+    if (isSuccess) {
+        self.bgImg.hidden = NO;
+        self.resultImg.image = [UIImage imageNamed:@"game_result_success_bg"];
+        self.titleL.text = @"天呀你是抓娃娃之神吗";
+    }else{
+        self.bgImg.hidden = YES;
+        self.resultImg.image = [UIImage imageNamed:@"game_result_fail_bg"];
+        self.titleL.text = @"失败是成功滴妈咪";
+    }
 }
 
 #pragma mark lazyload
@@ -90,25 +95,17 @@
 - (UIImageView *)bgImg{
     if (!_bgImg) {
         _bgImg = [UIImageView new];
-        _bgImg.image = [UIImage imageNamed:@"home_game_no"];
+        _bgImg.image = [UIImage imageNamed:@"game_result_guang"];
     }
     return _bgImg;
-}
-
-- (UIButton *)quit{
-    if (!_quit) {
-        _quit = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_quit setImage:[UIImage imageNamed:@"home_pop_delete"] forState:UIControlStateNormal];
-        [_quit addTarget:self action:@selector(quit:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _quit;
 }
 
 - (UIButton *)cancel{
     if (!_cancel) {
         _cancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_cancel setImage:[UIImage imageNamed:@"home_game_bring"] forState:UIControlStateNormal];
+        [_cancel setImage:[UIImage imageNamed:@"game_result_quit"] forState:UIControlStateNormal];
         [_cancel addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        _cancel.adjustsImageWhenHighlighted = NO;
     }
     return _cancel;
 }
@@ -116,59 +113,52 @@
 - (UIButton *)game{
     if (!_game) {
         _game = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_game setImage:[UIImage imageNamed:@"home_game_again"] forState:UIControlStateNormal];
+        [_game setImage:[UIImage imageNamed:@"game_result_game"] forState:UIControlStateNormal];
         [_game addTarget:self action:@selector(game:) forControlEvents:UIControlEventTouchUpInside];
+        _game.adjustsImageWhenHighlighted = NO;
     }
     return _game;
 }
 
-- (UIImageView *)cornerImgV{
-    if (!_cornerImgV) {
-        _cornerImgV = [UIImageView new];
-        _cornerImgV.image = [UIImage imageNamed:@"home_game_yuan"];
+- (UIImageView *)resultImg{
+    if (!_resultImg) {
+        _resultImg = [UIImageView new];
+        _resultImg.image = [UIImage imageNamed:@"game_result_success_bg"];
     }
-    return _cornerImgV;
+    return _resultImg;
 }
 
-- (UILabel *)cornerL{
-    if (!_cornerL) {
-        _cornerL = [[UILabel alloc] init];
-        _cornerL.textColor = [UIColor whiteColor];
-        _cornerL.textAlignment = NSTextAlignmentCenter;
-        _cornerL.font = [UIFont systemFontOfSize:12];
-        _cornerL.text = @"5";
+- (UILabel *)titleL{
+    if (!_titleL) {
+        _titleL = [[UILabel alloc] init];
+        _titleL.textColor = DYGColorFromHex(0x976A00);
+        _titleL.textAlignment = NSTextAlignmentCenter;
+        _titleL.font = [UIFont boldSystemFontOfSize:14];
+        _titleL.text = @"天呀你是抓娃娃之神吗";
     }
-    return _cornerL;
+    return _titleL;
 }
-
-- (void)quit:(UIButton *)sender{
-    [self removeFromSuperview];
+- (UILabel *)desL{
+    if (!_desL) {
+        _desL = [[UILabel alloc] init];
+        _desL.textColor = DYGColorFromHex(0x976A00);
+        _desL.textAlignment = NSTextAlignmentCenter;
+        _desL.font = [UIFont systemFontOfSize:12];
+        _desL.text = @"10s内投币继续";
+    }
+    return _desL;
 }
 - (void)cancel:(UIButton *)sender{
-    if (self.isSuccess) {
-        if ([self.delegate respondsToSelector:@selector(receiveWawaAction)]) {
-            [self.delegate receiveWawaAction];
-        }
-    }else{
-        [self removeFromSuperview];
+    [self removeFromSuperview];
+    if ([self.delegate respondsToSelector:@selector(cancelAction)]) {
+        [self.delegate cancelAction];
     }
 }
 - (void)game:(UIButton *)sender{
+    [self removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(gameAgainAction)]) {
         [self.delegate gameAgainAction];
     }
-}
-
-- (void)setIsSuccess:(BOOL)isSuccess{
-    _isSuccess = isSuccess;
-    if (isSuccess) {//抓中
-        self.bgImg.image = [UIImage imageNamed:@"home_game_no"];
-        [self.cancel setImage:[UIImage imageNamed:@"home_game_bring"] forState:UIControlStateNormal];
-    }else{//未抓中
-        self.bgImg.image = [UIImage imageNamed:@"home_game_yes"];
-        [self.cancel setImage:[UIImage imageNamed:@"home_game_quit"] forState:UIControlStateNormal];
-    }
-    
 }
 
 @end

@@ -210,11 +210,14 @@
     for (WwDepositItem *model in self.dataArray) {
         [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
     }
-    
-    [[WwUserInfoManager UserInfoMgrInstance] requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler      :^(int code, NSString *message) {
-        [MBProgressHUD showMessage:message toView:self.view];
-        if (code == 0) {
-            [self.navigationController popViewControllerAnimated:YES];
+
+    [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
+        
+        if (code == WwCodeSuccess) {
+            [MBProgressHUD showMessage:@"申请成功" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }
     }];
 }

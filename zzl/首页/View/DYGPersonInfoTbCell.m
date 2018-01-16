@@ -49,7 +49,7 @@
             if (self.accessoryView){
                 make.right.equalTo(self.accessoryView.mas_left);
             }else{
-                make.right.equalTo(self.contentView).offset(-15);
+                make.right.equalTo(self.contentView).offset(0);
             }
         }];
     }else{

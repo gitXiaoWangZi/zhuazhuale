@@ -37,55 +37,46 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
-        case 0:
-            return 7;
-            break;
-        default:
-            return 1;
-            break;
-    }
+    return self.cellConfigArr.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section==0){
-        DYGPersonInfoTbCell * cell = [[DYGPersonInfoTbCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"infoCell" WithConfigDict:self.cellConfigArr[indexPath.row]];
-        cell.textLabel.textColor = DYGColorFromHex(0x4c4c4c);
-        cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-        cell.textLabel.text =[self.cellConfigArr[indexPath.row] objectForKey:@"title"];
-        cell.detailTextLabel.text =self.dataArr[indexPath.row];
-        cell.detailTextLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
-        if (indexPath.row == 0) {
-            UIImageView *imageV = (UIImageView *)cell.detailView;
-            [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.size.mas_equalTo(CGSizeMake(Px(40), Py(40)));
-            }];
-            imageV.contentMode = UIViewContentModeScaleAspectFill;
-            imageV.clipsToBounds = YES;
-            [imageV sd_setImageWithURL:[NSURL URLWithString:_item.img_path] placeholderImage:[UIImage imageNamed:@"invite"]];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-    }else{
-        UITableViewCell * cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-        cell.textLabel.text =@"收货地址管理";
-        cell.textLabel.textColor = DYGColorFromHex(0x4c4c4c);
-        cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
+    DYGPersonInfoTbCell * cell = [[DYGPersonInfoTbCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"infoCell" WithConfigDict:self.cellConfigArr[indexPath.row]];
+    cell.textLabel.textColor = DYGColorFromHex(0x3b3b3b);
+    cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:15];
+    cell.textLabel.text =[self.cellConfigArr[indexPath.row] objectForKey:@"title"];
+    cell.detailTextLabel.text =self.dataArr[indexPath.row];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
+    cell.detailTextLabel.textColor = DYGColorFromHex(0x797979);
+    if (indexPath.row == 0) {
+        UIImageView *imageV = (UIImageView *)cell.detailView;
+        [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(Px(44), Py(44)));
+        }];
+        imageV.contentMode = UIViewContentModeScaleAspectFill;
+        imageV.clipsToBounds = YES;
+        imageV.layer.cornerRadius = Py(22);
+        [imageV sd_setImageWithURL:[NSURL URLWithString:_item.img_path] placeholderImage:[UIImage imageNamed:@"invite"]];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     return [UIView new];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return Py(10);
+    return Py(15);
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        return 66;
+    }
+    return 55;
 }
 
 -(UITableView *)tableView{
@@ -93,7 +84,7 @@
         _tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.separatorColor = BGColor;
+        _tableView.separatorColor = DYGColorFromHex(0xe7e7e7);
     }
     return _tableView;
 }
@@ -101,10 +92,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DYGPersonInfoTbCell * cell =[tableView cellForRowAtIndexPath:indexPath];
     if (indexPath.section==0) {
-        if (indexPath.row==6||indexPath.row==1) {
-            NSString *title=@"";
-            indexPath.row==1?(title=@"昵称"):(title=@"从事职业");
-            [self showAlertWithTitle:title WithMessage:nil WithIndexPath:indexPath];
+        if (indexPath.row==1) {
+            [self showAlertWithTitle:@"昵称" WithMessage:nil WithIndexPath:indexPath];
         }else if (indexPath.row==0){
             DYGActionSheetController * vc = [DYGActionSheetController actionSheetVcWithArray:@[@"拍照",@"从相册选择"]];
             vc.delegate = self;
@@ -190,7 +179,6 @@
     DYGPersonInfoTbCell * cell =[self.tableView cellForRowAtIndexPath:indexPath];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        //                DYGLog(@"添加一个textField就会调用 这个block");
     }];
     [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         DYGLog(@"点击取消");
@@ -205,31 +193,20 @@
     
 }
 
-//修改用户昵称或者职业
+//修改用户昵称
 - (void)updateUserInfo:(NSString *)title cell:(DYGPersonInfoTbCell *)cell alertV:(UIAlertController *)alterV{
-    NSString *path = @"";
-    NSDictionary *params = [NSDictionary dictionary];
-    if ([title isEqualToString:@"昵称"]) {
-        path = @"modName";
-        params = @{@"uid":KUID,@"name":alterV.textFields.lastObject.text};
-    }else{
-        path = @"modProfession";
-        params = @{@"uid":KUID,@"profession":alterV.textFields.lastObject.text};
-    }
+    NSString *path = @"modName";
+    NSDictionary *params = @{@"uid":KUID,@"name":alterV.textFields.lastObject.text};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             cell.detailTextLabel.text =alterV.textFields.lastObject.text;
-            if ([title isEqualToString:@"昵称"]) {
-                _item.username = alterV.textFields.lastObject.text;
-                NSMutableDictionary *userIngoDic = [[[NSUserDefaults standardUserDefaults] objectForKey:@"KWAWAUSER"] mutableCopy];
-                [userIngoDic setValue:alterV.textFields.lastObject.text forKey:@"name"];
-                [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
-                
-            }else{
-                _item.profession = alterV.textFields.lastObject.text;
-            }
+            _item.username = alterV.textFields.lastObject.text;
+            NSMutableDictionary *userIngoDic = [[[NSUserDefaults standardUserDefaults] objectForKey:@"KWAWAUSER"] mutableCopy];
+            [userIngoDic setValue:alterV.textFields.lastObject.text forKey:@"name"];
+            [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+            [MBProgressHUD showMessage:@"修改成功" toView:self.tableView];
         }
     } failure:^(NSError *error) {
         
@@ -245,8 +222,8 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             cell.detailTextLabel.text =sex;
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+            [MBProgressHUD showMessage:@"修改成功" toView:self.tableView];
         }
     } failure:^(NSError *error) {
         
@@ -262,6 +239,7 @@
         if ([dic[@"code"] integerValue] == 200) {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%zd",age];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+            [MBProgressHUD showMessage:@"修改成功" toView:self.tableView];
         }
     } failure:^(NSError *error) {
         
@@ -277,6 +255,7 @@
         if ([dic[@"code"] integerValue] == 200) {
             cell.detailTextLabel.text = emotion;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+            [MBProgressHUD showMessage:@"修改成功" toView:self.tableView];
         }
     } failure:^(NSError *error) {
         
@@ -315,7 +294,6 @@
                            @{@"title":@"性别",@"accesoryType":@"indicator"},
                            @{@"title":@"年龄",@"accesoryType":@"indicator"},
                            @{@"title":@"情感状况",@"accesoryType":@"indicator"},
-                           @{@"title":@"职业",@"accesoryType":@"indicator"}
                            ];
     }
     return _cellConfigArr;

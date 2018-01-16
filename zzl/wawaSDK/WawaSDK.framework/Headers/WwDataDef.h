@@ -25,7 +25,7 @@
 @property (nonatomic, strong) NSString * streamMaster;          /**< 正面摄像头流信息*/
 @property (nonatomic, strong) NSString * streamSlave;           /**< 侧面摄像头流信息*/
 
-//@property (nonatomic, strong) NSString * streamPlayer;          /**< 拉流地址*/
+@property (nonatomic, strong) NSString * streamPlayer;          /**< 拉流地址*/
 //@property (nonatomic, strong) NSString * stream;                /**< 推流地址*/
 
 @end
@@ -111,7 +111,7 @@
 @property (nonatomic, assign) NSInteger status;                 /**< 状态 0:失败（游戏失败，如机器故障）; 1:未抓中; 2:抓中;*/
 @property (nonatomic, strong) WwReplayVideo *video;             /**< 回放*/
 @property (nonatomic, assign) NSInteger coin;                   /**< 消耗金币*/
-@property (nonatomic, assign) NSInteger awardFishball;          /**< 奖励鱼丸*/
+@property (nonatomic, assign) NSInteger awardFishball;          /**< 奖励积分*/
 @property (nonatomic, strong) WwWawa *wawa;                     /**< 娃娃*/
 
 @end

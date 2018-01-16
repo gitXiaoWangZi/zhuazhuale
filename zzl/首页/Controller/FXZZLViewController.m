@@ -10,7 +10,8 @@
 #import "FXRoomCell.h"
 #import "DYGPopViewMenu.h"
 #import "FXGameWaitController.h"
-@interface FXZZLViewController ()<UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,DYGPopViewMenuDelegate,UINavigationControllerDelegate>
+#import "LSJGameViewController.h"
+@interface FXZZLViewController ()<UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,DYGPopViewMenuDelegate>
 
 @property (nonatomic,strong) UIButton *priceBtn;
 @property (nonatomic,strong) UIButton *stateBtn;
@@ -27,20 +28,11 @@
 
 #pragma ======================controller life cycle======================
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if ([viewController isKindOfClass:[self class]]) {
-        [navigationController setNavigationBarHidden:NO animated:YES];
-    }else {
-        [navigationController setNavigationBarHidden:YES animated:YES];
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"抓抓乐";
+    self.title = @"娃娃列表";
     self.view.backgroundColor = randomColor;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    self.navigationController.delegate = self;
     [self creatTopView];
     [self loadNewData];
 }
@@ -82,20 +74,21 @@
     static NSString * reuserId= @"roomCell";
     FXRoomCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuserId forIndexPath:indexPath];
     cell.model = self.roomsArray[indexPath.row];
+    [cell dealLineWithIndex:indexPath];
     return cell;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(Px(164),Py(164));
+    return CGSizeMake(((kScreenWidth - 20)/2.0),Py(210));
 }
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    return UIEdgeInsetsMake(Py(15),Px(16),Py(15),Px(16));
+    return UIEdgeInsetsMake(Py(0),Px(9),Py(0),Px(9));
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    FXGameWaitController * vc= [[FXGameWaitController alloc]init];
-    vc.model = self.roomsArray[indexPath.row];
-    [self.navigationController pushViewController:vc animated:YES];
+    LSJGameViewController *game = [[LSJGameViewController alloc] init];
+    game.model = self.roomsArray[indexPath.row];
+    [self.navigationController pushViewController:game animated:YES];
 }
 
 #pragma mark  Click Selector
@@ -107,7 +100,6 @@
 }
 -(void)creatPopView{
     self.popView = [[DYGPopViewMenu alloc]initWithFrame:CGRectMake(0, 100, kScreenWidth, 100)];
-//    self.popView.lineNum = 3;
     self.popView.titleArr = @[@"游戏中",@"空闲中",@"补货中"];
     self.popView.delegate= self;
     [self.view addSubview:self.popView];
@@ -147,7 +139,8 @@
 -(UICollectionView *)collectionView{
     if (!_collectionView) {
         UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc]init];
-        flowLayout.minimumLineSpacing=Py(15);
+        flowLayout.minimumLineSpacing=0;
+        flowLayout.minimumInteritemSpacing = 0;
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width,self.view.height) collectionViewLayout:flowLayout];
         _collectionView.delegate = self;
@@ -156,7 +149,11 @@
         _collectionView.backgroundColor = [UIColor whiteColor];
         [_collectionView registerClass:[FXRoomCell class] forCellWithReuseIdentifier:@"roomCell"];
         _collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
-        _collectionView.mj_footer = [MJRefreshAutoFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+        MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+        footer.stateLabel.font = [UIFont systemFontOfSize:14];
+        footer.stateLabel.textColor = DYGColorFromHex(0xB4B4B4);
+        [footer setTitle:@"(/≧▽≦)/伦家可是有底线的娃娃机~" forState:MJRefreshStateNoMoreData];
+        _collectionView.mj_footer = footer;
         _collectionView.showsHorizontalScrollIndicator = NO;
     }
     return _collectionView;
@@ -190,6 +187,9 @@
             }
             for (WwRoom *model in list) {
                 [self.roomsArray addObject:model];
+            }
+            if (list.count < 100) {
+                [self.collectionView.mj_footer endRefreshingWithNoMoreData];
             }
             [self.collectionView reloadData];
             DYGLog(@"查找房间成功");

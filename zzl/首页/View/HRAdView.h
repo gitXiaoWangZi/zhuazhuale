@@ -19,6 +19,11 @@
  */
 
 @property (nonatomic, strong) UIImage *headImg;
+/**
+ * 背景图片 默认为nil
+ */
+
+@property (nonatomic, strong) UIImage *bgImg;
 
 /**
  *  广告字体 默认为16号系统字体

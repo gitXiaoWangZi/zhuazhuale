@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FXLoginHomeController">
+            <connections>
+                <outlet property="domnImgV" destination="yS0-fE-fiZ" id="qYt-A3-13X"/>
+                <outlet property="downImagV" destination="yS0-fE-fiZ" id="apu-36-qAJ"/>
+                <outlet property="phoneBtn" destination="4x0-0S-F6e" id="3Wx-eI-o4j"/>
+                <outlet property="phoneRightCons" destination="SHZ-D9-afl" id="E5N-vH-gpy"/>
+                <outlet property="view" destination="iN0-l3-epB" id="qae-w7-d4T"/>
+                <outlet property="wechatBtn" destination="JFd-r5-zfZ" id="CUF-XI-dNY"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_backImg" translatesAutoresizingMaskIntoConstraints="NO" id="pXF-ec-RMG">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_top" translatesAutoresizingMaskIntoConstraints="NO" id="wbc-1I-CBB">
+                    <rect key="frame" x="20" y="40" width="335" height="554"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="wbc-1I-CBB" secondAttribute="height" multiplier="335:554" id="R8y-2F-EcC"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_down" translatesAutoresizingMaskIntoConstraints="NO" id="yS0-fE-fiZ">
+                    <rect key="frame" x="20" y="507" width="335" height="87"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4x0-0S-F6e">
+                    <rect key="frame" x="217" y="486" width="117" height="93"/>
+                    <state key="normal" backgroundImage="login_phone_normal"/>
+                    <state key="highlighted" backgroundImage="login_phone_select"/>
+                    <connections>
+                        <action selector="phoneAction:" destination="-1" eventType="touchUpInside" id="6lK-fG-yhT"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFd-r5-zfZ">
+                    <rect key="frame" x="41" y="486" width="117" height="93"/>
+                    <state key="normal" backgroundImage="login_weixin_normal"/>
+                    <state key="selected" backgroundImage="login_weixin_select"/>
+                    <state key="highlighted" backgroundImage="login_weixin_select"/>
+                    <connections>
+                        <action selector="weixinAction:" destination="-1" eventType="touchUpInside" id="zS0-d1-jc6"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="JFd-r5-zfZ" firstAttribute="leading" secondItem="yS0-fE-fiZ" secondAttribute="leading" constant="21" id="5o5-8o-d0M"/>
+                <constraint firstAttribute="trailing" secondItem="wbc-1I-CBB" secondAttribute="trailing" constant="20" id="6da-FQ-Tgf"/>
+                <constraint firstItem="yS0-fE-fiZ" firstAttribute="leading" secondItem="wbc-1I-CBB" secondAttribute="leading" id="AUj-1v-1iJ"/>
+                <constraint firstAttribute="bottom" secondItem="pXF-ec-RMG" secondAttribute="bottom" id="BZm-Nd-SY3"/>
+                <constraint firstItem="wbc-1I-CBB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="C26-Zz-TgX"/>
+                <constraint firstItem="wbc-1I-CBB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="HBq-m7-Vn4"/>
+                <constraint firstItem="4x0-0S-F6e" firstAttribute="trailing" secondItem="yS0-fE-fiZ" secondAttribute="trailing" constant="-21" id="SHZ-D9-afl"/>
+                <constraint firstItem="JFd-r5-zfZ" firstAttribute="bottom" secondItem="yS0-fE-fiZ" secondAttribute="bottom" constant="-15" id="Xbc-1R-GhU"/>
+                <constraint firstAttribute="trailing" secondItem="pXF-ec-RMG" secondAttribute="trailing" id="bsw-M8-oOq"/>
+                <constraint firstItem="pXF-ec-RMG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kVI-2p-MNY"/>
+                <constraint firstItem="yS0-fE-fiZ" firstAttribute="trailing" secondItem="wbc-1I-CBB" secondAttribute="trailing" id="lKD-tx-jqw"/>
+                <constraint firstItem="yS0-fE-fiZ" firstAttribute="bottom" secondItem="wbc-1I-CBB" secondAttribute="bottom" id="mvs-Qw-MIe"/>
+                <constraint firstItem="4x0-0S-F6e" firstAttribute="bottom" secondItem="yS0-fE-fiZ" secondAttribute="bottom" constant="-15" id="vC9-7B-OLm"/>
+                <constraint firstItem="pXF-ec-RMG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ymG-oP-zb7"/>
+            </constraints>
+            <point key="canvasLocation" x="-100" y="50"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="login_backImg" width="375" height="667"/>
+        <image name="login_down" width="328" height="87"/>
+        <image name="login_phone_normal" width="117" height="93"/>
+        <image name="login_phone_select" width="117" height="83"/>
+        <image name="login_top" width="375" height="554"/>
+        <image name="login_weixin_normal" width="117" height="93"/>
+        <image name="login_weixin_select" width="117" height="83"/>
+    </resources>
+</document>

@@ -18,6 +18,10 @@
 - (void)onMasterStreamReady;  /**< 主摄像头的流已经加载成功了*/
 - (void)onSlaveStreamReady;   /**< 辅摄像头的流已经加载成功了*/
 
+// rtmp
+- (void)pushStatusDidChanged:(WwRtmpPush)status;  /**< 推流状态发生了变化*/
+- (void)playStatusDidChanged:(WWRtmpPlay)status;  /**< 拉流状态发生了变化*/
+
 // IM
 - (void)reciveRemoteMsg:(WwChatMessage *)chatM; /**< 收到聊天回调*/
 - (void)reciveWatchNumber:(NSInteger)number; /**< 收到 观看人数*/
@@ -76,6 +80,33 @@ typedef NS_ENUM(NSInteger, PlayOperationType) {
  * 必要字段有: ID, streamMaster, streamSlave
  */
 - (UIView *)enterRoomWith:(WwRoom *)room;
+
+
+
+/*
+ * 开始推流
+ * 此动作必须要在上机成功之后执行, 否则会失败
+ */
+- (UIView *)startPushRtmpWithIsAudioOnly:(BOOL)isAudioOnly;
+
+/*
+ * 停止推流
+ */
+- (void)endPushRtmp;
+
+/*
+ * 开始拉取游戏者的流,需要传入拉流地址吗,
+ * SDK内部会对必要数据进行校验,如果校验不通过会直接返回nil
+ * 必要字段有: playUrl
+ */
+- (UIView *)startPlayRtmp:(NSString *)playUrl isAudioOnly:(BOOL)isAudioOnly;
+
+/*
+ * 停止拉流
+ */
+- (void)endPlayRtmp;
+
+
 
 /*
  * 销毁房间, 离开房间时务必调用, 否则会影响之后的逻辑

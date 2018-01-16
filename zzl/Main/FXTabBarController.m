@@ -53,7 +53,7 @@
             if (room == nil) {
                 [MBProgressHUD showError:@"没有房间可以进入" toView:[UIApplication sharedApplication].keyWindow];
             }else{
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kQuitEnter"];
+//                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kQuitEnter"];
                 FXGameWaitController * vc = [[FXGameWaitController alloc]init];
                 FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:vc];
                 vc.model = room;

@@ -10,7 +10,6 @@
 
 @interface DYGCollectionViewCell()
 
-//@property(nonatomic,strong)UIImageView *imgView;
 @property (nonatomic,strong) UIButton *delect;
 
 
@@ -46,16 +45,13 @@
     [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView.mas_left);
         make.bottom.equalTo(self.contentView.mas_bottom);
-//        make.width.height.equalTo(@75);
-//        make.width.equalTo(@(Px(75)));
-//        make.height.equalTo(@(Py(70)));
         make.left.right.top.bottom.equalTo(self);
     }];
     [self.contentView addSubview:self.delect];
     [self.delect mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.right.equalTo(self.contentView.mas_right);
-        make.height.width.equalTo(@21);
+        make.top.equalTo(self.contentView.mas_top).offset(-3);
+        make.right.equalTo(self.contentView.mas_right).offset(5);
+        make.height.width.equalTo(@22);
     }];
     [self.delect addTarget:self action:@selector(delectBtnClick) forControlEvents:UIControlEventTouchUpInside];
 }

@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadAdressListData) name:@"refreshAddress" object:nil];
-    self.title =@"收货地址管理";
+    self.title =@"收货地址";
     [self.view addSubview:self.tableView];
     [self creatFooter];
     self.tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadAdressListData)];
@@ -38,10 +38,11 @@
 -(void)creatFooter{
     UIView * footer = [UIView new];
     footer.backgroundColor = [UIColor whiteColor];
-    footer.frame = CGRectMake(0, 0, kScreenWidth,Py(64));
-    self.addBtn = [UIButton buttonWithTitle:@"添加收货地址" titleColor:DYGColorFromHex(0xfefefe) font:16];
+    footer.frame = CGRectMake(0, kScreenHeight - Py(76)-64, kScreenWidth,Py(76));
+    
+    self.addBtn = [UIButton buttonWithTitle:@"添加新地址" titleColor:DYGColorFromHex(0xfefefe) font:18];
     self.addBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-    [self.addBtn setBackgroundColor:systemColor];
+    [self.addBtn setBackgroundColor:DYGColorFromHex(0xfed811)];
     [self.addBtn setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
     self.addBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -Px(8), 0, 0 );
     self.addBtn.cornerRadius = Py(22);
@@ -50,11 +51,11 @@
     [footer addSubview:self.addBtn];
     [self.addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(footer);
+        make.centerY.equalTo(footer);
         make.width.equalTo(@(kScreenWidth-Px(32)));
         make.height.equalTo(@(Py(44)));
-        make.bottom.equalTo(footer);
     }];
-    self.tableView.tableFooterView = footer;
+    [self.view addSubview:footer];
 }
 
 #pragma mark 请求收货地址列表
@@ -93,6 +94,11 @@
         cell.indexPath = indexPath;
     }
     cell.model = model;
+    if (indexPath.row == self.dataArr.count-1) {
+        cell.botoomV.hidden = YES;
+    }else{
+        cell.botoomV.hidden = NO;
+    }
     
     return cell;
 }
@@ -107,7 +113,6 @@
     }
 }
 
-
 -(void)addAddress{
 //    [self.dataArr addObject:@"1"];
 //    self.tableView.tableHeaderView = nil;
@@ -121,12 +126,13 @@
 
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth,kScreenHeight - Py(76)-64) style:UITableViewStylePlain];
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.estimatedRowHeight = 100;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = DYGColorFromHex(0xf7f7f7);
     }
     return _tableView;
 }
@@ -134,7 +140,7 @@
 #pragma mark FXAddressCellDelegate编辑删除地址处理
 - (void)editAction:(NSIndexPath *)path{
     NSLog(@"编辑:%zd--%zd",path.section,path.row);
-    WwAddressModel *model = self.dataArr[path.row];
+    WwAddress *model = self.dataArr[path.row];
     FXAddAddressController * vc = [FXAddAddressController new];
     vc.isAdd = NO;
     vc.model = model;

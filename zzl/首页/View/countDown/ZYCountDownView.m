@@ -70,8 +70,8 @@
 {
     _totalTimer = 30.0f;
     self.backgroundColor = [UIColor clearColor];
-    [self.layer addSublayer:self.innerShader]; //底部阴影
-    [self addSubview:self.progressView];
+//    [self.layer addSublayer:self.innerShader]; //底部阴影
+//    [self addSubview:self.progressView];
     [self addSubview:self.countLabel];
 }
 
@@ -147,7 +147,7 @@
                            NSShadowAttributeName:shar,
                            };
     [attr addAttributes:dic range:NSMakeRange(0,count.length)];
-    [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18.f] range:NSMakeRange(0, count.length)];
+    [attr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"STYuanti-SC-Bold" size:18] range:NSMakeRange(0, count.length)];
     self.countLabel.attributedText = attr;
 }
 

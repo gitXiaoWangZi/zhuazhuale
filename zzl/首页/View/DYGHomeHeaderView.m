@@ -17,14 +17,12 @@
 @property(nonatomic,weak)UIButton * selectBtn;
 @property (nonatomic,strong) HRAdView *adView;
 @property (nonatomic,strong) UIImageView *defaultImgV;
+@property (nonatomic,strong) UIImageView *clawsImgV;
 
 @end
 
 @implementation DYGHomeHeaderView
 
-//-(void)layoutSubviews{
-//    [self creatSubViews];
-//}
 -(instancetype)init{
     if (self = [super init]) {
         [self creatSubViews];
@@ -36,7 +34,8 @@
     self.MyScrollView.pagingEnabled = YES;
     self.MyScrollView.delegate = self;
     self.MyScrollView.backgroundColor = [UIColor whiteColor];
-    self.MyScrollView.frame = CGRectMake(0, 0, kScreenWidth, Py(165));
+    self.MyScrollView.frame = CGRectMake(0, 0, self.width, Py(100));
+    self.MyScrollView.layer.cornerRadius = 20;
     [self addSubview:self.MyScrollView];
     
     if (self.adArray.count == 0) {
@@ -45,11 +44,10 @@
         self.defaultImgV.image = [UIImage imageNamed:@"home_banner_default"];
         [self addSubview:self.defaultImgV];
     }else{
-        self.MyScrollView.contentSize = CGSizeMake(self.adArray.count*kScreenWidth, 0);
+        self.MyScrollView.contentSize = CGSizeMake(self.adArray.count*self.width, Py(100));
         self.MyScrollView.showsHorizontalScrollIndicator = NO;
         for (int i = 0; i<self.adArray.count; i++) {
-            self.scrollImage = [[UIImageView alloc]initWithFrame:CGRectMake(i*kScreenWidth, 0, kScreenWidth, self.MyScrollView.height)];
-            self.scrollImage.backgroundColor =randomColor;
+            self.scrollImage = [[UIImageView alloc]initWithFrame:CGRectMake(i*self.width, 0, self.width, self.MyScrollView.height)];
             NSString * urlStr = self.adArray[i];
             [self.scrollImage sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"home_banner_default"]];
             self.scrollImage.tag = i;
@@ -75,21 +73,25 @@
     self.adView = [[HRAdView alloc]initWithTitles:self.scrollAdArr];
     self.adView.isHaveHeadImg = YES;
     self.adView.headImg = [UIImage imageNamed:@"home_notice"];
-    self.adView.labelFont = [UIFont systemFontOfSize:14];
-    self.adView.color = DYGColorFromHex(0x000000);
+    self.adView.bgImg = [UIImage imageNamed:@"home_notice_bg"];
+    self.adView.labelFont = [UIFont systemFontOfSize:12];
+    self.adView.color = DYGColorFromHex(0xefa300);
     [self beginScroll];
     [self addSubview:self.adView];
     [self.adView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.MyScrollView.mas_bottom).offset(Py(10));
-        make.left.equalTo(self.mas_left).offset(Px(30));
-        make.right.equalTo(self.mas_right).offset(Px(-30));
-        make.height.equalTo(@(Py(26)));
+        make.top.equalTo(self.MyScrollView.mas_bottom).offset(Py(8));
+        make.left.equalTo(self.mas_left).offset(Px(35.5));
+        make.right.equalTo(self.mas_right).offset(Px(-35.5));
+        make.height.equalTo(@(Py(34)));
     }];
-    self.adView.backgroundColor = [UIColor whiteColor];
-    self.adView.layer.cornerRadius = 13;
-    self.adView.layer.borderColor = systemColor.CGColor;
-    self.adView.layer.borderWidth = 1;
-    self.adView.layer.masksToBounds = YES;
+    self.adView.clipsToBounds = YES;
+    
+    self.clawsImgV = [[UIImageView alloc] init];
+    self.clawsImgV.image = [UIImage imageNamed:@"home_banner_claws"];
+    self.clawsImgV.frame = CGRectMake(kScreenWidth/2.0-19, Py(68), 38.5, 53);
+    self.clawsImgV.centerX = [UIScreen mainScreen].bounds.size.width/2.0;
+    [self addSubview:self.clawsImgV];
+    [self sendSubviewToBack:self.clawsImgV];
 }
 -(void)beginScroll{
     [self.adView beginScroll];
@@ -105,6 +107,7 @@
     }
     
 }
+
 //滑动的方法
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     

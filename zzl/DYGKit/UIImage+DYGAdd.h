@@ -10,4 +10,5 @@
 
 @interface UIImage (DYGAdd)
 +(instancetype)rendModeOriginalWithName:(NSString *)name;
++ (instancetype)getLaunchImage;
 @end

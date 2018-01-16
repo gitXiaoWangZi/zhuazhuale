@@ -8,6 +8,8 @@
 
 #import "FXLoginController.h"
 #import "FXTabBarController.h"
+#import "FXNavigationController.h"
+#import "FXHomeViewController.h"
 
 @interface FXLoginController ()
 {
@@ -195,12 +197,14 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kWChatLoginType];
             [MobClick event:@"phone_login"];
             NSDictionary *userDic = dic[@"data"][0];
             NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
             [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            window.rootViewController = [[FXTabBarController alloc] init];
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            window.rootViewController = nav;
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
             

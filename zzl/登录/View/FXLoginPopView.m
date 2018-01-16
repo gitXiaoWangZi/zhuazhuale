@@ -8,13 +8,15 @@
 
 #import "FXLoginPopView.h"
 #import "FXTabBarController.h"
+#import "FXNavigationController.h"
+#import "FXHomeViewController.h"
+#import "AccountItem.h"
 
 @interface FXLoginPopView()
 {
     NSInteger _timerNo;
     NSTimer *_timer;
 }
-@property(nonatomic,strong)UIImageView * iconImg;
 @property (nonatomic,strong) UITextField * numTF;
 @property (nonatomic,strong) UITextField * pswTF;
 @property (nonatomic,strong) UIButton * send;
@@ -24,6 +26,8 @@
 @property (nonatomic,strong) UIView *line2;
 @property (nonatomic,strong) UIButton *exit;
 @property (nonatomic,strong) UIView * MView;
+@property (nonatomic,strong) UILabel *titlL;
+@property (nonatomic,strong) UILabel *desL;
 
 @end
 
@@ -41,21 +45,27 @@
     [self addSubview:self.MView];
     [self.MView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
-        make.top.equalTo(self).offset(Py(115));
-        make.left.equalTo(self).offset(Px(35));
-        make.right.equalTo(self).offset(-Px(35));
-        make.height.equalTo(@(Py(492)));
+        make.top.equalTo(self).offset(Py(135));
+        make.width.equalTo(@(Px(282.5)));
+        make.height.equalTo(@(Py(307)));
     }];
-    [self.MView addSubview:self.iconImg];
-    [self.iconImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.MView);
-        make.top.equalTo(self.MView).offset(Py(38));
+    [self.MView addSubview:self.titlL];
+    [self.titlL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.mas_centerX);
+        make.top.equalTo(self.MView.mas_top).offset(Py(33));
     }];
+    [self.titlL sizeToFit];
+    [self.MView addSubview:self.desL];
+    [self.desL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.mas_centerX);
+        make.top.equalTo(self.titlL.mas_bottom).offset(Py(5));
+    }];
+    [self.desL sizeToFit];
     [self.MView addSubview:self.numTF];
     [self.numTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.MView);
-        make.top.equalTo(self.iconImg.mas_bottom).offset(Py(38));
-        make.size.mas_equalTo(CGSizeMake(Px(218), Py(52)));
+        make.top.equalTo(self.desL.mas_bottom).offset(Py(30));
+        make.size.mas_equalTo(CGSizeMake(Px(218), Py(50)));
     }];
     [self.MView addSubview:self.line1];
     [self.line1 mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -67,7 +77,7 @@
     [self.MView addSubview:self.pswTF];
     [self.pswTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(self.line1);
-        make.size.mas_equalTo(CGSizeMake(Px(117), Py(52)));
+        make.size.mas_equalTo(CGSizeMake(Px(117), Py(50)));
     }];
     [self.MView addSubview:self.line2];
     [self.line2 mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -85,14 +95,14 @@
     }];
     [self.MView addSubview:self.login];
     [self.login mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.line2.mas_bottom).offset(Py(30));
+        make.top.equalTo(self.line2.mas_bottom).offset(Py(28));
         make.centerX.equalTo(self.MView);
     }];
     [self addSubview:self.exit];
     [self.exit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.MView.mas_right).offset(-Px(22));
-        make.bottom.equalTo(self.MView.mas_top);
-        make.size.mas_equalTo(CGSizeMake(Px(25), Py(53)));
+        make.centerX.equalTo(self.MView);
+        make.top.equalTo(self.MView.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(Px(52), Py(114)));
     }];
 }
 
@@ -106,13 +116,26 @@
 
 
 #pragma mark lazy load
-
-
--(UIImageView *)iconImg{
-    if (!_iconImg) {
-        _iconImg = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"loginLogo"]];
+-(UILabel *)titlL{
+    if (!_titlL) {
+        _titlL = [[UILabel alloc] init];
+        _titlL.text = @"手机登录";
+        _titlL.font = [UIFont boldSystemFontOfSize:20];
+        _titlL.textColor = DYGColorFromHex(0x424242);
+        _titlL.textAlignment = NSTextAlignmentCenter;
     }
-    return _iconImg;
+    return _titlL;
+}
+
+-(UILabel *)desL{
+    if (!_desL) {
+        _desL = [[UILabel alloc] init];
+        _desL.text = @"欢迎来到抓抓乐的世界";
+        _desL.font = [UIFont systemFontOfSize:13];
+        _desL.textColor = DYGColorFromHex(0xd2d2d2);
+        _desL.textAlignment = NSTextAlignmentCenter;
+    }
+    return _desL;
 }
 
 -(UITextField *)numTF{
@@ -206,15 +229,20 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([[dic objectForKey:@"code"] integerValue] == 200) {
-            [MBProgressHUD showSuccess:[dic objectForKey:@"msg"]];
-            
-            NSMutableDictionary *userIngoDic = [@{@"ID":dic[@"data"][@"id"],@"name":dic[@"data"][@"username"],@"img":dic[@"data"][@"img_path"]} mutableCopy];
+            [MobClick event:@"phone_login"];
+            NSNumber *alias = dic[@"data"][0][@"id"];
+            [JPUSHService setTags:nil alias:[alias stringValue] fetchCompletionHandle:nil];
+            NSDictionary *userDic = dic[@"data"][0];
+            NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
             [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
-
-            [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][@"user_id"] forKey:KUser_ID];
+            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            window.rootViewController = nav;
+            [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
-            [self removeFromSuperview];
-            [self changeMainViewController];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kWChatLoginType];
+            AccountItem *account = [AccountItem mj_objectWithKeyValues:dic[@"data"][0]];
+            [[NSUserDefaults standardUserDefaults] setObject:account.firstpunch forKey:Kfirstpunch];
             
         }else{
             [MBProgressHUD showText:[dic objectForKey:@"msg"]];

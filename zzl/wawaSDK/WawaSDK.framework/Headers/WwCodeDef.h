@@ -19,7 +19,16 @@ typedef NS_ENUM(NSInteger, WwCode) {
     
     WwCodeErrorInRoom   = -50100,                       /**< 房间内错误*/
     WwCodeErrorUploadingPortrait = -50201,              /**< 正在上传头像*/
-    
+};
+
+typedef NS_ENUM(NSInteger, WwRtmpPush) {
+    WwRtmpPushSuccess = 0,                              /**< 推流成功*/
+    WwRtmpPushFail = 1,                                 /**< 推流失败*/
+};
+
+typedef NS_ENUM(NSInteger, WWRtmpPlay) {
+    WWRtmpPlaySuccess = 0,                              /**< 拉流成功*/
+    WWRtmpPlayFail = 1,                                 /**< 拉流失败*/
 };
 
 typedef NS_ENUM (NSInteger, PlayerErrorCode) {

@@ -44,11 +44,11 @@
     return self;
 }
 -(void)creatAddCell{
+    self.contentView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:self.addImg];
     [self.addImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.contentView.mas_centerX);
         make.centerY.equalTo(self.contentView.mas_centerY).offset(-5);
-//        make.width.height.equalTo(@21);
     }];
     [self.contentView addSubview:self.addLabel];
     [self.addLabel mas_makeConstraints:^(MASConstraintMaker *make) {

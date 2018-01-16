@@ -36,10 +36,15 @@
 
 @implementation FXSpoilsController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBottom:) name:@"KClickCell" object:nil];
-    self.title =@"战利品";
+    self.title =@"我的娃娃";
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.btnTitleArr = @[@"寄存中(0)",@"运送中(0)",@"已兑换(0)"];
@@ -51,7 +56,6 @@
     }];
     [self scrollViewDidEndDecelerating:self.collectionView];
     [self addBottomView];
-    [self loadData];
 }
 
 - (void)refreshBottom:(NSNotification *)noti{
@@ -356,13 +360,15 @@
     NSMutableArray *idsArr = [NSMutableArray array];
     NSMutableArray *coinArr = [NSMutableArray array];
     for (WwDepositItem *model in self.cell.selectArray) {
-        [idsArr addObject:@(model.wid)];
-        [coinArr addObject:@(model.coin)];
+        [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
+        [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
     }
     coins = [coinArr componentsJoinedByString:@","];
-    [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithType:WawaList_Deposit IdArr:idsArr complete:^(int code, NSString *message) {
-        if (code == 0) {
+    [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
+        if (code == WwCodeSuccess) {
             [self sendMsgToServesWithCoin:coins];
+        }else{
+            [MBProgressHUD showMessage:message toView:self.view];
         }
     }];
 }

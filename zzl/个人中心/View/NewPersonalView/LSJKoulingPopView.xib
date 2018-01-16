@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="LSJKoulingPopView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RmP-VI-9Yi">
+                    <rect key="frame" x="46" y="134" width="283" height="307"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_pop_basemap" translatesAutoresizingMaskIntoConstraints="NO" id="L5y-Ho-1L6">
+                            <rect key="frame" x="0.0" y="0.0" width="283" height="307"/>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="输入口令" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5R-Sq-k0i">
+                            <rect key="frame" x="91" y="59" width="101.5" height="30"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QvQ-o6-bIs">
+                            <rect key="frame" x="30.5" y="127" width="222.5" height="37"/>
+                            <subviews>
+                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZOq-9c-mhW">
+                                    <rect key="frame" x="20" y="3" width="182.5" height="31"/>
+                                    <nil key="textColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                            </subviews>
+                            <color key="backgroundColor" red="1" green="0.96470588235294119" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="ZOq-9c-mhW" secondAttribute="trailing" constant="20" id="BAG-Ax-eGi"/>
+                                <constraint firstItem="ZOq-9c-mhW" firstAttribute="leading" secondItem="QvQ-o6-bIs" secondAttribute="leading" constant="20" id="MWD-kl-Xrf"/>
+                                <constraint firstItem="ZOq-9c-mhW" firstAttribute="top" secondItem="QvQ-o6-bIs" secondAttribute="top" constant="3" id="coD-QJ-h06"/>
+                                <constraint firstAttribute="height" constant="37" id="eo5-6K-lkZ"/>
+                                <constraint firstAttribute="bottom" secondItem="ZOq-9c-mhW" secondAttribute="bottom" constant="3" id="fMj-Hr-GZT"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mwI-g0-mns">
+                            <rect key="frame" x="50" y="240" width="183" height="52"/>
+                            <state key="normal" backgroundImage="mine_pop_bring"/>
+                            <connections>
+                                <action selector="bringAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="5Oz-HA-Xzm"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z7z-gv-Q63">
+                            <rect key="frame" x="254" y="9" width="21" height="21"/>
+                            <state key="normal" backgroundImage="mine_pop_cancel"/>
+                            <connections>
+                                <action selector="removeAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="lcJ-VN-7y9"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="QvQ-o6-bIs" secondAttribute="trailing" constant="30" id="0mn-yh-cGc"/>
+                        <constraint firstAttribute="bottom" secondItem="L5y-Ho-1L6" secondAttribute="bottom" id="9A8-hA-wul"/>
+                        <constraint firstItem="QvQ-o6-bIs" firstAttribute="centerX" secondItem="x5R-Sq-k0i" secondAttribute="centerX" id="9wm-2o-J0Q"/>
+                        <constraint firstItem="z7z-gv-Q63" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" constant="9" id="CPQ-kl-1Nb"/>
+                        <constraint firstItem="mwI-g0-mns" firstAttribute="leading" secondItem="RmP-VI-9Yi" secondAttribute="leading" constant="50" id="CoV-ny-OYi"/>
+                        <constraint firstAttribute="width" secondItem="RmP-VI-9Yi" secondAttribute="height" multiplier="283:307" id="FRM-KK-p1W"/>
+                        <constraint firstAttribute="trailing" secondItem="L5y-Ho-1L6" secondAttribute="trailing" id="GsQ-13-tQY"/>
+                        <constraint firstAttribute="trailing" secondItem="z7z-gv-Q63" secondAttribute="trailing" constant="8" id="Isg-fJ-dgR"/>
+                        <constraint firstItem="L5y-Ho-1L6" firstAttribute="leading" secondItem="RmP-VI-9Yi" secondAttribute="leading" id="Mkh-1j-fMx"/>
+                        <constraint firstItem="x5R-Sq-k0i" firstAttribute="centerX" secondItem="L5y-Ho-1L6" secondAttribute="centerX" id="YQk-8Y-HzQ"/>
+                        <constraint firstItem="L5y-Ho-1L6" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" id="a52-Y6-tGr"/>
+                        <constraint firstItem="mwI-g0-mns" firstAttribute="centerX" secondItem="ZOq-9c-mhW" secondAttribute="centerX" id="i8e-zk-TU3"/>
+                        <constraint firstAttribute="trailing" secondItem="mwI-g0-mns" secondAttribute="trailing" constant="50" id="lYv-o9-69M"/>
+                        <constraint firstItem="x5R-Sq-k0i" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" constant="59" id="wSe-I7-REx"/>
+                        <constraint firstItem="QvQ-o6-bIs" firstAttribute="top" secondItem="x5R-Sq-k0i" secondAttribute="bottom" constant="38" id="xjT-sj-8m7"/>
+                        <constraint firstAttribute="bottom" secondItem="mwI-g0-mns" secondAttribute="bottom" constant="15" id="yVT-An-Ala"/>
+                    </constraints>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_pop_diamond" translatesAutoresizingMaskIntoConstraints="NO" id="tO7-1k-OzZ">
+                    <rect key="frame" x="167.5" y="114" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="ADa-Uj-EcV"/>
+                        <constraint firstAttribute="width" constant="40" id="rb4-af-lve"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.59999999999999998" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="RmP-VI-9Yi" secondAttribute="trailing" constant="46" id="3FK-7l-qeL"/>
+                <constraint firstItem="RmP-VI-9Yi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="134" id="5nx-k9-QFV"/>
+                <constraint firstItem="RmP-VI-9Yi" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="IPv-AD-cvo"/>
+                <constraint firstItem="tO7-1k-OzZ" firstAttribute="top" secondItem="L5y-Ho-1L6" secondAttribute="top" constant="-20" id="Wu7-Aa-l7a"/>
+                <constraint firstItem="tO7-1k-OzZ" firstAttribute="centerX" secondItem="x5R-Sq-k0i" secondAttribute="centerX" id="XmB-8B-gh4"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="centerView" destination="RmP-VI-9Yi" id="7dw-5o-Fie"/>
+                <outlet property="msgTF" destination="ZOq-9c-mhW" id="X6x-4P-ufC"/>
+                <outlet property="tfView" destination="QvQ-o6-bIs" id="4AZ-fE-mLx"/>
+            </connections>
+            <point key="canvasLocation" x="34.5" y="53.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="mine_pop_basemap" width="282" height="307"/>
+        <image name="mine_pop_bring" width="180" height="52"/>
+        <image name="mine_pop_cancel" width="21" height="21"/>
+        <image name="mine_pop_diamond" width="41" height="41"/>
+    </resources>
+</document>

@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class FXLatesRecordModel;
 @class FXHomeBannerItem;
 @interface FXGameWebController : UIViewController
 
-@property (nonatomic,strong) FXLatesRecordModel *model;
+@property (nonatomic,strong) WwRoomCatchRecordItem *model;
 @property (nonatomic,strong) FXHomeBannerItem *item;
 @property (nonatomic,copy) NSString *orderId;
 @end

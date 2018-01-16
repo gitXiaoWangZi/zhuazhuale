@@ -19,7 +19,7 @@
 @interface FXSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong)UITableView * tableView;
-@property (nonatomic,strong) NSArray *titleArr;
+@property (nonatomic,strong) NSArray *dataArr;
 @property (nonatomic,strong) MBProgressHUD *hud;
 
 @end
@@ -29,64 +29,92 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"设置";
-//    self.titleArr =@[@"背景音乐",@"音效",@"消息推送",@"麦克风/照相机权限",@"清除缓存",@"关于我们"];
-    self.titleArr =@[@"清除缓存",@"关于我们"];
     [self.view addSubview:self.tableView];
+    self.tableView.tableFooterView = [self addFooterView];
+}
+
+- (NSArray *)dataArr{
+    if (!_dataArr) {
+        _dataArr = @[@[@{@"image":@"mine_setting_Soundeffect",@"name":@"音效"},
+                          @{@"image":@"mine_setting_news",@"name":@"消息推送"}],
+                        @[@{@"image":@"mine_setting_Clear",@"name":@"清除缓存"},
+                          @{@"image":@"mine_setting_aboutus",@"name":@"关于我们"}]];
+    }
+    return _dataArr;
+}
+
+- (UIView *)addFooterView{
+    UIView *bgV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, Py(130))];
+    bgV.backgroundColor = [UIColor whiteColor];
+    
+    UIView *lineV = [[UIView alloc] initWithFrame:CGRectMake(12, 0, kScreenWidth-12, 0.5)];
+    lineV.backgroundColor = DYGColorFromHex(0xe7e7e7);
+    [bgV addSubview:lineV];
+    
+    UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [exitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    [exitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    exitBtn.titleLabel.font = [UIFont systemFontOfSize:17];
+    exitBtn.backgroundColor = DYGColorFromHex(0xfed811);
+    [exitBtn addTarget:self action:@selector(exitAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bgV addSubview:exitBtn];
+    [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(bgV.mas_bottom).offset(-Py(20));
+        make.centerX.equalTo(bgV.mas_centerX);
+        make.width.equalTo(@(Px(180)));
+        make.height.equalTo(@(Py(35)));
+    }];
+    exitBtn.layer.cornerRadius = 17.5f;
+    return bgV;
+}
+
+- (void)exitAction:(UIButton *)sender{
+    UIAlertController *alterC = [UIAlertController alertControllerWithTitle:@"确定退出登录" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [[WwUserInfoManager UserInfoMgrInstance] logout];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KLoginStatus];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:KUser_ID];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"KWAWAUSER"];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:Kfirstpunch];
+        UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+        FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[[FXLoginHomeController alloc] init]];
+        window.rootViewController = nav;
+    }];
+    [alterC addAction:cancelAction];
+    [alterC addAction:okAction];
+    [self presentViewController:alterC animated:YES completion:nil];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return self.dataArr.count;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    switch (section) {
-//        case 0:
-//            return 4;
-//            break;
-//        case 1:
-//            return 2;
-//        default:
-//            return 1;
-//            break;
-//    }
-    switch (section) {
-        case 0:
-            return 2;
-            break;
-        default:
-            return 1;
-            break;
-    }
+    NSArray *tempArr = self.dataArr[section];
+    return tempArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *resueId =@"";
     if (indexPath.section==0) {
+        resueId= @"switchCell";
+        FXSwitchCell * cell = [[FXSwitchCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
+        cell.title.text = self.dataArr[indexPath.section][indexPath.row][@"name"];
+        cell.icon.image = [UIImage imageNamed:self.dataArr[indexPath.section][indexPath.row][@"image"]];
+        return cell;
+    }else{
         resueId =@"cell";
         UITableViewCell * cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:resueId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.text = self.titleArr[indexPath.row];
-        cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-        cell.textLabel.textColor =DYGColorFromHex(0x4c4c4c);
+        cell.textLabel.text = self.dataArr[indexPath.section][indexPath.row][@"name"];
+        cell.imageView.image = [UIImage imageNamed:self.dataArr[indexPath.section][indexPath.row][@"image"]];
+        cell.textLabel.font = [UIFont systemFontOfSize:15];
+        cell.textLabel.textColor = DYGColorFromHex(0x3b3b3b);
         if (indexPath.row == 0) {
             cell.detailTextLabel.text = [self getCacheSize];
         }
-        return cell;
-//        resueId= @"switchCell";
-//        FXSwitchCell * cell = [[FXSwitchCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
-//        cell.title.text = self.titleArr[indexPath.row];
-//        return cell;
-//    }else if (indexPath.section==1){
-//        resueId =@"cell";
-//        UITableViewCell * cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:resueId];
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        cell.textLabel.text = self.titleArr[indexPath.row+4];
-//        cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-//        cell.textLabel.textColor =DYGColorFromHex(0x4c4c4c);
-//        return cell;
-    }else{
-        resueId =@"exitCell";
-        FXExitCell * cell =[[FXExitCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
 }
@@ -94,55 +122,35 @@
     if (section>0) {
         return Py(10);
     }
-    return 0;
+    return Py(15);
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (section>0) {
-        return [UIView new];
-    }
-    return nil;
+    UIView *lineV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, Py(10))];
+    lineV.backgroundColor = DYGColorFromHex(0xf7f7f7);
+    return lineV;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return Py(44);
+    return Py(55);
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section==0&&indexPath.row==0) {
+    if (indexPath.section==1&&indexPath.row==0) {
         [self clearCache];
     }
-    if (indexPath.section==0&&indexPath.row==1) {
+    if (indexPath.section==1&&indexPath.row==1) {
         FXAboutUsController * vc = [FXAboutUsController new];
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    if (indexPath.section==1) {
-        
-        UIAlertController *alterC = [UIAlertController alertControllerWithTitle:@"确定退出登录" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-            [[WwUserInfoManager UserInfoMgrInstance] logout];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KLoginStatus];
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:KUser_ID];
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"KWAWAUSER"];
-            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[[FXLoginHomeController alloc] init]];
-            window.rootViewController = nav;
-        }];
-        [alterC addAction:cancelAction];
-        [alterC addAction:okAction];
-        [self presentViewController:alterC animated:YES completion:nil];
     }
 }
 
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
-        _tableView.backgroundColor = BGColor;
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.tableFooterView = [UIView new];
-        _tableView.separatorColor =BGColor;
+        _tableView.separatorColor = DYGColorFromHex(0xe7e7e7);
+        _tableView.separatorInset=UIEdgeInsetsMake(0, 12, 0, 0);
     }
     return _tableView;
 }
@@ -172,7 +180,7 @@
         [imageCache clearMemory];
         [imageCache clearDiskOnCompletion:^{
             [MBProgressHUD showMessage:@"清理完毕" toView:self.tableView];
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
             [cell.detailTextLabel setText:@"0K"];
         }];
         

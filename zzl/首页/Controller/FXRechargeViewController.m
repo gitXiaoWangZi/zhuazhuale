@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"充值";
     if(!_item){
         [self loadUserInfoData];
@@ -301,7 +302,6 @@
 
 #pragma mark ---请求用户信息数据
 - (void)loadUserInfoData{
-    
     NSString *path = @"getUserInfo";
     NSDictionary *params = @{@"uid":[[NSUserDefaults standardUserDefaults] objectForKey:KUser_ID]};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {

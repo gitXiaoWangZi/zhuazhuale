@@ -7,16 +7,18 @@
 //
 
 #import "FXHelpController.h"
-//#import "DYGTextView.h"
 #import "DYGAddCell.h"
 #import "DYGCollectionViewCell.h"
 #import "MyTextView.h"
 
 @interface FXHelpController ()<UIGestureRecognizerDelegate,UITextViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DYGDelectCellDelegate,TZImagePickerControllerDelegate>
 
-//@property(nonatomic,strong)DYGTextView * inputTextView;
+@property(nonatomic,strong)UIView * bgView;
 @property(nonatomic,strong)MyTextView * textV;
 @property(nonatomic,strong)UICollectionView * imgCollecView;
+@property(nonatomic,strong)UILabel * warnLabel;
+@property(nonatomic,strong)UIImageView * QRCodeImgV;
+@property(nonatomic,strong)UILabel * desLabel;
 @property(nonatomic,strong)NSMutableArray * dataArray;
 @property(nonatomic,strong)NSMutableArray * imgDataArray;
 @property (nonatomic,strong) NSMutableArray *indexArr;
@@ -31,27 +33,51 @@
     self.title =@"帮助与反馈";
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatUI];
-    [self.view addSubview:self.textV];
 }
 -(void)creatUI{
-    [self.view addSubview:self.textV];
-    [self.textV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(Px(16));
-        make.top.equalTo(self.view).offset(Py(13));
-        make.right.equalTo(self.view).offset(-Px(16));
-        make.height.equalTo(@(Py(200)));
+    [self.view addSubview:self.bgView];
+    [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view).offset(Py(10));
+        make.left.equalTo(self.view.mas_left).offset(Px(10));
+        make.right.equalTo(self.view.mas_right).offset(-Px(10));
+        make.height.equalTo(@(Py(235)));
     }];
-    [self.view addSubview:self.imgCollecView];
+    self.bgView.layer.cornerRadius = 5;
+    [self.bgView addSubview:self.textV];
+    [self.textV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.bgView.mas_left).offset(Px(5));
+        make.top.equalTo(self.bgView.mas_top).offset(Py(5));
+        make.right.equalTo(self.bgView.mas_right).offset(-Px(5));
+        make.height.equalTo(@(Py(113)));
+    }];
+    [self.bgView addSubview:self.imgCollecView];
     [self.imgCollecView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.textV);
+        make.left.equalTo(self.bgView.mas_left);
+        make.right.equalTo(self.bgView.mas_right);
         make.top.equalTo(self.textV.mas_bottom);
-        make.height.equalTo(@(Py(108)));
+        make.height.equalTo(@(Py(122)));
+    }];
+    [self.view addSubview:self.warnLabel];
+    [self.warnLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.imgCollecView.mas_bottom).offset(Py(12));
+        make.left.right.equalTo(self.imgCollecView);
     }];
     [self.view addSubview:self.submitBtn];
     [self.submitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.imgCollecView.mas_bottom).offset(Py(35));
+        make.top.equalTo(self.warnLabel.mas_bottom).offset(Py(42));
+        make.centerX.equalTo(self.textV.mas_centerX);
+        make.width.equalTo(@(Px(180)));
+        make.height.equalTo(@(Py(35)));
+    }];
+    [self.view addSubview:self.desLabel];
+    [self.desLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).offset(-Py(20));
         make.left.right.equalTo(self.imgCollecView);
-        make.height.equalTo(@(Py(44)));
+    }];
+    [self.view addSubview:self.QRCodeImgV];
+    [self.QRCodeImgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.desLabel.mas_top).offset(-Py(27));
+        make.centerX.equalTo(self.desLabel.mas_centerX);
     }];
 }
 
@@ -76,8 +102,6 @@
         cell.delegate = self;
         cell.imgView.image = self.dataArray[indexPath.row];
         cell.tag = indexPath.row;
-        //        NSDictionary * dic = self.dataArray[indexPath.row];
-        //        [cell.imgView sd_setImageWithURL:[NSURL URLWithString:dic[@"img_path"]]];
         return cell;
     }
 }
@@ -99,7 +123,6 @@
 }
 -(void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto{
     for (UIImage * img in photos) {
-        //        DYGLog(@"Data:%@",[self Image_TransForm_Data:img]);
         NSString * s =  [[self Image_TransForm_Data:img] base64EncodedStringWithOptions:0];
         NSDictionary * dict = @{@"name":s};
         [self.imgDataArray addObject:dict];
@@ -108,7 +131,6 @@
     [self.imgCollecView  reloadData];
 }
 -(void)delectImgWithTag:(NSInteger)tag{
-//    [self.indexArr removeObjectAtIndex:tag];
     [self.dataArray removeObjectAtIndex:tag];
     [self.imgCollecView reloadData];
 }
@@ -130,26 +152,26 @@
 }
 
 #pragma mark lazy load
+- (UIView *)bgView{
+    if (!_bgView) {
+        _bgView = [[UIView alloc] init];
+        _bgView.backgroundColor = DYGColorFromHex(0xf7f7f7);
+        _bgView.layer.shadowColor = DYGColorFromHex(0xececec).CGColor;
+        _bgView.layer.shadowOffset = CGSizeMake(5, 5);
+        _bgView.layer.shadowOpacity = 0.8;
+        _bgView.layer.shadowRadius = 4;
+    }
+    return _bgView;
+}
 
-//-(DYGTextView *)inputTextView{
-//    if (!_inputTextView) {
-//        _inputTextView = [[DYGTextView alloc]init];
-//        _inputTextView.backgroundColor = BGColor;
-//        _inputTextView.textColor = DYGColorFromHex(0x4c4c4c);
-//        _inputTextView.font = [UIFont systemFontOfSize:15];
-//        _inputTextView.placeholder = @"非常抱歉，由于我们的疏忽给您带来不便，请将您遇到的问题/产品建议反馈给我们。为了我们能及时修复问题，请尽量将您碰到的问题描述清楚,(包括但不限于)时间、房间、娃娃、问题说明等，非常感谢！";
-//        _inputTextView.placeholderTextColor = [UIColor colorWithHexString:@"c6c6c6" alpha:1];
-//    }
-//    return _inputTextView;
-//}
 - (MyTextView *)textV{
     if (!_textV) {
         _textV = [[MyTextView alloc] init];
-        _textV.backgroundColor = BGColor;
+        _textV.backgroundColor = DYGColorFromHex(0xf7f7f7);
         _textV.textColor = DYGColorFromHex(0x4c4c4c);
         _textV.font = [UIFont systemFontOfSize:15];
-        _textV.placeholder = @"非常抱歉，由于我们的疏忽给您带来不便，请将您遇到的问题/产品建议反馈给我们。为了我们能及时修复问题，请尽量将您碰到的问题描述清楚,(包括但不限于)时间、房间、娃娃、问题说明等，非常感谢！";
-        _textV.placeholderColor = [UIColor colorWithHexString:@"c6c6c6" alpha:1];
+        _textV.placeholder = @"反馈问题......";
+        _textV.placeholderColor = [UIColor colorWithHexString:@"797979" alpha:1];
     }
     return _textV;
 }
@@ -160,12 +182,34 @@
         _imgCollecView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 142, kScreenWidth,94) collectionViewLayout:flowLayout];
         _imgCollecView.delegate = self;
         _imgCollecView.dataSource = self;
-        _imgCollecView.backgroundColor = BGColor;
+        _imgCollecView.backgroundColor = DYGColorFromHex(0xf7f7f7);
         [_imgCollecView registerClass:[DYGCollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
         [_imgCollecView registerClass:[DYGAddCell class] forCellWithReuseIdentifier:@"addCell"];
         _imgCollecView.showsHorizontalScrollIndicator = NO;
     }
     return _imgCollecView;
+}
+
+- (UILabel *)warnLabel{
+    if (!_warnLabel) {
+        _warnLabel = [[UILabel alloc] init];
+        _warnLabel.text = @"温馨提示：请如实反馈，拒接恶意虚假信息";
+        _warnLabel.textColor = DYGColorFromHex(0x797979);
+        _warnLabel.font = [UIFont systemFontOfSize:15];
+        _warnLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _warnLabel;
+}
+
+- (UILabel *)desLabel{
+    if (!_desLabel) {
+        _desLabel = [[UILabel alloc] init];
+        _desLabel.text = @"如遇到问题还可联系微信客服：chaoxiangk";
+        _desLabel.textColor = DYGColorFromHex(0x797979);
+        _desLabel.font = [UIFont systemFontOfSize:12];
+        _desLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _desLabel;
 }
 
 -(NSMutableArray *)dataArray{
@@ -188,13 +232,19 @@
 }
 -(UIButton *)submitBtn{
     if (!_submitBtn) {
-        _submitBtn = [UIButton buttonWithTitle:@"完成" titleColor:[UIColor whiteColor] font:16];
-        [_submitBtn setBackgroundColor:systemColor];
-        _submitBtn.cornerRadius = Py(22);
+        _submitBtn = [UIButton buttonWithTitle:@"提交" titleColor:[UIColor whiteColor] font:17];
+        [_submitBtn setBackgroundColor:DYGColorFromHex(0xfed811)];
+        _submitBtn.cornerRadius = Py(17.5);
         _submitBtn.layer.masksToBounds = YES;
         [_submitBtn addTarget:self action:@selector(submitClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _submitBtn;
+}
+-(UIImageView *)QRCodeImgV{
+    if (!_QRCodeImgV) {
+        _QRCodeImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mine_help_QRcode"]];
+    }
+    return _QRCodeImgV;
 }
 
 //提交数据

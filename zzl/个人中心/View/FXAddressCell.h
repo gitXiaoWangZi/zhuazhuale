@@ -21,4 +21,5 @@
 
 @property (nonatomic,strong) NSIndexPath *indexPath;
 @property (nonatomic,strong) WwAddress *model;
+@property (nonatomic,strong) UIView *botoomV;
 @end
