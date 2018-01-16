@@ -66,7 +66,7 @@
     _bgImageV.frame = self.view.bounds;
     [self.view addSubview:_bgImageV];
     [self.view sendSubviewToBack:_bgImageV];
-    self.roomIdsArray = @[@"590",@"562",@"508",@"321",@"335",@"262"];
+    self.roomIdsArray = @[@"501",@"603",@"581",@"590",@"622",@"240"];
 }
 
 #pragma  Controller Life

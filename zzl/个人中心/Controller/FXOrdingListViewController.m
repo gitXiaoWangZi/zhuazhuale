@@ -86,7 +86,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FXSpoilsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     cell.model = self.dataArray[indexPath.row];
-    cell.isShow = NO;
+    cell.celltype = WawaList_All;
     return cell;
 }
 

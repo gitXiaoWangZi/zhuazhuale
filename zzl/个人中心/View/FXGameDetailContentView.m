@@ -29,8 +29,6 @@
     [super awakeFromNib];
     _shensuBtn.layer.cornerRadius = 17.5f;
     _shensuBtn.layer.masksToBounds = YES;
-    _status.layer.cornerRadius = 13;
-    _status.layer.masksToBounds = YES;
     
 }
 - (void)reloadDataWithModel:(WwGameHistory*)model {
@@ -41,23 +39,18 @@
     self.num.text = [NSString stringWithFormat:@"x%ld",model.coin];
     self.gameNo.text = model.orderId;
     if (model.status == 2) {
-        _status.layer.backgroundColor = DYGColorFromHex(0xe0fdfc).CGColor;
         _status.text = @"成功";
-        [_status setTextColor:DYGColorFromHex(0x72f3f5)];
+        [_status setTextColor:DYGColorFromHex(0xfed811)];
     }
     else if (model.status == 1) {
-        _status.layer.backgroundColor = DYGColorFromHex(0xf2f2f2).CGColor;
         _status.text = @"失败";
-        [_status setTextColor:DYGColorFromHex(0xc6c6c6)];
+        [_status setTextColor:DYGColorFromHex(0x797979)];
     }
     else if (model.status == 0) {
         // 故障
-        _status.layer.backgroundColor = DYGColorFromHex(0xf2f2f2).CGColor;
         _status.text = @"失败";
-        [_status setTextColor:DYGColorFromHex(0xc6c6c6)];
+        [_status setTextColor:DYGColorFromHex(0x797979)];
     }
-    
-    //    [self.appealBtn setTitle:model.complainModel.complainStr forState:UIControlStateNormal];
 }
 - (void)updataComplainState:(BOOL)complain {
     if (complain) {

@@ -10,7 +10,7 @@
 
 @interface FXSpoilsCell : UITableViewCell
 
-@property (nonatomic,assign) BOOL isShow;
+@property (nonatomic,assign) WwWawaListType celltype;
 @property (nonatomic,strong) WwDepositItem *model;
 @property (nonatomic,strong) WwOrderItem *item;
 @property (nonatomic,strong) UIButton *isSelectBtn;

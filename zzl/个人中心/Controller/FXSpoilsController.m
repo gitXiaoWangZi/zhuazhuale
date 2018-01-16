@@ -10,6 +10,7 @@
 #import "FXCollecTBCell.h"
 #import "FXLogisticsController.h"
 #import "FXOrdingListViewController.h"
+#import "UIButton+Position.h"
 #define  btnW kScreenWidth/3
 
 @interface FXSpoilsController ()<UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate,FXColecTBCellDelegate>
@@ -24,7 +25,6 @@
 
 @property (nonatomic,strong) UIView *orderView;
 @property (nonatomic,strong) UIButton *selectBtn;
-@property (nonatomic,strong) UILabel *allSelctLabel;
 @property (nonatomic,strong) UIButton *applySendBtn;
 @property (nonatomic,strong) UIButton *applyExchangeBtn;
 
@@ -47,7 +47,7 @@
     self.title =@"我的娃娃";
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.btnTitleArr = @[@"寄存中(0)",@"运送中(0)",@"已兑换(0)"];
+    self.btnTitleArr = @[@"寄存中",@"已发货",@"已兑换"];
     [self creatTopViewWithArr:self.btnTitleArr];
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -80,30 +80,26 @@
     [self.selectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.orderView).offset(Px(20));
         make.centerY.equalTo(self.orderView);
-    }];
-    
-    [self.orderView addSubview:self.allSelctLabel];
-    [self.allSelctLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.selectBtn.mas_right).offset(Px(3));
-        make.centerY.equalTo(self.selectBtn);
+        make.width.equalTo(@(Px(62)));
+        make.height.equalTo(@(Py(30)));
     }];
 
     [self.orderView addSubview:self.applySendBtn];
     [self.applySendBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.orderView).offset(Px(-20));
+        make.right.equalTo(self.orderView.mas_right).offset(Px(-15));
         make.centerY.equalTo(self.orderView);
-        make.size.mas_equalTo(CGSizeMake(70, 30));
+        make.size.mas_equalTo(CGSizeMake(Px(80), Py(30)));
     }];
-    _applySendBtn.layer.cornerRadius = 15;
+    _applySendBtn.layer.cornerRadius = Py(15);
     _applySendBtn.layer.masksToBounds = YES;
     
     [self.orderView addSubview:self.applyExchangeBtn];
     [self.applyExchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.applySendBtn.mas_left).offset(Px(-20));
+        make.right.equalTo(self.applySendBtn.mas_left).offset(Px(-7));
         make.centerY.equalTo(self.applySendBtn);
-        make.size.mas_equalTo(CGSizeMake(70, 30));
+        make.size.mas_equalTo(CGSizeMake(Px(80), Py(30)));
     }];
-    _applyExchangeBtn.layer.cornerRadius = 15;
+    _applyExchangeBtn.layer.cornerRadius = Py(15);
     _applyExchangeBtn.layer.masksToBounds = YES;
     
 }
@@ -113,8 +109,8 @@
     for (int i = 0; i<arr.count; i++) {
         UIButton * btn = [[UIButton alloc]initWithFrame:CGRectMake(btnW*i,0, btnW,self.topView.height)];
         [btn setTitle:arr[i] forState:UIControlStateNormal];
-        [btn setTitleColor:systemColor forState:UIControlStateSelected];
-        [btn setTitleColor:DYGColorFromHex(0x4c4c4c) forState:UIControlStateNormal];
+        [btn setTitleColor:DYGColorFromHex(0xd9b600) forState:UIControlStateSelected];
+        [btn setTitleColor:DYGColorFromHex(0x4d4d4d) forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
         btn.tag = 10+i;
         [btn addTarget:self action:@selector(btnClickToScroll:) forControlEvents:UIControlEventTouchUpInside];
@@ -123,7 +119,7 @@
     self.topView.borderColor = BGColor;
     self.topView.borderWidth =1;
     [self.view addSubview:self.topView];
-    self.lineView.frame = CGRectMake((btnW/2-Px(10)), CGRectGetMaxY(self.topView.frame)-2, Px(20), 2);
+    self.lineView.frame = CGRectMake((btnW - Px(60))/2.0, CGRectGetMaxY(self.topView.frame)-2, Px(60), 2);
     [self.view addSubview:self.lineView];
 }
 
@@ -137,15 +133,12 @@
     FXCollecTBCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"tableView" forIndexPath:indexPath];
     cell.delegate = self;
     if (indexPath.row == 0) {
-        cell.isShow = YES;
         cell.colectType = WawaList_Deposit;
         cell.dataArray = self.depositArr;
     }else if (indexPath.row == 1){
-        cell.isShow = NO;
         cell.colectType = WawaList_Deliver;
         cell.dataArray = self.deliverArr;
     }else{
-        cell.isShow = NO;
         cell.colectType = WawaList_Exchange;
         cell.dataArray = self.exchangeArr;
     }
@@ -160,7 +153,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int i = (scrollView.contentOffset.x+ kScreenWidth * 0.5)/kScreenWidth;
     [UIView animateWithDuration:0.25 animations:^{
-        self.lineView.frame = CGRectMake((btnW/2-Px(10))+btnW*i, self.lineView.y, self.lineView.width, self.lineView.height);
+        self.lineView.frame = CGRectMake((btnW - Px(60))/2.0+btnW*i, self.lineView.y, self.lineView.width, self.lineView.height);
     }];
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -268,27 +261,23 @@
         _selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_selectBtn setImage:[UIImage imageNamed:@"address_normal"] forState:UIControlStateNormal];
         [_selectBtn setImage:[UIImage imageNamed:@"address_selected"] forState:UIControlStateSelected];
+        [_selectBtn setTitle:@"全选" forState:UIControlStateNormal];
+        _selectBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_selectBtn setTitleColor:DYGColorFromHex(0x4d4d4d) forState:UIControlStateNormal];
         [_selectBtn addTarget:self action:@selector(allSelectAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_selectBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont systemFontOfSize:12] spacing:6];
     }
     return _selectBtn;
-}
-
--(UILabel *)allSelctLabel{
-    if (!_allSelctLabel) {
-        _allSelctLabel = [UILabel labelWithFont:12 WithTextColor:TextColor WithAlignMent:NSTextAlignmentCenter];
-        _allSelctLabel.text = @"全选";
-    }
-    return _allSelctLabel;
 }
 
 - (UIButton *)applySendBtn{
     if (!_applySendBtn) {
         _applySendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_applySendBtn setTitle:@"申请发货" forState:UIControlStateNormal];
-        [_applySendBtn setTitleColor:systemColor forState:UIControlStateNormal];
+        [_applySendBtn setTitleColor:DYGColorFromHex(0xd9b600) forState:UIControlStateNormal];
         _applySendBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-        _applySendBtn.layer.borderColor = systemColor.CGColor;
-        _applySendBtn.layer.borderWidth = 1;
+        _applySendBtn.layer.borderColor = DYGColorFromHex(0xd9b600).CGColor;
+        _applySendBtn.layer.borderWidth = 0.5f;
         [_applySendBtn addTarget:self action:@selector(applaySendAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _applySendBtn;
@@ -298,10 +287,10 @@
     if (!_applyExchangeBtn) {
         _applyExchangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_applyExchangeBtn setTitle:@"申请兑换" forState:UIControlStateNormal];
-        [_applyExchangeBtn setTitleColor:systemColor forState:UIControlStateNormal];
+        [_applyExchangeBtn setTitleColor:DYGColorFromHex(0x4cbaff) forState:UIControlStateNormal];
         _applyExchangeBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-        _applyExchangeBtn.layer.borderColor = systemColor.CGColor;
-        _applyExchangeBtn.layer.borderWidth = 1;
+        _applyExchangeBtn.layer.borderColor = DYGColorFromHex(0x4cbaff).CGColor;
+        _applyExchangeBtn.layer.borderWidth = 0.5f;
         [_applyExchangeBtn addTarget:self action:@selector(applyExchangeAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _applyExchangeBtn;
@@ -310,20 +299,6 @@
 #pragma mark 请求战利品数据
 - (void)loadData{
     [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_All completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
-        NSInteger deposit = model.depositTotalCount;
-        NSInteger deliver = model.expressTotalCount;
-        NSInteger exchange = model.exchangeTotalCount;
-        
-        NSString *depositStr = [NSString stringWithFormat:@"寄存中(%zd)",deposit];
-        NSString *deliverStr = [NSString stringWithFormat:@"运送中(%zd)",deliver];
-        NSString *exchangeStr = [NSString stringWithFormat:@"已兑换(%zd)",exchange];
-        NSArray *titleArr = @[depositStr,deliverStr,exchangeStr];
-        
-        for (int i = 0; i < titleArr.count; i ++) {
-            UIButton *btn = (UIButton *)[self.topView viewWithTag:i+10];
-            [btn setTitle:titleArr[i] forState:UIControlStateNormal];
-        }
-        
         self.depositArr = model.depositList;
         self.deliverArr = model.expressList;
         self.exchangeArr = model.exchangeList;
@@ -356,21 +331,23 @@
 
 //申请兑换按钮
 - (void)applyExchangeAction:(UIButton *)sender{
-    NSString *coins = @"";
-    NSMutableArray *idsArr = [NSMutableArray array];
-    NSMutableArray *coinArr = [NSMutableArray array];
-    for (WwDepositItem *model in self.cell.selectArray) {
-        [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
-        [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
-    }
-    coins = [coinArr componentsJoinedByString:@","];
-    [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
-        if (code == WwCodeSuccess) {
-            [self sendMsgToServesWithCoin:coins];
-        }else{
-            [MBProgressHUD showMessage:message toView:self.view];
+    if (self.cell.selectArray.count != 0) {
+        NSString *coins = @"";
+        NSMutableArray *idsArr = [NSMutableArray array];
+        NSMutableArray *coinArr = [NSMutableArray array];
+        for (WwDepositItem *model in self.cell.selectArray) {
+            [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
+            [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
         }
-    }];
+        coins = [coinArr componentsJoinedByString:@","];
+        [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
+            if (code == WwCodeSuccess) {
+                [self sendMsgToServesWithCoin:coins];
+            }else{
+                [MBProgressHUD showMessage:message toView:self.view];
+            }
+        }];
+    }
 }
 
 //告诉服务器兑换了娃娃

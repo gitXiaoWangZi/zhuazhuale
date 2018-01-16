@@ -20,7 +20,6 @@
 @interface FXCollecTBCell : UICollectionViewCell
 
 @property (nonatomic,weak) id<FXColecTBCellDelegate> delegate;
-@property (nonatomic,assign) BOOL isShow;
 @property (nonatomic,assign) WwWawaListType colectType;
 @property (nonatomic,strong) NSArray *dataArray;
 @property(nonatomic,strong)UITableView * tableView;

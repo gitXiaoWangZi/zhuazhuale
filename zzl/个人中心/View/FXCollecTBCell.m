@@ -69,9 +69,9 @@
     static NSString * resueId = @"spolisCell";
     FXSpoilsCell * cell = [tableView dequeueReusableCellWithIdentifier:resueId];
     if (!cell) {
-        cell = [[FXSpoilsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
+        cell = [[FXSpoilsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
     }
-    cell.isShow = self.isShow;
+    cell.celltype = self.colectType;
     if (self.colectType == WawaList_Deposit) {
         cell.model = self.dataArray[indexPath.row];
     }else{
@@ -82,9 +82,6 @@
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if ([self.delegate respondsToSelector:@selector(cellDidClickWithIndexPath:)]) {
-//        [self.delegate cellDidClickWithIndexPath:indexPath];
-//    }
     FXSpoilsCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (self.colectType == WawaList_Deposit) {
         cell.isSelectBtn.selected = !cell.isSelectBtn.selected;
@@ -105,7 +102,7 @@
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return Py(90);
+    return Py(94);
 }
 -(UITableView *)tableView{
     if (!_tableView) {
