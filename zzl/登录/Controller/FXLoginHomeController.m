@@ -47,6 +47,11 @@
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     
+    [self.view addSubview:self.visiteBtn];
+    [self.visiteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.phoneBtn.mas_bottom).offset(30);
+        make.centerX.equalTo(self.view);
+    }];
     if (![WXApi isWXAppInstalled]) {//用户没有安装微信客户端
         //构造SendAuthReq结构体
         self.wechatBtn.hidden = YES;
@@ -190,7 +195,7 @@
 
 -(UIButton *)visiteBtn{
     if (!_visiteBtn) {
-        _visiteBtn = [UIButton buttonWithTitle:@"游客登录" titleColor:DYGColorFromHex(0x999999) font:14];
+        _visiteBtn = [UIButton buttonWithTitle:@"游客登录" titleColor:DYGColorFromHex(0xd27300) font:15];
         [_visiteBtn addTarget:self action:@selector(visiteBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _visiteBtn;
@@ -207,7 +212,7 @@
             NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
             [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            window.rootViewController = [[FXTabBarController alloc] init];
+            window.rootViewController = [[FXHomeViewController alloc] init];
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
             AccountItem *account = [AccountItem mj_objectWithKeyValues:dic[@"data"][0]];

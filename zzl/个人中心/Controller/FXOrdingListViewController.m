@@ -11,7 +11,9 @@
 #import "FXAddressManageController.h"
 
 @interface FXOrdingListViewController ()
-
+{
+    NSString *money;
+}
 @property (nonatomic,strong) UIView *nBgView;
 @property (nonatomic,strong) UIImageView *nAdressIcon;
 @property (nonatomic,strong) UILabel *msgL;
@@ -31,6 +33,7 @@
 @property (nonatomic,strong) UIButton *sureBtn;
 
 @property (nonatomic,strong) WwAddress *addressModel;
+@property (nonatomic,strong) UIView *popBgView;
 @end
 
 @implementation FXOrdingListViewController
@@ -71,6 +74,171 @@
         }
     }];
     [self.numLabel setText:[NSString stringWithFormat:@"共%zd件",self.dataArray.count]];
+    if (self.dataArray.count == 1) {
+        [self loadPostFeeData];
+    }
+}
+
+- (void)addPostViewWithMoney:(NSString *)money{
+    UIView *bgView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    bgView.backgroundColor = DYGAColor(0, 0, 0, 0.4);
+    self.popBgView = bgView;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissSelf)];
+    [bgView addGestureRecognizer:tap];
+    
+    UIView *centerV = [[UIView alloc] init];
+    centerV.backgroundColor = [UIColor whiteColor];
+    centerV.cornerRadius = 8;
+    [bgView addSubview:centerV];
+    [centerV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(bgView);
+        make.width.equalTo(@(Px(280)));
+        make.height.equalTo(@(Py(180)));
+    }];
+    UIButton *dismissBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [dismissBtn setImage:[UIImage imageNamed:@"mine_send_cross"] forState:UIControlStateNormal];
+    [dismissBtn addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
+    [centerV addSubview:dismissBtn];
+    [dismissBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(centerV).offset(Py(10));
+        make.right.equalTo(centerV).offset(-Px(10));
+    }];
+    UILabel *titleL = [[UILabel alloc] init];
+    titleL.textColor = DYGColor(77, 77, 77);
+    titleL.font = kPingFangSC_Medium(24);
+    titleL.numberOfLines = 2;
+    titleL.textAlignment = NSTextAlignmentCenter;
+    titleL.text = [NSString stringWithFormat:@"单个商品发货需要支付%@元哦~",money];
+    [centerV addSubview:titleL];
+    [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(centerV).offset(Py(50));
+        make.left.equalTo(centerV.mas_left).offset(Px(20));
+        make.right.equalTo(centerV.mas_right).offset(-Px(20));
+    }];
+    UIButton *zhifubaoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [zhifubaoBtn setTitle:@"支付宝" forState:UIControlStateNormal];
+    zhifubaoBtn.titleLabel.font = kPingFangSC_Semibold(15);
+    [zhifubaoBtn setTitleColor:DYGColor(19, 130, 233) forState:UIControlStateNormal];
+    [zhifubaoBtn addTarget:self action:@selector(zhifubaoPay:) forControlEvents:UIControlEventTouchUpInside];
+    [centerV addSubview:zhifubaoBtn];
+    [zhifubaoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(centerV);
+        make.left.equalTo(centerV);
+        make.width.equalTo(@((Px(280)-0.5)/2.0));
+        make.height.equalTo(@(Py(52)));
+    }];
+    UIButton *wechatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [wechatBtn setTitle:@"微信" forState:UIControlStateNormal];
+    wechatBtn.titleLabel.font = kPingFangSC_Semibold(15);
+    [wechatBtn setTitleColor:DYGColor(35, 186, 0) forState:UIControlStateNormal];
+    [wechatBtn addTarget:self action:@selector(wechatPay:) forControlEvents:UIControlEventTouchUpInside];
+    [centerV addSubview:wechatBtn];
+    [wechatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(centerV);
+        make.right.equalTo(centerV);
+        make.width.equalTo(@((Px(280)-0.5)/2.0));
+        make.height.equalTo(@(Py(52)));
+    }];
+    UIView *line0 = [UIView new];
+    line0.backgroundColor = DYGColor(204, 204, 204);
+    [centerV addSubview:line0];
+    [line0 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(centerV);
+        make.width.equalTo(@(0.5));
+        make.centerX.equalTo(centerV);
+        make.height.equalTo(@(Py(52)));
+    }];
+    UIView *line = [UIView new];
+    line.backgroundColor = DYGColor(204, 204, 204);
+    [centerV addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(line0.mas_top);
+        make.height.equalTo(@(0.5));
+        make.left.right.equalTo(centerV);
+    }];
+    [[UIApplication sharedApplication].keyWindow addSubview:bgView];
+    bgView.hidden = YES;
+}
+
+- (void)dismissSelf{
+    self.popBgView.hidden = YES;
+}
+
+- (void)zhifubaoPay:(UIButton *)sender{
+    self.popBgView.hidden = YES;
+    WwDepositItem *item = self.dataArray[0];
+    NSString *path = @"DealiPay";
+    NSDictionary *params = @{@"uid":KUID,@"money":money,@"itemCode":@(item.wid)};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [[AlipaySDK defaultService] payOrder:dic[@"data"] fromScheme:@"zzlwwzfb" callback:^(NSDictionary *resultDic) {
+            }];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)wechatPay:(UIButton *)sender{
+    self.popBgView.hidden = YES;
+    WwDepositItem *item = self.dataArray[0];
+    NSString *path = @"Depay";
+    NSDictionary *params = @{@"uid":KUID,@"money":money,@"itemCode":@(item.wid)};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            PayReq *req = [[PayReq alloc] init];
+            req.partnerId = dic[@"data"][@"partnerid"];
+            req.prepayId = dic[@"data"][@"prepayid"];
+            req.package = dic[@"data"][@"package"];
+            req.nonceStr = dic[@"data"][@"noncestr"];
+            req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
+            req.sign = dic[@"data"][@"sign"];
+            if ([WXApi sendReq:req]) {
+                NSLog(@"调起成功");
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+#pragma mark - 收到支付成功的消息后作相应的处理
+- (void)getOrderPayResult:(NSNotification *)notification
+{
+    if ([notification.object isEqualToString:@"success"]) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    }else {
+        [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
+    }
+}
+
+//支付宝回调
+- (void)getOrderzfbPayResult:(NSNotification *)noti{
+    NSDictionary *dic= noti.object;
+    if ([dic[@"resultStatus"] integerValue] == 9000) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    }else{
+        [MBProgressHUD showError:@"支付失败" toView:self.view];
+    }
+}
+
+#pragma mark 请求支付邮费
+- (void)loadPostFeeData{
+    NSString *path = @"Postage";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            money = dic[@"data"][@"money"];
+            [self addPostViewWithMoney:money];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 #pragma mark - Table view data source
@@ -206,20 +374,24 @@
     if (self.addressModel == nil) {
         [MBProgressHUD showMessage:@"请选择地址" toView:self.view];
     }
-    NSMutableArray *tempArr = [NSMutableArray array];
-    for (WwDepositItem *model in self.dataArray) {
-        [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
-    }
-
-    [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
-        
-        if (code == WwCodeSuccess) {
-            [MBProgressHUD showMessage:@"申请成功" toView:self.view];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
+    if (self.dataArray.count > 1) {
+        NSMutableArray *tempArr = [NSMutableArray array];
+        for (WwDepositItem *model in self.dataArray) {
+            [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
         }
-    }];
+        [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
+            
+            if (code == WwCodeSuccess) {
+                [MBProgressHUD showMessage:@"申请成功" toView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }
+        }];
+    }else{
+        self.popBgView.hidden = NO;
+    }
+    
 }
 
 #pragma mark 懒加载
