@@ -13,7 +13,7 @@
 #import "LSJOperationNormalView.h"
 #import "ZYPlayOperationView.h"
 #import "AccountItem.h"
-#import "FXRechargeViewController.h"
+#import "LSJRechargeViewController.h"
 #import "FXCommentView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "BulletManager.h"
@@ -322,7 +322,7 @@
             self.isNoBack = YES;
             [MobClick event:@"game_pay"];
             NSString *firstPunch = [[NSUserDefaults standardUserDefaults] objectForKey:Kfirstpunch];
-            FXRechargeViewController *rechargeVC = [[FXRechargeViewController alloc] init];
+            LSJRechargeViewController *rechargeVC = [[LSJRechargeViewController alloc] init];
             rechargeVC.firstpunch = firstPunch;
             [self.navigationController pushViewController:rechargeVC animated:YES];
         }
