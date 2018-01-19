@@ -47,7 +47,7 @@
         // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
     }
     [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
-    [JPUSHService setupWithOption:launchOptions appKey:@"a07cd2a354fdb609b05196fa" channel:@"App Store" apsForProduction:0];//0是开发1是发布
+    [JPUSHService setupWithOption:launchOptions appKey:@"a07cd2a354fdb609b05196fa" channel:@"App Store" apsForProduction:1];//0是开发1是发布
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     /*******向友盟注册  统计功能*********/

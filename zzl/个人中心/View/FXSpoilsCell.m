@@ -84,6 +84,7 @@
         _time = [[UILabel alloc] init];
         _time.font = kPingFangSC_Regular(11);
         _time.textColor = DYGColorFromHex(0x797979);
+        _time.hidden = YES;
     }
     return _time;
 }
@@ -133,7 +134,9 @@
 }
 
 - (void)desAction:(UIButton *)sender{
-    NSLog(@"查看物流");
+    if ([self.delegate respondsToSelector:@selector(checkTheLogistics:)]) {
+        [self.delegate checkTheLogistics:self.indexPath];
+    }
 }
 
 - (void)setCelltype:(WwWawaListType)celltype{

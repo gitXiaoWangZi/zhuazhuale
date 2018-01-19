@@ -31,7 +31,7 @@
     [self.icon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(Px(16));
         make.centerY.equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(Px(40), Py(40)));
+//        make.size.mas_equalTo(CGSizeMake(Px(40), Py(40)));
     }];
     [self addSubview:self.title];
     [self.title mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -51,7 +51,7 @@
 -(UIImageView *)icon{
     if (!_icon) {
         _icon = [[UIImageView alloc]init];
-        _icon.contentMode = UIViewContentModeCenter;
+//        _icon.contentMode = UIViewContentModeScaleAspectFit;
         [_icon sizeToFit];
     }
     return _icon;
@@ -86,7 +86,7 @@
 
 - (void)setModel:(FXTaskModel *)model{
     _model = model;
-//    [self.icon sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    [self.icon sd_setImageWithURL:[NSURL URLWithString:model.img]];
     self.title.text = model.sign_name;
     if ([model.status isEqualToString:@"0"]) {//不可领取
         self.btn.selected = NO;

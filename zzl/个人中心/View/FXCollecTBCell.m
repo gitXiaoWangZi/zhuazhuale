@@ -8,9 +8,10 @@
 
 #import "FXCollecTBCell.h"
 #import "FXSpoilsCell.h"
-@interface FXCollecTBCell()<UITableViewDelegate,UITableViewDataSource>
+#import "LSJLogisticsPopView.h"
+@interface FXCollecTBCell()<UITableViewDelegate,UITableViewDataSource,FXSpoilsCellDelegate>
 
-
+@property (nonatomic,strong) LSJLogisticsPopView *popView;
 @end
 
 @implementation FXCollecTBCell
@@ -71,6 +72,7 @@
     if (!cell) {
         cell = [[FXSpoilsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
     }
+    cell.delegate = self;
     cell.celltype = self.colectType;
     if (self.colectType == WawaList_Deposit) {
         cell.model = self.dataArray[indexPath.row];
@@ -78,6 +80,7 @@
         WwOrderModel *model = self.dataArray[indexPath.section];
         WwOrderItem *item = model.records[indexPath.row];
         cell.item = item;
+        cell.indexPath = indexPath;
     }
     return cell;
 }
@@ -104,6 +107,22 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return Py(94);
 }
+
+#pragma mark FXSpoilsCellDelegate
+-(void)checkTheLogistics:(NSIndexPath *)indexPath{
+    WwOrderModel *item = self.dataArray[indexPath.section];
+    [[WwUserInfoManager UserInfoMgrInstance] requestExpressInfo:item.orderId complete:^(int code, NSString *message, WwExpressInfo *model) {
+        if (code == WwCodeSuccess) {
+            if (model.number.length == 0) {
+                [MBProgressHUD showMessage:@"暂无物流信息" toView:self.tableView];
+                return ;
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpLogisticsVC" object:model];
+            }
+        }
+    }];
+}
+
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
@@ -121,6 +140,13 @@
         _selectArray = [NSMutableArray array];
     }
     return _selectArray;
+}
+
+- (LSJLogisticsPopView *)popView{
+    if (!_popView) {
+        _popView = [[LSJLogisticsPopView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    }
+    return _popView;
 }
 
 - (void)dealloc{

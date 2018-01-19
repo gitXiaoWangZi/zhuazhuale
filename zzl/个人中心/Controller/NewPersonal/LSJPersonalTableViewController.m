@@ -18,6 +18,7 @@
 #import "FXTaskViewController.h"
 #import "FXRecordViewController.h"
 #import "FXSpoilsController.h"
+#import "LSJSpoilsController.h"
 #import "AccountItem.h"
 #import "FXRechargeViewController.h"
 #import "FXUserInfoController.h"
@@ -136,8 +137,12 @@ static NSString *const cellID = @"LSJMineCell";
     if ([cell.nameL.text isEqualToString:@"帮助与反馈"]) {
         cell.desL.hidden = NO;
     }
-    if ([cell.nameL.text isEqualToString:@"每日任务"] && [_receive integerValue] == 1) {
-        cell.warnImgV.hidden = NO;
+    if ([cell.nameL.text isEqualToString:@"每日任务"]) {
+        if ([_receive integerValue] == 1) {
+            cell.warnImgV.hidden = NO;
+        }else{
+            cell.warnImgV.hidden = YES;
+        }
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -171,7 +176,7 @@ static NSString *const cellID = @"LSJMineCell";
     __weak typeof(self) weakSelf = self;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            FXSpoilsController *spoilVC = [[FXSpoilsController alloc] init];
+            LSJSpoilsController *spoilVC = [[LSJSpoilsController alloc] init];
             [self.navigationController pushViewController:spoilVC animated:YES];
         }else if (indexPath.row == 1) {
             FXRecordViewController *recordVC = [[FXRecordViewController alloc] init];

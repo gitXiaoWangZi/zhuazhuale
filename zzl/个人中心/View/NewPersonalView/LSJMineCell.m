@@ -119,7 +119,7 @@
         _desL = [UILabel new];
         _desL.textColor = DYGColorFromHex(0xb6b6b6);
         _desL.font = [UIFont systemFontOfSize:12];
-        _desL.text = @"客服在线时间 8:30-21:30";
+        _desL.text = @"客服在线时间 周一至周五10:00-19:00";
     }
     return _desL;
 }

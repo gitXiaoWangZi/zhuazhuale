@@ -54,9 +54,9 @@
         index = indexPath.row;
     }
     cell.model = self.cellConfigArr[indexPath.row];
-    NSString *imgStr = [NSString stringWithFormat:@"task_icon_%zd",indexPath.row];
-    cell.icon.image = [UIImage imageNamed:imgStr];
-    cell.icon.contentMode = UIViewContentModeCenter;
+//    NSString *imgStr = [NSString stringWithFormat:@"task_icon_%zd",indexPath.row];
+//    cell.icon.image = [UIImage imageNamed:imgStr];
+//    cell.icon.contentMode = UIViewContentModeCenter;
     return cell;
 }
 

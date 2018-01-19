@@ -1,62 +1,71 @@
 //
-//  FXSpoilsController.m
+//  LSJSpoilsController.m
 //  zzl
 //
-//  Created by Mr_Du on 2017/11/8.
-//  Copyright © 2017年 Mr.Du. All rights reserved.
+//  Created by Mr_Du on 2018/1/18.
+//  Copyright © 2018年 Mr.Du. All rights reserved.
 //
 
-#import "FXSpoilsController.h"
-#import "FXCollecTBCell.h"
-#import "FXLogisticsController.h"
-#import "FXOrdingListViewController.h"
+#import "LSJSpoilsController.h"
+#import "LSJWaWaDepositController.h"
+#import "LSJWaWaDeliverController.h"
+#import "LSJWaWaExchangeController.h"
 #import "UIButton+Position.h"
+#import "FXOrdingListViewController.h"
+#import "LSJLogisticsPopView.h"
 #define  btnW kScreenWidth/3
 
-@interface FXSpoilsController ()<UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate,FXColecTBCellDelegate>
+@interface LSJSpoilsController ()<UIScrollViewDelegate,LSJLogisticsPopViewDelegate>
 
+@property (nonatomic,strong) LSJWaWaDepositController *depositVC;
+@property (nonatomic,strong) LSJWaWaDeliverController *deliverVC;
+@property (nonatomic,strong) LSJWaWaExchangeController *exchangeVC;
+
+@property (nonatomic,strong) UIScrollView *bgScrollV;
 @property(nonatomic,strong)NSArray * btnTitleArr;
 @property (nonatomic,strong) UIView *topView;
 @property (nonatomic,strong) UIView *lineView;
-@property (nonatomic,strong) UICollectionView * collectionView;
 @property(nonatomic,strong) UIButton * tempBtn;
-@property (nonatomic,strong) FXCollecTBCell * cell;
-
 
 @property (nonatomic,strong) UIView *orderView;
 @property (nonatomic,strong) UIButton *selectBtn;
 @property (nonatomic,strong) UIButton *applySendBtn;
 @property (nonatomic,strong) UIButton *applyExchangeBtn;
 
-@property (nonatomic,strong) NSMutableArray *depositArr;
-@property (nonatomic,strong) NSMutableArray *deliverArr;
-@property (nonatomic,strong) NSMutableArray *exchangeArr;
+@property (nonatomic,strong) LSJLogisticsPopView *popV;
 
 @end
 
-@implementation FXSpoilsController
+@implementation LSJSpoilsController
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.selectBtn.selected = NO;
+    [self.depositVC.selectArray removeAllObjects];
     [self loadData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBottom:) name:@"KClickCell" object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpLogisticsVC:) name:@"jumpLogisticsVC" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBottom:) name:@"KClickCell" object:nil];[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpLogisticsVC:) name:@"jumpLogisticsVC" object:nil];
+    
     self.title =@"我的娃娃";
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.btnTitleArr = @[@"寄存中",@"已发货",@"已兑换"];
     [self creatTopViewWithArr:self.btnTitleArr];
-    [self.view addSubview:self.collectionView];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.topView.mas_bottom);
-        make.width.bottom.equalTo(self.view);
-    }];
-    [self scrollViewDidEndDecelerating:self.collectionView];
+    [self.view addSubview:self.bgScrollV];
+    [self addChildViewController:self.depositVC];
+    [self addChildViewController:self.deliverVC];
+    [self addChildViewController:self.exchangeVC];
+    self.depositVC.view.frame = CGRectMake(0, 0, kScreenWidth, self.bgScrollV.height-Py(50));
+    self.deliverVC.view.frame = CGRectMake(kScreenWidth, 0, kScreenWidth, self.bgScrollV.height);
+    self.exchangeVC.view.frame = CGRectMake(kScreenWidth*2, 0, kScreenWidth, self.bgScrollV.height);
+    [self.bgScrollV addSubview:self.depositVC.view];
+    [self.bgScrollV addSubview:self.deliverVC.view];
+    [self.bgScrollV addSubview:self.exchangeVC.view];
+    
     [self addBottomView];
 }
 
@@ -67,12 +76,6 @@
     }else{
         self.selectBtn.selected = NO;
     }
-}
-- (void)jumpLogisticsVC:(NSNotification *)noti{
-//    WwExpressInfo *model = (WwExpressInfo *)noti.object;
-//    LSJLogisticsController *logisVC = [[LSJLogisticsController alloc] initWithStyle:UITableViewStylePlain];
-//    logisVC.model = model;
-//    [self.navigationController pushViewController:logisVC animated:YES];
 }
 
 - (void)addBottomView{
@@ -91,7 +94,7 @@
         make.width.equalTo(@(Px(62)));
         make.height.equalTo(@(Py(30)));
     }];
-
+    
     [self.orderView addSubview:self.applySendBtn];
     [self.applySendBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.orderView.mas_right).offset(Px(-15));
@@ -126,37 +129,10 @@
     }
     self.topView.borderColor = BGColor;
     self.topView.borderWidth =1;
+    self.topView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.topView];
     self.lineView.frame = CGRectMake((btnW - Px(60))/2.0, CGRectGetMaxY(self.topView.frame)-2, Px(60), 2);
     [self.view addSubview:self.lineView];
-}
-
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    return 1;
-}
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.btnTitleArr.count;
-}
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    FXCollecTBCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"tableView" forIndexPath:indexPath];
-    cell.delegate = self;
-    if (indexPath.row == 0) {
-        cell.colectType = WawaList_Deposit;
-        cell.dataArray = self.depositArr;
-    }else if (indexPath.row == 1){
-        cell.colectType = WawaList_Deliver;
-        cell.dataArray = self.deliverArr;
-    }else{
-        cell.colectType = WawaList_Exchange;
-        cell.dataArray = self.exchangeArr;
-    }
-    self.cell = cell;
-    [cell.tableView reloadData];
-    return cell;
-}
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(collectionView.width, collectionView.height);
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int i = (scrollView.contentOffset.x+ kScreenWidth * 0.5)/kScreenWidth;
@@ -179,10 +155,8 @@
     }
     if (self.tempBtn.tag == 10) {
         self.orderView.hidden = NO;
-        self.collectionView.contentInset = UIEdgeInsetsMake(40, 0, 50, 0);
     }else{
         self.orderView.hidden = YES;
-        self.collectionView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     }
 }
 -(void)btnClickToScroll:(UIButton *)btn{
@@ -192,44 +166,75 @@
         self.tempBtn.selected = NO;
         btn.selected = !btn.selected;
         self.tempBtn = btn;
-        NSIndexPath * index = [NSIndexPath indexPathForRow:btn.tag-10 inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        [self.bgScrollV setContentOffset:CGPointMake((btn.tag-10)*kScreenWidth, 0) animated:YES];
     }
     if (btn.tag == 10) {
         self.orderView.hidden = NO;
-        self.collectionView.contentInset = UIEdgeInsetsMake(40, 0, 50, 0);
     }else{
         self.orderView.hidden = YES;
-        self.collectionView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     }
 }
 
--(void)cellDidClickWithIndexPath:(NSIndexPath *)indexPath{
-    FXLogisticsController * vc = [FXLogisticsController new];
-    [self.navigationController pushViewController:vc animated:YES];
+- (void)jumpLogisticsVC:(NSNotification *)noti{
+    
+    WwExpressInfo *model = (WwExpressInfo *)noti.object;
+    [[UIApplication sharedApplication].keyWindow addSubview:self.popV];
+    self.popV.model = model;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.popV.frame = [UIScreen mainScreen].bounds;
+        self.popV.backgroundColor = DYGAColor(0, 0, 0, 0.4);
+    }];
 }
 
-
-#pragma mark lazy load
-- (NSMutableArray *)deliverArr{
-    if (!_deliverArr) {
-        _deliverArr = [NSMutableArray array];
-    }
-    return _deliverArr;
+#pragma mark LSJLogisticsPopViewDelegate
+- (void)dismissAction{
+    self.popV.backgroundColor = [UIColor clearColor];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.popV.frame = CGRectMake(0, kScreenHeight, kScreenWidth, Py(598.5));
+    }];
 }
 
-- (NSMutableArray *)depositArr{
-    if (!_depositArr) {
-        _depositArr = [NSMutableArray array];
+#pragma mark lazyload
+- (LSJLogisticsPopView *)popV{
+    if (!_popV) {
+        _popV = [[LSJLogisticsPopView alloc] initWithFrame:CGRectMake(0, Py(598.5), kScreenWidth, kScreenHeight)];
+        _popV.backgroundColor = [UIColor clearColor];
+        _popV.delegate = self;
     }
-    return _depositArr;
+    return _popV;
 }
 
-- (NSMutableArray *)exchangeArr{
-    if (!_exchangeArr) {
-        _exchangeArr = [NSMutableArray array];
+- (LSJWaWaDepositController *)depositVC{
+    if (!_depositVC) {
+        _depositVC = [[LSJWaWaDepositController alloc] initWithStyle:UITableViewStylePlain];
     }
-    return _exchangeArr;
+    return _depositVC;
+}
+- (LSJWaWaDeliverController *)deliverVC{
+    if (!_deliverVC) {
+        _deliverVC = [[LSJWaWaDeliverController alloc] initWithStyle:UITableViewStylePlain];
+    }
+    return _deliverVC;
+}
+- (LSJWaWaExchangeController *)exchangeVC{
+    if (!_exchangeVC) {
+        _exchangeVC = [[LSJWaWaExchangeController alloc] initWithStyle:UITableViewStylePlain];
+    }
+    return _exchangeVC;
+}
+
+- (UIScrollView *)bgScrollV {
+    if (!_bgScrollV) {
+        _bgScrollV = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.topView.frame), kScreenWidth,self.view.height-self.lineView.y-Py(64))];
+        _bgScrollV.delegate = self;
+        _bgScrollV.backgroundColor = [UIColor whiteColor];
+        _bgScrollV.contentSize = CGSizeMake(kScreenWidth * 3, self.view.height-self.lineView.y-Py(64));
+        _bgScrollV.pagingEnabled = YES;
+        _bgScrollV.bounces = NO;
+        _bgScrollV.showsVerticalScrollIndicator = NO;
+        _bgScrollV.showsHorizontalScrollIndicator = NO;
+    }
+    return _bgScrollV;
 }
 
 -(UIView *)lineView{
@@ -238,22 +243,6 @@
         _lineView.backgroundColor = systemColor;
     }
     return _lineView;
-}
-
--(UICollectionView *)collectionView{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc]init];
-        flowLayout.minimumLineSpacing = 0;
-        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.topView.frame), kScreenWidth,self.view.height-self.lineView.y-Py(64)) collectionViewLayout:flowLayout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.pagingEnabled = YES;
-        _collectionView.backgroundColor = [UIColor whiteColor];
-        [_collectionView registerClass:[FXCollecTBCell class] forCellWithReuseIdentifier:@"tableView"];
-        _collectionView.showsHorizontalScrollIndicator = NO;
-    }
-    return _collectionView;
 }
 
 - (UIView *)orderView{
@@ -307,11 +296,10 @@
 #pragma mark 请求战利品数据
 - (void)loadData{
     [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_All completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
-        self.depositArr = model.depositList;
-        self.deliverArr = model.expressList;
-        self.exchangeArr = model.exchangeList;
-        
-        [self.collectionView reloadData];
+        self.depositVC.dataArray = model.depositList;
+        self.deliverVC.dataArray = model.expressList;
+        self.exchangeVC.dataArray = model.exchangeList;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"kREFRESHTABLE" object:nil];
     }];
 }
 
@@ -329,32 +317,37 @@
 
 //申请发货按钮
 - (void)applaySendAction:(UIButton *)sender{
-    if (self.cell.selectArray.count != 0) {
+    if (self.depositVC.selectArray.count != 0) {
         FXOrdingListViewController *listVC = [[FXOrdingListViewController alloc] initWithStyle:UITableViewStylePlain];
-        listVC.dataArray = self.cell.selectArray;
+        listVC.dataArray = self.depositVC.selectArray;
         [self.navigationController pushViewController:listVC animated:YES];
+    }else{
+        [MBProgressHUD showMessage:@"还未选择娃娃" toView:self.view];
     }
     
 }
 
 //申请兑换按钮
 - (void)applyExchangeAction:(UIButton *)sender{
-    if (self.cell.selectArray.count != 0) {
+    if (self.depositVC.selectArray.count != 0) {
         NSString *coins = @"";
         NSMutableArray *idsArr = [NSMutableArray array];
         NSMutableArray *coinArr = [NSMutableArray array];
-        for (WwDepositItem *model in self.cell.selectArray) {
+        for (WwDepositItem *model in self.depositVC.selectArray) {
             [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
             [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
         }
+        //38671,38687
         coins = [coinArr componentsJoinedByString:@","];
         [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
             if (code == WwCodeSuccess) {
                 [self sendMsgToServesWithCoin:coins];
             }else{
-                [MBProgressHUD showMessage:message toView:self.view];
+                [MBProgressHUD showMessage:[NSString stringWithFormat:@"%zd%@",code,message] toView:self.view];
             }
         }];
+    }else{
+        [MBProgressHUD showMessage:@"还未选择娃娃" toView:self.view];
     }
 }
 
@@ -366,7 +359,7 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            [MBProgressHUD showMessage:@"兑换成功" toView:self.collectionView];
+            [MBProgressHUD showMessage:@"兑换成功" toView:self.view];
             [self loadData];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
         }

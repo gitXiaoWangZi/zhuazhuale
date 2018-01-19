@@ -181,10 +181,19 @@
 
 #pragma mark --FXCommentViewDelegate
 - (void)sendClick{
+    
     if (self.comment.commentTF.text != nil && ![self.comment.commentTF.text isEqualToString:@""]) {
         [[WwGameManager GameMgrInstance] sendDamuMsg:self.comment.commentTF.text];
+        [self loadMsgDanmuDataWithContent:self.comment.commentTF.text];
     }
     self.comment.commentTF.text = nil;
+}
+
+#pragma mark 统计弹幕数据
+- (void)loadMsgDanmuDataWithContent:(NSString *)content{
+    NSString *path = @"barrage";
+    NSDictionary *params = @{@"uid":KUID,@"content":content,@"itemCode":@(self.model.wawa.ID),@"roomid":@(self.model.ID)};
+    [DYGHttpTool postWithURL:path params:params sucess:nil failure:nil];
 }
 
 #pragma mark music switch
@@ -601,12 +610,9 @@
 
 #pragma mark 抓到娃娃成功后的接口
 - (void)loadgetWaWaSuccessData{
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"catch_baby"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+    NSString *path = @"luckyRecode";
+    NSDictionary *params = @{@"uid":KUID,@"dollname":self.model.wawa.name,@"money":@(self.model.wawa.coin),@"itemCode":@(self.model.wawa.ID)};
+    [DYGHttpTool postWithURL:path params:params sucess:nil failure:nil];
 }
 
 #pragma mark FXGameResultViewDelegate

@@ -34,9 +34,8 @@
 }
 
 - (NSArray *)dataArr{
-    if (!_dataArr) {
-        _dataArr = @[@[@{@"image":@"mine_setting_Soundeffect",@"name":@"音效"},
-                          @{@"image":@"mine_setting_news",@"name":@"消息推送"}],
+    if (!_dataArr) {//@{@"image":@"mine_setting_Soundeffect",@"name":@"音效"},
+        _dataArr = @[@[@{@"image":@"mine_setting_news",@"name":@"消息推送"}],
                         @[@{@"image":@"mine_setting_Clear",@"name":@"清除缓存"},
                           @{@"image":@"mine_setting_aboutus",@"name":@"关于我们"}]];
     }

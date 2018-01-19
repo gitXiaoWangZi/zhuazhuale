@@ -119,6 +119,8 @@
 		92744F491FC03BC400F8D42C /* UIImage+ColorAtPixel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92744F361FBFFE6900F8D42C /* UIImage+ColorAtPixel.m */; };
 		927478C91FBEAF07005C5772 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 927478C41FBEAEE0005C5772 /* libcrypto.a */; };
 		927478CA1FBEAF0A005C5772 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 927478C51FBEAEE0005C5772 /* libssl.a */; };
+		9279CD72200F401600FC7403 /* LSJLogisticsPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */; };
+		9279CD75200F5AB100FC7403 /* LSJLogisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */; };
 		92801F5B1FF766E60087ECC6 /* LSJOperationNormalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */; };
 		92820E73200860EC00D2E4D7 /* LSJTaskHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92820E72200860EC00D2E4D7 /* LSJTaskHeaderView.m */; };
 		92820E762008A89100D2E4D7 /* LSJTaskPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92820E752008A89100D2E4D7 /* LSJTaskPopView.m */; };
@@ -164,6 +166,10 @@
 		928EC8301FB1B2180072C68B /* FXSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 928EC82F1FB1B2180072C68B /* FXSwitchCell.m */; };
 		928EC8331FB1B94C0072C68B /* DYGTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928EC8311FB1B94C0072C68B /* DYGTextView.m */; };
 		928EC8391FB1BF570072C68B /* ZXContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 928EC8371FB1BF570072C68B /* ZXContactInfo.m */; };
+		9293C785201035FE00A29ED3 /* LSJWaWaDepositController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293C784201035FE00A29ED3 /* LSJWaWaDepositController.m */; };
+		9293C7882010363300A29ED3 /* LSJWaWaDeliverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293C7872010363300A29ED3 /* LSJWaWaDeliverController.m */; };
+		9293C78B2010364600A29ED3 /* LSJWaWaExchangeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293C78A2010364600A29ED3 /* LSJWaWaExchangeController.m */; };
+		9293C78E201038D200A29ED3 /* LSJSpoilsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293C78D201038D200A29ED3 /* LSJSpoilsController.m */; };
 		929EC8321FD27E2B0008FE14 /* FXMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 929EC8311FD27E2B0008FE14 /* FXMineHeaderView.m */; };
 		929EC8A61FF5D56400D86470 /* LSJMineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 929EC8A41FF5D56400D86470 /* LSJMineCell.m */; };
 		929EC8B01FF6271600D86470 /* ZYBaseScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 929EC8AD1FF6270F00D86470 /* ZYBaseScrollView.m */; };
@@ -463,6 +469,10 @@
 		92744F471FC03A8600F8D42C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		927478C41FBEAEE0005C5772 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		927478C51FBEAEE0005C5772 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		9279CD70200F401600FC7403 /* LSJLogisticsPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJLogisticsPopView.h; sourceTree = "<group>"; };
+		9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJLogisticsPopView.m; sourceTree = "<group>"; };
+		9279CD73200F5AB100FC7403 /* LSJLogisticsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJLogisticsCell.h; sourceTree = "<group>"; };
+		9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJLogisticsCell.m; sourceTree = "<group>"; };
 		92801F591FF766E60087ECC6 /* LSJOperationNormalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJOperationNormalView.h; sourceTree = "<group>"; };
 		92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJOperationNormalView.m; sourceTree = "<group>"; };
 		92820E71200860EC00D2E4D7 /* LSJTaskHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJTaskHeaderView.h; sourceTree = "<group>"; };
@@ -536,6 +546,14 @@
 		928EC8321FB1B94C0072C68B /* DYGTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DYGTextView.h; sourceTree = "<group>"; };
 		928EC8371FB1BF570072C68B /* ZXContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZXContactInfo.m; sourceTree = "<group>"; };
 		928EC8381FB1BF570072C68B /* ZXContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXContactInfo.h; sourceTree = "<group>"; };
+		9293C783201035FE00A29ED3 /* LSJWaWaDepositController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJWaWaDepositController.h; sourceTree = "<group>"; };
+		9293C784201035FE00A29ED3 /* LSJWaWaDepositController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJWaWaDepositController.m; sourceTree = "<group>"; };
+		9293C7862010363300A29ED3 /* LSJWaWaDeliverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJWaWaDeliverController.h; sourceTree = "<group>"; };
+		9293C7872010363300A29ED3 /* LSJWaWaDeliverController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJWaWaDeliverController.m; sourceTree = "<group>"; };
+		9293C7892010364600A29ED3 /* LSJWaWaExchangeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJWaWaExchangeController.h; sourceTree = "<group>"; };
+		9293C78A2010364600A29ED3 /* LSJWaWaExchangeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJWaWaExchangeController.m; sourceTree = "<group>"; };
+		9293C78C201038D200A29ED3 /* LSJSpoilsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJSpoilsController.h; sourceTree = "<group>"; };
+		9293C78D201038D200A29ED3 /* LSJSpoilsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJSpoilsController.m; sourceTree = "<group>"; };
 		929EC8301FD27E2B0008FE14 /* FXMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXMineHeaderView.h; sourceTree = "<group>"; };
 		929EC8311FD27E2B0008FE14 /* FXMineHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXMineHeaderView.m; sourceTree = "<group>"; };
 		929EC8A31FF5D56400D86470 /* LSJMineCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJMineCell.h; sourceTree = "<group>"; };
@@ -743,6 +761,14 @@
 				92043F951FF4F289008A858B /* LSJPersonalTableViewController.m */,
 				9203C6271FFF2FCE0059708F /* LSJRechargeViewController.h */,
 				9203C6281FFF2FCE0059708F /* LSJRechargeViewController.m */,
+				9293C78C201038D200A29ED3 /* LSJSpoilsController.h */,
+				9293C78D201038D200A29ED3 /* LSJSpoilsController.m */,
+				9293C783201035FE00A29ED3 /* LSJWaWaDepositController.h */,
+				9293C784201035FE00A29ED3 /* LSJWaWaDepositController.m */,
+				9293C7862010363300A29ED3 /* LSJWaWaDeliverController.h */,
+				9293C7872010363300A29ED3 /* LSJWaWaDeliverController.m */,
+				9293C7892010364600A29ED3 /* LSJWaWaExchangeController.h */,
+				9293C78A2010364600A29ED3 /* LSJWaWaExchangeController.m */,
 			);
 			path = NewPersonal;
 			sourceTree = "<group>";
@@ -769,6 +795,10 @@
 				92820E752008A89100D2E4D7 /* LSJTaskPopView.m */,
 				928D71DC200C8B8900ED4ED9 /* LSJComplainReasonCell.h */,
 				928D71DD200C8B8900ED4ED9 /* LSJComplainReasonCell.m */,
+				9279CD70200F401600FC7403 /* LSJLogisticsPopView.h */,
+				9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */,
+				9279CD73200F5AB100FC7403 /* LSJLogisticsCell.h */,
+				9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */,
 			);
 			path = NewPersonalView;
 			sourceTree = "<group>";
@@ -1735,6 +1765,7 @@
 				9250B6011FEBA34F002C8CAA /* VisiteTools.m in Sources */,
 				928EC8331FB1B94C0072C68B /* DYGTextView.m in Sources */,
 				9217B54D1FC423B700B506EB /* DYGGetUrl.m in Sources */,
+				9293C7882010363300A29ED3 /* LSJWaWaDeliverController.m in Sources */,
 				92744F451FC01EFB00F8D42C /* FXGameWebController.m in Sources */,
 				928EC8221FB1818A0072C68B /* MOFSToolbar.m in Sources */,
 				9248B6A71FB2A43200633CDA /* FXRecordViewController.m in Sources */,
@@ -1748,6 +1779,7 @@
 				92744F491FC03BC400F8D42C /* UIImage+ColorAtPixel.m in Sources */,
 				92570DBA1FAB4E9D00232AE0 /* FXCommentView.m in Sources */,
 				92570DE01FAB54AC00232AE0 /* NSString+DYGAdd.m in Sources */,
+				9293C785201035FE00A29ED3 /* LSJWaWaDepositController.m in Sources */,
 				9267A06F1FAB20BF0058AA70 /* DYGPopDetailView.m in Sources */,
 				9248B6D11FB32BE900633CDA /* FXHelpController.m in Sources */,
 				929EC8C01FF6279700D86470 /* BottomViewController.m in Sources */,
@@ -1756,6 +1788,7 @@
 				92744F421FC01B2800F8D42C /* FXLatesRecordModel.m in Sources */,
 				9248B6CB1FB309AA00633CDA /* FXNotificationController.m in Sources */,
 				9203C62F1FFF33230059708F /* LSJRechargeCell.m in Sources */,
+				9279CD75200F5AB100FC7403 /* LSJLogisticsCell.m in Sources */,
 				928EC81F1FB1818A0072C68B /* MOFSDatePicker.m in Sources */,
 				929EC8C21FF6279700D86470 /* WawaInfoTableViewCell.m in Sources */,
 				9248B6D71FB32F2300633CDA /* DYGCollectionViewCell.m in Sources */,
@@ -1783,6 +1816,7 @@
 				92570DDC1FAB54AC00232AE0 /* UIDevice+DYGAdd.m in Sources */,
 				92570DDA1FAB54AC00232AE0 /* UINavigationController+NeedLogin.m in Sources */,
 				9267A0661FAB056A0058AA70 /* FXGameWaitCell.m in Sources */,
+				9279CD72200F401600FC7403 /* LSJLogisticsPopView.m in Sources */,
 				9248B6FE1FB5A46700633CDA /* FXLoginPopView.m in Sources */,
 				9267A0601FAAB9D80058AA70 /* BulletView.m in Sources */,
 				92BA91421FFDC81900545DA0 /* AdManager.m in Sources */,
@@ -1803,6 +1837,7 @@
 				92679FD21FA748360058AA70 /* DYGCustomTabbar.m in Sources */,
 				92570DE51FAB54AC00232AE0 /* UIColor+DYGAdd.m in Sources */,
 				92570DD81FAB54AC00232AE0 /* NSBundle+DYGAdd.m in Sources */,
+				9293C78E201038D200A29ED3 /* LSJSpoilsController.m in Sources */,
 				92C0479F1FCC0B3100636F15 /* FXRechargeRecordModel.m in Sources */,
 				928349651FC6C07C0012A2D1 /* FXTaskModel.m in Sources */,
 				9248B7011FBA855A00633CDA /* FXTaskViewController.m in Sources */,
@@ -1816,6 +1851,7 @@
 				92EF426C1FAC588F00889B20 /* FXRechargeViewController.m in Sources */,
 				9267A02D1FA804DE0058AA70 /* DYGHomeHeaderView.m in Sources */,
 				9203C62C1FFF32340059708F /* RechargeModel.m in Sources */,
+				9293C78B2010364600A29ED3 /* LSJWaWaExchangeController.m in Sources */,
 				92D7231B1FED0E130031F7EB /* FXGameDetailViewController.m in Sources */,
 				92570DDE1FAB54AC00232AE0 /* UILabel+DYGAdd.m in Sources */,
 				92C047A21FCC1AF500636F15 /* WelcomeViewController.m in Sources */,
