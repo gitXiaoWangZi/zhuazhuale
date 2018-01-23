@@ -110,6 +110,8 @@
 		9267A06F1FAB20BF0058AA70 /* DYGPopDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267A06E1FAB20BF0058AA70 /* DYGPopDetailView.m */; };
 		9267A0721FAB28900058AA70 /* FXTextDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267A0711FAB28900058AA70 /* FXTextDetailCell.m */; };
 		9269330E1FD90FF500AE2EF6 /* MyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9269330D1FD90FF100AE2EF6 /* MyTextView.m */; };
+		926EDC5C2015C06900A93A01 /* ZYSpreadButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EDC582015C06800A93A01 /* ZYSpreadButton.m */; };
+		926EDC5D2015C06900A93A01 /* ZYSpreadSubButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EDC592015C06800A93A01 /* ZYSpreadSubButton.m */; };
 		92744F3D1FC001FD00F8D42C /* ZYCountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92744F3C1FC0003D00F8D42C /* ZYCountDownView.m */; };
 		92744F3E1FC001FD00F8D42C /* ZYPlayOperationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92744F381FBFFE6900F8D42C /* ZYPlayOperationView.m */; };
 		92744F3F1FC0062000F8D42C /* ZYPlayOperationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92744F391FBFFE6900F8D42C /* ZYPlayOperationView.xib */; };
@@ -238,7 +240,7 @@
 		92FCBEAD1FBD5EA100BE88A7 /* libiconv.2.4.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCBEAC1FBD5EA100BE88A7 /* libiconv.2.4.0.tbd */; };
 		92FCBEAF1FBD5EAE00BE88A7 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCBEAE1FBD5EAE00BE88A7 /* libbz2.tbd */; };
 		92FCBEB11FBD5EC100BE88A7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCBEB01FBD5EC000BE88A7 /* CFNetwork.framework */; };
-		DD0D23A25124F358DDCA84A0 /* libPods-zzl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BCC9AF701E85DB6C628A5D /* libPods-zzl.a */; };
+		C6E2A3A7C1AF583C4BBB0337 /* libPods-zzl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9123751E431358315AAD524A /* libPods-zzl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -256,9 +258,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		18BCC9AF701E85DB6C628A5D /* libPods-zzl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-zzl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B86F157191DC266584F258D /* Pods-zzl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zzl.release.xcconfig"; path = "Pods/Target Support Files/Pods-zzl/Pods-zzl.release.xcconfig"; sourceTree = "<group>"; };
 		8FA42B903AAF0028CBF73595 /* Pods-zzl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zzl.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zzl/Pods-zzl.debug.xcconfig"; sourceTree = "<group>"; };
+		9123751E431358315AAD524A /* libPods-zzl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-zzl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9203C6271FFF2FCE0059708F /* LSJRechargeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJRechargeViewController.h; sourceTree = "<group>"; };
 		9203C6281FFF2FCE0059708F /* LSJRechargeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJRechargeViewController.m; sourceTree = "<group>"; };
 		9203C62A1FFF32340059708F /* RechargeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RechargeModel.h; sourceTree = "<group>"; };
@@ -453,6 +455,10 @@
 		9267A0711FAB28900058AA70 /* FXTextDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXTextDetailCell.m; sourceTree = "<group>"; };
 		9269330C1FD90FF100AE2EF6 /* MyTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyTextView.h; sourceTree = "<group>"; };
 		9269330D1FD90FF100AE2EF6 /* MyTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyTextView.m; sourceTree = "<group>"; };
+		926EDC582015C06800A93A01 /* ZYSpreadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSpreadButton.m; sourceTree = "<group>"; };
+		926EDC592015C06800A93A01 /* ZYSpreadSubButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSpreadSubButton.m; sourceTree = "<group>"; };
+		926EDC5A2015C06800A93A01 /* ZYSpreadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSpreadButton.h; sourceTree = "<group>"; };
+		926EDC5B2015C06900A93A01 /* ZYSpreadSubButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSpreadSubButton.h; sourceTree = "<group>"; };
 		92744F331FBFFE6900F8D42C /* OBShapedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OBShapedButton.h; sourceTree = "<group>"; };
 		92744F341FBFFE6900F8D42C /* OBShapedButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OBShapedButton.m; sourceTree = "<group>"; };
 		92744F351FBFFE6900F8D42C /* UIImage+ColorAtPixel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+ColorAtPixel.h"; sourceTree = "<group>"; };
@@ -706,7 +712,7 @@
 				92D99ABB1FD92D6D00CDEDC4 /* ShareSDKExtension.framework in Frameworks */,
 				92FA4CA11FB17B58007D8A0D /* libxml2.2.tbd in Frameworks */,
 				92FA4CA01FB17B4F007D8A0D /* libxml2.tbd in Frameworks */,
-				DD0D23A25124F358DDCA84A0 /* libPods-zzl.a in Frameworks */,
+				C6E2A3A7C1AF583C4BBB0337 /* libPods-zzl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,7 +755,7 @@
 				92FCBE971FBD5DA600BE88A7 /* SystemConfiguration.framework */,
 				924AEC2C1FB1781000E0DD8C /* libxml2.tbd */,
 				924AEBFB1FB1629F00E0DD8C /* libxml2.2.tbd */,
-				18BCC9AF701E85DB6C628A5D /* libPods-zzl.a */,
+				9123751E431358315AAD524A /* libPods-zzl.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1391,6 +1397,10 @@
 		929EC8AB1FF6270F00D86470 /* NewGameRoomVIew */ = {
 			isa = PBXGroup;
 			children = (
+				926EDC5A2015C06800A93A01 /* ZYSpreadButton.h */,
+				926EDC582015C06800A93A01 /* ZYSpreadButton.m */,
+				926EDC5B2015C06900A93A01 /* ZYSpreadSubButton.h */,
+				926EDC592015C06800A93A01 /* ZYSpreadSubButton.m */,
 				92801F591FF766E60087ECC6 /* LSJOperationNormalView.h */,
 				92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */,
 				929EC8C71FF66CDF00D86470 /* LSJTopView.h */,
@@ -1731,9 +1741,11 @@
 				9267A05E1FAAB9D80058AA70 /* BulletBackgroudView.m in Sources */,
 				9260ABD41FA73AE200EA1881 /* main.m in Sources */,
 				92801F5B1FF766E60087ECC6 /* LSJOperationNormalView.m in Sources */,
+				926EDC5D2015C06900A93A01 /* ZYSpreadSubButton.m in Sources */,
 				9287C16A1FA76CA00042E4CF /* PGIndexBannerSubiew.m in Sources */,
 				929EC8C11FF6279700D86470 /* WawaInfoHeaderView.m in Sources */,
 				9217B54E1FC423B700B506EB /* DYGHttpTool.m in Sources */,
+				926EDC5C2015C06900A93A01 /* ZYSpreadButton.m in Sources */,
 				92570DE11FAB54AC00232AE0 /* DYGAlertMessageController.m in Sources */,
 				9267A03C1FA9B5FC0058AA70 /* FXRoomCell.m in Sources */,
 				9248B6DA1FB3F51700633CDA /* FXAboutUsController.m in Sources */,

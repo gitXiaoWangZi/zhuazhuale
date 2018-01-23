@@ -28,13 +28,17 @@
 
 #pragma ======================controller life cycle======================
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loadNewData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"娃娃列表";
     self.view.backgroundColor = randomColor;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     [self creatTopView];
-    [self loadNewData];
 }
 
 -(void)creatTopView{

@@ -23,6 +23,11 @@
 #import "FXZZLViewController.h"
 #import "LSJGameViewController.h"
 #import "LSJPersonalTableViewController.h"
+#import "ZYSpreadButton.h"
+#import "ZYSpreadSubButton.h"
+#import "FXNotificationController.h"
+#import "FXTaskViewController.h"
+#import "FXSettingViewController.h"
 
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
@@ -34,7 +39,7 @@
 @property (nonatomic, strong) NewPagedFlowView *pageFlowView;
 
 @property (nonatomic,strong) DYGHomeHeaderView *header;
-@property (nonatomic,strong) NSArray *roomIdsArray;
+@property (nonatomic,strong) NSMutableArray *roomIdsArray;
 /**
  * 房间模型数组
  */
@@ -56,7 +61,7 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     if (self.roomsArray.count == 0) {
-        [self initData];
+        [self loadRoomIDData];
     }
 }
 
@@ -66,7 +71,24 @@
     _bgImageV.frame = self.view.bounds;
     [self.view addSubview:_bgImageV];
     [self.view sendSubviewToBack:_bgImageV];
-    self.roomIdsArray = @[@"501",@"603",@"581",@"590",@"622",@"240"];
+}
+
+- (void)loadRoomIDData{
+    self.roomIdsArray = [NSMutableArray array];
+    NSString *path = @"getIndexGoodsBanner";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            self.roomPicArray = [FXHomeHouseItem mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+            for (FXHomeHouseItem *item in self.roomPicArray) {
+                [self.roomIdsArray addObject:item.dicid];
+            }
+            [self initData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 #pragma  Controller Life
@@ -85,9 +107,45 @@
     self.view.backgroundColor = BGColor;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     [self.view addSubview:self.header];
-    [self initData];
+    [self loadRoomIDData];
     
     [self addbottomView];
+    [self addSpreadButton];
+}
+
+- (void)addSpreadButton{
+    
+    ZYSpreadSubButton *btn0 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_msg"] highlightImage:[UIImage imageNamed:@"zy_msg_select"] clickedBlock:^(int index, UIButton *sender) {
+        NSLog(@"点击消息");
+        FXNotificationController *notiVC = [[FXNotificationController alloc] init];
+        [self.navigationController pushViewController:notiVC animated:YES];
+    }];
+    ZYSpreadSubButton *btn1 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_task"] highlightImage:[UIImage imageNamed:@"zy_task_select"] clickedBlock:^(int index, UIButton *sender) {
+        NSLog(@"点击任务");
+        FXTaskViewController *taskVC = [[FXTaskViewController alloc] init];
+        [self.navigationController pushViewController:taskVC animated:YES];
+    }];
+    ZYSpreadSubButton *btn2 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_share"] highlightImage:[UIImage imageNamed:@"zy_share_select"] clickedBlock:^(int index, UIButton *sender) {
+        NSLog(@"点击分享");
+        FXHomeBannerItem *item = [FXHomeBannerItem new];
+        item.href = @"http://wawa.api.fanx.xin/share";
+        item.title = @"邀请好友";
+        item.banner_type = @"2";
+        FXGameWebController *vc = [[FXGameWebController alloc] init];
+        vc.item = item;
+        [self.navigationController pushViewController:vc animated:YES];
+    }];
+    ZYSpreadSubButton *btn3 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_setting"] highlightImage:[UIImage imageNamed:@"zy_setting_select"] clickedBlock:^(int index, UIButton *sender) {
+        NSLog(@"点击设置");
+        FXSettingViewController *settingVC = [[FXSettingViewController alloc] init];
+        [self.navigationController pushViewController:settingVC animated:YES];
+    }];
+    ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light"] position: CGPointMake(kScreenWidth - 77, kScreenHeight - 255)];
+    spreadBtn.subButtons = @[btn0,btn1,btn2,btn3];
+    spreadBtn.mode = SpreadModeSickleSpread;
+    spreadBtn.direction = SpreadDirectionLeft;
+    spreadBtn.positionMode = SpreadPositionModeFixed;
+    [self.view addSubview:spreadBtn];
 }
 
 - (void)addbottomView{
@@ -306,18 +364,7 @@
             
             WwRoom *model = list[0];
             [self loadLatesRecordDataWithRoomID:model.ID];
-            NSString *path = @"getGoodsBanner";
-            NSDictionary *params = @{@"uid":KUID};
-            [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-                NSDictionary *dic = (NSDictionary *)json;
-                if ([dic[@"code"] integerValue] == 200) {
-                    self.roomPicArray = [FXHomeHouseItem mj_objectArrayWithKeyValuesArray:dic[@"data"]];
-                    
-                    [self setupUI];
-                }
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error);
-            }];
+            [self setupUI];
             DYGLog(@"查找房间成功");
         }
         else {
