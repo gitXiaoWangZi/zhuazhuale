@@ -165,6 +165,7 @@
             make.height.equalTo(@(Py(4)));
             make.width.equalTo(@(proBgViewWidth/3.0));
         }];
+        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }else if (num == 3){
         [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.processBgView.mas_top);
@@ -181,6 +182,7 @@
             make.width.equalTo(@(proBgViewWidth*2/3.0));
         }];
         self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }else if (num == 5){
         [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.processBgView.mas_top);

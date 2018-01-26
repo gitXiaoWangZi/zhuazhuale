@@ -54,9 +54,6 @@
         index = indexPath.row;
     }
     cell.model = self.cellConfigArr[indexPath.row];
-//    NSString *imgStr = [NSString stringWithFormat:@"task_icon_%zd",indexPath.row];
-//    cell.icon.image = [UIImage imageNamed:imgStr];
-//    cell.icon.contentMode = UIViewContentModeCenter;
     return cell;
 }
 
@@ -83,7 +80,7 @@
 
 #pragma mark 获取用户任务列表
 - (void)loadTastListData{
-    NSString *path = @"task";
+    NSString *path = @"newtask";
     NSDictionary *params = @{@"uid":KUID};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;

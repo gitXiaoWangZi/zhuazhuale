@@ -77,3 +77,4 @@ typedef enum {
 - (instancetype)initWithBackgroundImage:(UIImage *)backgroundImage highlightImage:(UIImage *)highlightImage position:(CGPoint)position;
 - (void)setSubButtons:(NSArray *)subButtons;
 @end
+

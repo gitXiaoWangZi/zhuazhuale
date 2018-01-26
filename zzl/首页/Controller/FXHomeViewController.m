@@ -160,7 +160,7 @@
         }
         
     }];
-    ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light"] position: CGPointMake(kScreenWidth - 77, kScreenHeight - 255)];
+    ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light"] position: CGPointMake(kScreenWidth - 40, kScreenHeight - 205)];
     spreadBtn.subButtons = @[btn0,btn1,btn2,btn3];
     spreadBtn.mode = SpreadModeSickleSpread;
     spreadBtn.direction = SpreadDirectionLeft;

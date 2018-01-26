@@ -84,7 +84,7 @@ static NSString *const cellID = @"LSJMineCell";
 
 #pragma mark 获取用户任务列表
 - (void)loadTastListData{
-    NSString *path = @"task";
+    NSString *path = @"newtask";
     NSDictionary *params = @{@"uid":KUID};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;

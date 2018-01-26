@@ -10,8 +10,6 @@
 
 @interface ZYSpreadButton () <CAAnimationDelegate>
 @property (strong, nonatomic) UIDynamicAnimator *animator;
-@property (nonatomic,strong) UIImage *normalImage;
-@property (nonatomic,strong) UIImage *selectImage;
 @end
 
 @implementation ZYSpreadButton
@@ -27,14 +25,13 @@
         
         //main Button
         self.powerButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, backgroundImage.size.width, backgroundImage.size.height)];
-        self.normalImage = backgroundImage;
         [self.powerButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
         if (highlightImage != nil) {
-            self.selectImage = highlightImage;
             [self.powerButton setBackgroundImage:backgroundImage forState:UIControlStateHighlighted];
         }
         [self.powerButton addTarget:self action:@selector(tapPowerButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_powerButton];
+        
         //configuration
         [self configureDefaultValue];
         [self setFrame:_mainFrame];
@@ -176,8 +173,7 @@
     //cover animation
     [UIView animateWithDuration:_animationDuring animations:^{
         self.cover.alpha = self.coverAlpha;
-        [self.powerButton setBackgroundImage:self.selectImage forState:UIControlStateNormal];
-//        [self powerButtonRotationAnimate];
+        [self powerButtonRotationAnimate];
     }];
     
     //spreadSubButton
@@ -290,12 +286,11 @@
     //cover animation
     [UIView animateWithDuration:_animationDuring animations:^{
         self.cover.alpha = 0;
-//        [self powerButtonCloseAnimation];
+        [self powerButtonCloseAnimation];
     } completion:^(BOOL finished) {
         [self.cover removeFromSuperview];
         self.frame = self.powerButton.frame;
         self.powerButton.frame = self.bounds;
-        [self.powerButton setBackgroundImage:self.normalImage forState:UIControlStateNormal];
     }];
     
     [self closeSubButton:exclusiveBtn];
@@ -324,7 +319,6 @@
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         btn.frame = CGRectMake(0, 0, btn.bounds.size.width, btn.bounds.size.height);
-        btn.center = self.powerButton.center;
         [CATransaction commit];
     }
     
@@ -378,7 +372,7 @@
     [path addLineToPoint:keyPoints];
     
     va_list varList;
-    va_start(varList, keyPoints);    
+    va_start(varList, keyPoints);
     for (int i = 0; i < keyPointCount - 1; i++) {
         CGPoint point = va_arg(varList, CGPoint);
         [path addLineToPoint:point];
@@ -497,3 +491,4 @@
 
 
 @end
+
