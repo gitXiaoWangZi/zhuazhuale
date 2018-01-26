@@ -10,6 +10,8 @@
 
 @interface ZYSpreadButton () <CAAnimationDelegate>
 @property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIImage *normalImage;
+@property (strong, nonatomic) UIImage *highImage;
 @end
 
 @implementation ZYSpreadButton
@@ -26,8 +28,9 @@
         //main Button
         self.powerButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, backgroundImage.size.width, backgroundImage.size.height)];
         [self.powerButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+        self.normalImage = backgroundImage;
         if (highlightImage != nil) {
-            [self.powerButton setBackgroundImage:backgroundImage forState:UIControlStateHighlighted];
+            self.highImage = highlightImage;
         }
         [self.powerButton addTarget:self action:@selector(tapPowerButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_powerButton];
@@ -36,7 +39,7 @@
         [self configureDefaultValue];
         [self setFrame:_mainFrame];
         self.center = position;
-        [self configureGesture];
+//        [self configureGesture];
         [self configureCover];
     }
     return self;
@@ -160,7 +163,7 @@
 //    self.buttonWillSpreadBlock(self);
     [self.animator removeAllBehaviors];
     self.isSpread = YES;
-    
+    [self.powerButton setBackgroundImage:self.highImage forState:UIControlStateNormal];
     //改变frame,充满整个superView
     self.frame = self.superview.bounds;
     
@@ -276,6 +279,12 @@
     }
 }
 
+- (void)setImage:(UIImage *)normalImage highImage:(UIImage *)highImage{
+    self.normalImage = normalImage;
+    self.highImage = highImage;
+    [self.powerButton setBackgroundImage:normalImage forState:UIControlStateNormal];
+}
+
 - (void)closeButton:(ZYSpreadSubButton *)exclusiveBtn {
     NSLog(@"close");
     
@@ -283,6 +292,7 @@
 //    self.buttonWillCloseBlock(self);
     self.isSpread = NO;
     
+    [self.powerButton setBackgroundImage:self.normalImage forState:UIControlStateNormal];
     //cover animation
     [UIView animateWithDuration:_animationDuring animations:^{
         self.cover.alpha = 0;
@@ -319,6 +329,7 @@
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         btn.frame = CGRectMake(0, 0, btn.bounds.size.width, btn.bounds.size.height);
+        btn.center = self.powerButton.center;
         [CATransaction commit];
     }
     
@@ -350,7 +361,7 @@
 }
 
 - (void)powerButtonRotationAnimate {
-    _powerButton.transform = CGAffineTransformMakeRotation(-0.75f * π);
+    _powerButton.transform = CGAffineTransformMakeRotation(0.01f);
 }
 
 - (void)powerButtonCloseAnimation {

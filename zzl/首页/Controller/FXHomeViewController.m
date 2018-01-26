@@ -53,6 +53,7 @@
 @property (nonatomic,strong) MBProgressHUD *hud;
 @property (nonatomic,strong) UIImageView *defaultImageV;
 @property (nonatomic,strong) UIImageView *bgImageV;
+@property (nonatomic,strong) ZYSpreadButton *spreadBtn;
 
 @end
 
@@ -62,6 +63,24 @@
     if (self.roomsArray.count == 0) {
         [self loadRoomIDData];
     }
+}
+
+#pragma mark 获取用户任务列表
+- (void)loadTastListData{
+    NSString *path = @"newtask";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            if (self.spreadBtn && [dic[@"red"] integerValue] == 1) {
+                [self.spreadBtn setImage:[UIImage imageNamed:@"zhangyu_btn"] highImage:[UIImage imageNamed:@"zhangyu_btn_light"]];
+            }else if (self.spreadBtn && [dic[@"red"] integerValue] == 0){
+                [self.spreadBtn setImage:[UIImage imageNamed:@"zhangyu_btn_no"] highImage:[UIImage imageNamed:@"zhangyu_btn_light_no"]];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (void)loadView{
@@ -160,7 +179,8 @@
         }
         
     }];
-    ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light"] position: CGPointMake(kScreenWidth - 40, kScreenHeight - 205)];
+    ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn_no"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light_no"] position: CGPointMake(kScreenWidth - 40, kScreenHeight - 205)];
+    self.spreadBtn = spreadBtn;
     spreadBtn.subButtons = @[btn0,btn1,btn2,btn3];
     spreadBtn.mode = SpreadModeSickleSpread;
     spreadBtn.direction = SpreadDirectionLeft;
@@ -289,6 +309,7 @@
     [super viewWillAppear:animated];
     [self.header beginScroll];
     [self.header starTimer];
+    [self loadTastListData];
     
 }
 -(void)viewDidDisappear:(BOOL)animated{
