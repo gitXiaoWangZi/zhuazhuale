@@ -97,8 +97,7 @@
                                             }
                                         }];
     
-    /*******向微信注册*********/
-    [WXApi registerApp:WXAppID];
+    
     
     NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBundleVersionKey];
     NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][kBundleVersionKey];

@@ -11,5 +11,4 @@
 //@class AccountItem;
 @interface FXUserInfoController : UIViewController
 
-
 @end

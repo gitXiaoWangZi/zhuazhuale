@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -48,7 +48,10 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mwI-g0-mns">
-                            <rect key="frame" x="50" y="240" width="183" height="52"/>
+                            <rect key="frame" x="51.5" y="240" width="180" height="52"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="nom-z4-RRE"/>
+                            </constraints>
                             <state key="normal" backgroundImage="mine_pop_bring"/>
                             <connections>
                                 <action selector="bringAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="5Oz-HA-Xzm"/>
@@ -68,7 +71,6 @@
                         <constraint firstAttribute="bottom" secondItem="L5y-Ho-1L6" secondAttribute="bottom" id="9A8-hA-wul"/>
                         <constraint firstItem="QvQ-o6-bIs" firstAttribute="centerX" secondItem="x5R-Sq-k0i" secondAttribute="centerX" id="9wm-2o-J0Q"/>
                         <constraint firstItem="z7z-gv-Q63" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" constant="9" id="CPQ-kl-1Nb"/>
-                        <constraint firstItem="mwI-g0-mns" firstAttribute="leading" secondItem="RmP-VI-9Yi" secondAttribute="leading" constant="50" id="CoV-ny-OYi"/>
                         <constraint firstAttribute="width" secondItem="RmP-VI-9Yi" secondAttribute="height" multiplier="283:307" id="FRM-KK-p1W"/>
                         <constraint firstAttribute="trailing" secondItem="L5y-Ho-1L6" secondAttribute="trailing" id="GsQ-13-tQY"/>
                         <constraint firstAttribute="trailing" secondItem="z7z-gv-Q63" secondAttribute="trailing" constant="8" id="Isg-fJ-dgR"/>
@@ -76,7 +78,6 @@
                         <constraint firstItem="x5R-Sq-k0i" firstAttribute="centerX" secondItem="L5y-Ho-1L6" secondAttribute="centerX" id="YQk-8Y-HzQ"/>
                         <constraint firstItem="L5y-Ho-1L6" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" id="a52-Y6-tGr"/>
                         <constraint firstItem="mwI-g0-mns" firstAttribute="centerX" secondItem="ZOq-9c-mhW" secondAttribute="centerX" id="i8e-zk-TU3"/>
-                        <constraint firstAttribute="trailing" secondItem="mwI-g0-mns" secondAttribute="trailing" constant="50" id="lYv-o9-69M"/>
                         <constraint firstItem="x5R-Sq-k0i" firstAttribute="top" secondItem="RmP-VI-9Yi" secondAttribute="top" constant="59" id="wSe-I7-REx"/>
                         <constraint firstItem="QvQ-o6-bIs" firstAttribute="top" secondItem="x5R-Sq-k0i" secondAttribute="bottom" constant="38" id="xjT-sj-8m7"/>
                         <constraint firstAttribute="bottom" secondItem="mwI-g0-mns" secondAttribute="bottom" constant="15" id="yVT-An-Ala"/>

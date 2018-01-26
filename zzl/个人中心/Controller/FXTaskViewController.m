@@ -109,16 +109,14 @@
         if ([dic[@"code"] integerValue] == 200) {
             [MBProgressHUD showSuccess:@"领取成功" toView:self.tableView];
             
-            if (taskNum == 2 || taskNum == 4 || taskNum == 6 || taskNum == 8) {
+            if (taskNum == 1 || taskNum == 3 || taskNum == 5) {
                 NSString *award_num = @"0";
-                if (taskNum == 2) {
+                if (taskNum == 1) {
                     award_num = @"200";
-                }else if (taskNum == 4){
-                    award_num = @"400";
-                }else if (taskNum == 6){
-                    award_num = @"600";
-                }else if (taskNum == 8){
-                    award_num = @"1000";
+                }else if (taskNum == 3){
+                    award_num = @"500";
+                }else if (taskNum == 5){
+                    award_num = @"1500";
                 }else{
                     award_num = @"0";
                 }

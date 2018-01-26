@@ -64,6 +64,8 @@
                 <constraint firstAttribute="bottom" secondItem="pXF-ec-RMG" secondAttribute="bottom" id="BZm-Nd-SY3"/>
                 <constraint firstItem="wbc-1I-CBB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="C26-Zz-TgX"/>
                 <constraint firstItem="wbc-1I-CBB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="HBq-m7-Vn4"/>
+                <constraint firstAttribute="bottom" secondItem="wbc-1I-CBB" secondAttribute="bottom" constant="73" id="MKf-H4-cRE"/>
+                <constraint firstAttribute="bottom" secondItem="wbc-1I-CBB" secondAttribute="bottom" constant="73" id="Pyk-kF-j2t"/>
                 <constraint firstItem="4x0-0S-F6e" firstAttribute="trailing" secondItem="yS0-fE-fiZ" secondAttribute="trailing" constant="-21" id="SHZ-D9-afl"/>
                 <constraint firstItem="JFd-r5-zfZ" firstAttribute="bottom" secondItem="yS0-fE-fiZ" secondAttribute="bottom" constant="-15" id="Xbc-1R-GhU"/>
                 <constraint firstAttribute="trailing" secondItem="pXF-ec-RMG" secondAttribute="trailing" id="bsw-M8-oOq"/>
@@ -73,7 +75,7 @@
                 <constraint firstItem="4x0-0S-F6e" firstAttribute="bottom" secondItem="yS0-fE-fiZ" secondAttribute="bottom" constant="-15" id="vC9-7B-OLm"/>
                 <constraint firstItem="pXF-ec-RMG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ymG-oP-zb7"/>
             </constraints>
-            <point key="canvasLocation" x="-100" y="50"/>
+            <point key="canvasLocation" x="-75" y="26"/>
         </view>
     </objects>
     <resources>

@@ -34,7 +34,7 @@
     [self.photo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(Px(16));
         make.top.equalTo(self).offset(Py(16));
-        make.size.mas_equalTo(CGSizeMake(Px(50), Py(50)));
+        make.size.mas_equalTo(CGSizeMake(Px(50), Px(50)));
     }];
     [self addSubview:self.name];
     [self.name mas_makeConstraints:^(MASConstraintMaker *make) {

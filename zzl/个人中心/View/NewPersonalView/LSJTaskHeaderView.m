@@ -22,17 +22,14 @@
 @property (nonatomic,strong) UIImageView *firstIcon;
 @property (nonatomic,strong) UIImageView *secondIcon;
 @property (nonatomic,strong) UIImageView *threeIcon;
-@property (nonatomic,strong) UIImageView *fourIcon;
 
 @property (nonatomic,strong) UILabel *firL;
 @property (nonatomic,strong) UILabel *secL;
 @property (nonatomic,strong) UILabel *thrL;
-@property (nonatomic,strong) UILabel *fourL;
 
 @property (nonatomic,strong) UIButton *firBtn;
 @property (nonatomic,strong) UIButton *secBtn;
 @property (nonatomic,strong) UIButton *thrBtn;
-@property (nonatomic,strong) UIButton *fourBtn;
 
 @end
 
@@ -98,22 +95,17 @@
     [self.processBgView addSubview:self.firstIcon];
     [self.firstIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.processBgView.mas_centerY);
-        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth/7.0- 13);
+        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth/3.0- 13);
     }];
     [self.processBgView addSubview:self.secondIcon];
     [self.secondIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.processBgView.mas_centerY);
-        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth*3/7.0 -13);
+        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth*2/3.0 -13);
     }];
     [self.processBgView addSubview:self.threeIcon];
     [self.threeIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.processBgView.mas_centerY);
-        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth*5/7.0 -13);
-    }];
-    [self.processBgView addSubview:self.fourIcon];
-    [self.fourIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.processBgView.mas_centerY);
-        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth-13);
+        make.left.equalTo(self.processBgView.mas_left).offset(proBgViewWidth -13);
     }];
     [self addSubview:self.firL];
     [self.firL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -130,11 +122,6 @@
         make.centerX.equalTo(self.threeIcon.mas_centerX);
         make.top.equalTo(self.threeIcon.mas_bottom).offset(5);
     }];
-    [self addSubview:self.fourL];
-    [self.fourL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.fourIcon.mas_centerX);
-        make.top.equalTo(self.fourIcon.mas_bottom).offset(5);
-    }];
     [self addSubview:self.firBtn];
     [self.firBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.firstIcon.mas_centerX);
@@ -149,11 +136,6 @@
     [self.thrBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.threeIcon.mas_centerX);
         make.bottom.equalTo(self.threeIcon.mas_top).offset(-5);
-    }];
-    [self addSubview:self.fourBtn];
-    [self.fourBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.fourIcon.mas_centerX);
-        make.bottom.equalTo(self.fourIcon.mas_top).offset(-5);
     }];
 }
 
@@ -174,21 +156,21 @@
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
             make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth/32.0));
+            make.width.equalTo(@(proBgViewWidth/6.0));
         }];
     }else if (num == 2){
         [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
             make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth/18.0));
+            make.width.equalTo(@(proBgViewWidth/3.0));
         }];
     }else if (num == 3){
         [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
             make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth/7.0));
+            make.width.equalTo(@(proBgViewWidth/2.0));
         }];
         self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }else if (num == 4){
@@ -196,7 +178,7 @@
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
             make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth*2/7.0));
+            make.width.equalTo(@(proBgViewWidth*2/3.0));
         }];
         self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }else if (num == 5){
@@ -204,40 +186,11 @@
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
             make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth*3/7.0));
+            make.width.equalTo(@(proBgViewWidth*5/6.0));
         }];
         self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
         self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }else if (num == 6){
-        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.processBgView.mas_top);
-            make.left.equalTo(self.processBgView.mas_left);
-            make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth*4/7.0));
-        }];
-        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-    }else if (num == 7){
-        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.processBgView.mas_top);
-            make.left.equalTo(self.processBgView.mas_left);
-            make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth*5/7.0));
-        }];
-        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-    }else if (num == 8){
-        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.processBgView.mas_top);
-            make.left.equalTo(self.processBgView.mas_left);
-            make.height.equalTo(@(Py(4)));
-            make.width.equalTo(@(proBgViewWidth*6/7.0));
-        }];
-        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-    }else if (num == 9){
         [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.processBgView.mas_top);
             make.left.equalTo(self.processBgView.mas_left);
@@ -247,8 +200,38 @@
         self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
         self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
         self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
-        self.fourIcon.image = [UIImage imageNamed:@"mine_task_yes"];
     }
+//    }else if (num == 7){
+//        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.processBgView.mas_top);
+//            make.left.equalTo(self.processBgView.mas_left);
+//            make.height.equalTo(@(Py(4)));
+//            make.width.equalTo(@(proBgViewWidth*5/7.0));
+//        }];
+//        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//    }else if (num == 8){
+//        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.processBgView.mas_top);
+//            make.left.equalTo(self.processBgView.mas_left);
+//            make.height.equalTo(@(Py(4)));
+//            make.width.equalTo(@(proBgViewWidth*6/7.0));
+//        }];
+//        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//    }else if (num == 9){
+//        [self.processView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.processBgView.mas_top);
+//            make.left.equalTo(self.processBgView.mas_left);
+//            make.height.equalTo(@(Py(4)));
+//            make.width.equalTo(@(proBgViewWidth));
+//        }];
+//        self.firstIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.secondIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//        self.threeIcon.image = [UIImage imageNamed:@"mine_task_yes"];
+//    }
 }
 
 #pragma mark lazyload
@@ -324,18 +307,12 @@
     }
     return _threeIcon;
 }
-- (UIImageView *)fourIcon{
-    if (!_fourIcon) {
-        _fourIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mine_task_no"]];
-    }
-    return _fourIcon;
-}
 - (UILabel *)firL{
     if (!_firL) {
         _firL = [[UILabel alloc] init];
         _firL.textColor = DYGColorFromHex(0x9b7000);
         _firL.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
-        _firL.text = @"3";
+        _firL.text = @"2";
         _firL.textAlignment = NSTextAlignmentCenter;
     }
     return _firL;
@@ -345,7 +322,7 @@
         _secL = [[UILabel alloc] init];
         _secL.textColor = DYGColorFromHex(0x9b7000);
         _secL.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
-        _secL.text = @"5";
+        _secL.text = @"4";
         _secL.textAlignment = NSTextAlignmentCenter;
     }
     return _secL;
@@ -355,20 +332,10 @@
         _thrL = [[UILabel alloc] init];
         _thrL.textColor = DYGColorFromHex(0x9b7000);
         _thrL.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
-        _thrL.text = @"7";
+        _thrL.text = @"6";
         _thrL.textAlignment = NSTextAlignmentCenter;
     }
     return _thrL;
-}
-- (UILabel *)fourL{
-    if (!_fourL) {
-        _fourL = [[UILabel alloc] init];
-        _fourL.textColor = DYGColorFromHex(0x9b7000);
-        _fourL.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
-        _fourL.text = @"9";
-        _fourL.textAlignment = NSTextAlignmentCenter;
-    }
-    return _fourL;
 }
 
 - (UIButton *)firBtn{
@@ -386,7 +353,7 @@
 - (UIButton *)secBtn{
     if (!_secBtn) {
         _secBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_secBtn setTitle:@"400" forState:UIControlStateNormal];
+        [_secBtn setTitle:@"500" forState:UIControlStateNormal];
         [_secBtn setTitleColor:DYGColorFromHex(0x9b7000) forState:UIControlStateNormal];
         [_secBtn setImage:[UIImage imageNamed:@"jewel_task"] forState:UIControlStateNormal];
         _secBtn.titleLabel.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
@@ -398,7 +365,7 @@
 - (UIButton *)thrBtn{
     if (!_thrBtn) {
         _thrBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_thrBtn setTitle:@"600" forState:UIControlStateNormal];
+        [_thrBtn setTitle:@"1500" forState:UIControlStateNormal];
         [_thrBtn setTitleColor:DYGColorFromHex(0x9b7000) forState:UIControlStateNormal];
         [_thrBtn setImage:[UIImage imageNamed:@"jewel_task"] forState:UIControlStateNormal];
         _thrBtn.titleLabel.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
@@ -406,17 +373,5 @@
         _thrBtn.enabled = NO;
     }
     return _thrBtn;
-}
-- (UIButton *)fourBtn{
-    if (!_fourBtn) {
-        _fourBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_fourBtn setTitle:@"1000" forState:UIControlStateNormal];
-        [_fourBtn setTitleColor:DYGColorFromHex(0x9b7000) forState:UIControlStateNormal];
-        [_fourBtn setImage:[UIImage imageNamed:@"jewel_task"] forState:UIControlStateNormal];
-        _fourBtn.titleLabel.font = [UIFont fontWithName:@"STYuanti-SC-Regular" size:13];
-        [_fourBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont fontWithName:@"STYuanti-SC-Regular" size:13] spacing:3];
-        _fourL.enabled = NO;
-    }
-    return _fourBtn;
 }
 @end

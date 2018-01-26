@@ -27,7 +27,6 @@
 #import "ZYSpreadSubButton.h"
 #import "FXNotificationController.h"
 #import "FXTaskViewController.h"
-#import "FXSettingViewController.h"
 
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
@@ -114,31 +113,52 @@
 }
 
 - (void)addSpreadButton{
-    
     ZYSpreadSubButton *btn0 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_msg"] highlightImage:[UIImage imageNamed:@"zy_msg_select"] clickedBlock:^(int index, UIButton *sender) {
         NSLog(@"点击消息");
-        FXNotificationController *notiVC = [[FXNotificationController alloc] init];
-        [self.navigationController pushViewController:notiVC animated:YES];
+        if (![[VisiteTools shareInstance] isVisite]) {
+            FXNotificationController *notiVC = [[FXNotificationController alloc] init];
+            [self.navigationController pushViewController:notiVC animated:YES];
+        }else{
+            [[VisiteTools shareInstance] outLogin];
+        }
     }];
     ZYSpreadSubButton *btn1 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_task"] highlightImage:[UIImage imageNamed:@"zy_task_select"] clickedBlock:^(int index, UIButton *sender) {
         NSLog(@"点击任务");
-        FXTaskViewController *taskVC = [[FXTaskViewController alloc] init];
-        [self.navigationController pushViewController:taskVC animated:YES];
+        if (![[VisiteTools shareInstance] isVisite]) {
+            FXTaskViewController *taskVC = [[FXTaskViewController alloc] init];
+            [self.navigationController pushViewController:taskVC animated:YES];
+        }else{
+            [[VisiteTools shareInstance] outLogin];
+        }
     }];
     ZYSpreadSubButton *btn2 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_share"] highlightImage:[UIImage imageNamed:@"zy_share_select"] clickedBlock:^(int index, UIButton *sender) {
         NSLog(@"点击分享");
-        FXHomeBannerItem *item = [FXHomeBannerItem new];
-        item.href = @"http://wawa.api.fanx.xin/share";
-        item.title = @"邀请好友";
-        item.banner_type = @"2";
-        FXGameWebController *vc = [[FXGameWebController alloc] init];
-        vc.item = item;
-        [self.navigationController pushViewController:vc animated:YES];
+        if (![[VisiteTools shareInstance] isVisite]) {
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = @"http://wawa.api.fanx.xin/share";
+            item.title = @"邀请好友";
+            item.banner_type = @"2";
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [[VisiteTools shareInstance] outLogin];
+        }
+        
     }];
-    ZYSpreadSubButton *btn3 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_setting"] highlightImage:[UIImage imageNamed:@"zy_setting_select"] clickedBlock:^(int index, UIButton *sender) {
-        NSLog(@"点击设置");
-        FXSettingViewController *settingVC = [[FXSettingViewController alloc] init];
-        [self.navigationController pushViewController:settingVC animated:YES];
+    ZYSpreadSubButton *btn3 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_otherPay"] highlightImage:[UIImage imageNamed:@"zy_otherPay_select"] clickedBlock:^(int index, UIButton *sender) {
+        NSLog(@"代付");
+        if (![[VisiteTools shareInstance] isVisite]) {
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
+            item.title = @"好友助力";
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [[VisiteTools shareInstance] outLogin];
+        }
+        
     }];
     ZYSpreadButton *spreadBtn =  [[ZYSpreadButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zhangyu_btn"] highlightImage:[UIImage imageNamed:@"zhangyu_btn_light"] position: CGPointMake(kScreenWidth - 77, kScreenHeight - 255)];
     spreadBtn.subButtons = @[btn0,btn1,btn2,btn3];

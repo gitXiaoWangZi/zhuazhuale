@@ -212,9 +212,10 @@
             NSMutableDictionary *userIngoDic = [@{@"ID":userDic[@"id"],@"name":userDic[@"username"],@"img":userDic[@"img_path"]} mutableCopy];
             [[NSUserDefaults standardUserDefaults] setObject:userIngoDic forKey:@"KWAWAUSER"];
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            window.rootViewController = [[FXHomeViewController alloc] init];
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            window.rootViewController = nav;
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"data"][0][@"id"] forKey:KUser_ID];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KLoginStatus];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KLoginStatus];
             AccountItem *account = [AccountItem mj_objectWithKeyValues:dic[@"data"][0]];
             [[NSUserDefaults standardUserDefaults] setObject:account.firstpunch forKey:Kfirstpunch];
         }else{

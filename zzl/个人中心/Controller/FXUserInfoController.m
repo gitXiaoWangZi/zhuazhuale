@@ -10,7 +10,6 @@
 #import "DYGPersonInfoTbCell.h"
 #import "DYGActionSheetController.h"
 #import "DYGAlertMessageController.h"
-#import "DYGActionSheetController.h"
 #import "FXAddressManageController.h"
 #import "MOFSPickerManager.h"
 #import "NSString+DYGAdd.h"

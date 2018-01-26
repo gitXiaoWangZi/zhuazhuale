@@ -187,7 +187,6 @@
 		929EC8C61FF6281400D86470 /* BottomViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929EC8B51FF6279600D86470 /* BottomViewController.xib */; };
 		929EC8C91FF66CDF00D86470 /* LSJTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 929EC8C81FF66CDF00D86470 /* LSJTopView.m */; };
 		92A3138F1FC51B0700296171 /* FXHomeBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A3138E1FC51B0700296171 /* FXHomeBannerItem.m */; };
-		92A64BED1FCD10AB009C75A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92A64BEC1FCD10AB009C75A1 /* Images.xcassets */; };
 		92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B573FC1FD9370000B32C02 /* UMMobClick.framework */; };
 		92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A921FD925DD00CDEDC4 /* CoreTelephony.framework */; };
 		92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B574001FD937CD00B32C02 /* UMMobClick.framework */; };
@@ -586,7 +585,6 @@
 		929EC8C81FF66CDF00D86470 /* LSJTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJTopView.m; sourceTree = "<group>"; };
 		92A3138D1FC51B0700296171 /* FXHomeBannerItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXHomeBannerItem.h; sourceTree = "<group>"; };
 		92A3138E1FC51B0700296171 /* FXHomeBannerItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXHomeBannerItem.m; sourceTree = "<group>"; };
-		92A64BEC1FCD10AB009C75A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		92B573FC1FD9370000B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMMobClick.framework; path = "zzl/Supporting Files/UMeng/UMMobClick.framework"; sourceTree = "<group>"; };
 		92B574001FD937CD00B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
 		92B574021FD955F400B32C02 /* zzl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = zzl.entitlements; sourceTree = "<group>"; };
@@ -902,7 +900,6 @@
 				9260ABDE1FA73B2B00EA1881 /* 抓抓乐 */,
 				9260ABE61FA73B3200EA1881 /* Tools */,
 				9260ABEA1FA73B9500EA1881 /* Main */,
-				92A64BEC1FCD10AB009C75A1 /* Images.xcassets */,
 				9260ABED1FA73C1A00EA1881 /* Supporting Files */,
 			);
 			path = zzl;
@@ -1629,7 +1626,6 @@
 			files = (
 				92744F3F1FC0062000F8D42C /* ZYPlayOperationView.xib in Resources */,
 				9282B20B1FFB9E76004A4236 /* FXLoginHomeController.xib in Resources */,
-				92A64BED1FCD10AB009C75A1 /* Images.xcassets in Resources */,
 				9248B6EF1FB42E0100633CDA /* 失败1.wav in Resources */,
 				92043F9C1FF4F2F4008A858B /* LSJPersonalHeaderView.xib in Resources */,
 				9248B6F11FB42E0100633CDA /* 投币.wav in Resources */,

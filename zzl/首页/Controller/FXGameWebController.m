@@ -223,40 +223,4 @@
     return _progressView;
 }
 
-//- (void)webViewDidStartLoad:(UIWebView *)webView{
-//    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(progressValueMonitor)];
-//    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-//}
-//- (void)webViewDidFinishLoad:(UIWebView *)webView{
-//    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-//
-//    [self.displayLink invalidate];
-//    [self.progressView removeFromSuperview];
-//    [UIView animateWithDuration:0.2 animations:^{
-//        self.progressView.width = kScreenWidth;
-//    } completion:^(BOOL finished) {
-//        [self.progressView removeFromSuperview];
-//    }];
-//}
-
-
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [UIView animateWithDuration:0.2 animations:^{
-        self.progressView.width = kScreenWidth;
-    } completion:^(BOOL finished) {
-        [self.progressView removeFromSuperview];
-    }];
-    [self.displayLink invalidate];
-    if([error code] == NSURLErrorCancelled) return;
-    [MBProgressHUD showError:@"网络不给力" toView:self.view];
-}
-
-- (void)progressValueMonitor
-{
-    [self.view addSubview:self.progressView];
-    self.progressView.width = kScreenWidth * 0.3;
-}
 @end
