@@ -57,7 +57,7 @@
     [self.zuanshiBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.time.mas_bottom).offset(Py(5));
         make.left.equalTo(self.time.mas_left);
-        make.size.mas_equalTo(CGSizeMake(Px(43), Py(22)));
+//        make.size.mas_equalTo(CGSizeMake(Px(43), Py(22)));
     }];
     [self addSubview:self.desBtn];
     [self.desBtn mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -329,26 +329,38 @@
 
 //申请兑换按钮
 - (void)applyExchangeAction:(UIButton *)sender{
+    
     if (self.depositVC.selectArray.count != 0) {
-        NSString *coins = @"";
-        NSMutableArray *idsArr = [NSMutableArray array];
-        NSMutableArray *coinArr = [NSMutableArray array];
-        for (WwDepositItem *model in self.depositVC.selectArray) {
-            [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
-            [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
-        }
-        //38671,38687
-        coins = [coinArr componentsJoinedByString:@","];
-        [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
-            if (code == WwCodeSuccess) {
-                [self sendMsgToServesWithCoin:coins];
-            }else{
-                [MBProgressHUD showMessage:[NSString stringWithFormat:@"%zd%@",code,message] toView:self.view];
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"确认兑换" message:@"确认后将不能退回" preferredStyle:UIAlertControllerStyleAlert];
+        // 2.创建并添加按钮
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSString *coins = @"";
+            NSMutableArray *idsArr = [NSMutableArray array];
+            NSMutableArray *coinArr = [NSMutableArray array];
+            for (WwDepositItem *model in self.depositVC.selectArray) {
+                [idsArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
+                [coinArr addObject:[NSString stringWithFormat:@"%zd",model.coin]];
             }
+            //38671,38687
+            coins = [coinArr componentsJoinedByString:@","];
+            [[WwUserInfoManager UserInfoMgrInstance] requestExchangeWawaWithDepositIds:idsArr deliverIds:@[] complete:^(int code, NSString *message) {
+                if (code == WwCodeSuccess) {
+                    [self sendMsgToServesWithCoin:coins];
+                }else{
+                    [MBProgressHUD showMessage:[NSString stringWithFormat:@"%zd%@",code,message] toView:self.view];
+                }
+            }];
         }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"Cancel Action");
+        }];
+        [alertVC addAction:okAction];
+        [alertVC addAction:cancelAction];
+        [self presentViewController:alertVC animated:YES completion:nil];
     }else{
         [MBProgressHUD showMessage:@"还未选择娃娃" toView:self.view];
     }
+    
 }
 
 //告诉服务器兑换了娃娃

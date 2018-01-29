@@ -29,7 +29,7 @@
     self.wawasizeL.text = model.size;
     self.fabricL.text = model.material;
     self.innerL.text = model.filler;
-    NSString *price = [NSString stringWithFormat:@"%zd",model.coin];
+    NSString *price = [NSString stringWithFormat:@"%zd",model.recoverCoin];
     [self.priceBtn setTitle:price forState:UIControlStateNormal];
     [self.priceBtn setImage:[UIImage imageNamed:@"dia_small"] forState:UIControlStateNormal];
     [self.priceBtn xm_setImagePosition:XMImagePositionRight titleFont:[UIFont systemFontOfSize:12] spacing:8];

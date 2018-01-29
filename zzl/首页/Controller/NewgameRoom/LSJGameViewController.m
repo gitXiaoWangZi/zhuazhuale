@@ -373,7 +373,8 @@
             break;
         case OperationNormalViewGame:
         {
-            [self playGameAction];
+            sender.enabled = NO;
+            [self playGameAction:sender];
         }
             break;
         case OperationNormalViewMsg:
@@ -387,12 +388,13 @@
 }
 
 #pragma mark--点击开始游戏按钮
-- (void)playGameAction {
+- (void)playGameAction:(UIButton *)sender {
     NSString *path = @"userMoney";
     NSDictionary *params = @{@"uid":KUID};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
+            sender.enabled = YES;
             if ([dic[@"data"] intValue] >= self.model.wawa.coin) {
                 [self playGame];
             }else{

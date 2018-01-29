@@ -209,6 +209,7 @@
 {
     if ([notification.object isEqualToString:@"success"]) {
         [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self applySend];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
     }else {
         [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
@@ -220,6 +221,7 @@
     NSDictionary *dic= noti.object;
     if ([dic[@"resultStatus"] integerValue] == 9000) {
         [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self applySend];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
     }else{
         [MBProgressHUD showError:@"支付失败" toView:self.view];
@@ -370,24 +372,30 @@
     [self.navigationController pushViewController:addressVC animated:YES];
 }
 
+//申请发货
+- (void)applySend{
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (WwDepositItem *model in self.dataArray) {
+        [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
+    }
+    [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
+        
+        if (code == WwCodeSuccess) {
+            [MBProgressHUD showMessage:@"申请成功" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    }];
+}
+
 - (void)sureOrding:(UIButton *)sender{
     if (self.addressModel == nil) {
         [MBProgressHUD showMessage:@"请选择地址" toView:self.view];
+        return;
     }
     if (self.dataArray.count > 1) {
-        NSMutableArray *tempArr = [NSMutableArray array];
-        for (WwDepositItem *model in self.dataArray) {
-            [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
-        }
-        [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
-            
-            if (code == WwCodeSuccess) {
-                [MBProgressHUD showMessage:@"申请成功" toView:self.view];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.navigationController popViewControllerAnimated:YES];
-                });
-            }
-        }];
+        [self applySend];
     }else{
         self.popBgView.hidden = NO;
     }
