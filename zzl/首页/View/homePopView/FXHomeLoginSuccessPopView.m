@@ -7,6 +7,7 @@
 //
 
 #import "FXHomeLoginSuccessPopView.h"
+#import "UIButton+Position.h"
 
 @interface FXHomeLoginSuccessPopView()
 @property (weak, nonatomic) IBOutlet UILabel *detailL;
@@ -18,9 +19,6 @@
 
 - (void)awakeFromNib{
     [super awakeFromNib];
-    
-    [self.diamoBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.diamoBtn.imageView.bounds.size.width-5, 0, self.diamoBtn.imageView.bounds.size.width)];
-    [self.diamoBtn setImageEdgeInsets:UIEdgeInsetsMake(0, self.diamoBtn.titleLabel.bounds.size.width, 0, -self.diamoBtn.titleLabel.bounds.size.width-5)];
 }
 
 - (IBAction)sureClick:(UIButton *)sender {
@@ -29,12 +27,11 @@
 
 - (void)setDay:(NSString *)day{
     _day = day;
-    self.detailL.text = [NSString stringWithFormat:@"已连续成功登录%zd天",[day intValue] + 1];
+    self.detailL.text = [NSString stringWithFormat:@"本周积累签到%zd天",[day intValue] + 1];
 }
 
 - (void)setMoney:(NSString *)money{
     _money = money;
-    NSString *diamostr = [NSString stringWithFormat:@"恭喜您，获得%@",money];
-    [self.diamoBtn setTitle:diamostr forState:UIControlStateNormal];
+    [self.diamoBtn setTitle:money forState:UIControlStateNormal];
 }
 @end

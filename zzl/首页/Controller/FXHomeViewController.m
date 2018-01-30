@@ -577,10 +577,10 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             [self.signPopView removeFromSuperview];
-            self.loginPopView = [[[NSBundle mainBundle] loadNibNamed:@"FXHomeLoginSuccessPopView" owner:self options:nil] firstObject];
+            self.loginPopView = [[[NSBundle mainBundle] loadNibNamed:@"FXHomeLoginSuccessPopView" owner:nil options:nil] firstObject];
             self.loginPopView.frame = self.view.bounds;
             self.loginPopView.day = day;
-            self.loginPopView.money = dic[@"data"][@"money"];
+            self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
             [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
         }
     } failure:^(NSError *error) {
