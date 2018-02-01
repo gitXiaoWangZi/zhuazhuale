@@ -118,6 +118,8 @@
                     award_num = @"0";
                 }
                 [self bringActionWithNum:taskNum+1 award_num:award_num];
+            }else{
+                [self loadTastListData];
             }
             
             NSInteger mark = [dic[@"data"][@"ward_id"] integerValue];
@@ -149,7 +151,6 @@
                 default:
                     break;
             }
-            [self loadTastListData];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
         }
     } failure:^(NSError *error) {
@@ -163,9 +164,9 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            
             [[UIApplication sharedApplication].keyWindow addSubview:self.popV];
             [self.popV refreshViewWithNum:taskNum+1 award_num:award_num];
+            [self loadTastListData];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
