@@ -372,6 +372,8 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             [MBProgressHUD showMessage:@"兑换成功" toView:self.view];
+            self.selectBtn.selected = NO;
+            [self.depositVC.selectArray removeAllObjects];
             [self loadData];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
         }
