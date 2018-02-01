@@ -565,10 +565,10 @@
         num--;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-//            self.resultPopView.cornerL.text = [NSString stringWithFormat:@"%zd",num];
+            self.resultPopView.desL.text = [NSString stringWithFormat:@"%zd",num];
         });
         
-        if (num == 0) {
+        if (num < 0) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.resultPopView removeFromSuperview];
             });

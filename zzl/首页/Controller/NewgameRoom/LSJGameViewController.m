@@ -588,7 +588,7 @@
             num--;
         });
         
-        if (num == 0) {
+        if (num <= 0 || num > 10) {
             // 关闭定时器
             dispatch_source_cancel(timer0);
             dispatch_async(dispatch_get_main_queue(), ^{
