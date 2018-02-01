@@ -89,6 +89,36 @@
     _bgImageV.frame = self.view.bounds;
     [self.view addSubview:_bgImageV];
     [self.view sendSubviewToBack:_bgImageV];
+    [self loadVersionData];
+}
+
+#pragma mark 版本号
+- (void)loadVersionData{
+    NSString *path = @"getNewIos";
+    [DYGHttpTool postWithURL:path params:nil sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBundleVersionKey];
+            if (![saveVersion isEqualToString:dic[@"data"][@"version"]]) {
+                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:dic[@"data"][@"content"] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectZero];
+                    NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1320308247?mt=8"];
+                    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+                    [webV loadRequest:request];
+                    [self.view addSubview:webV];
+                }];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"暂不" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    NSLog(@"Cancel Action");
+                }];
+                [alertVC addAction:okAction];
+                [alertVC addAction:cancelAction];
+                [self presentViewController:alertVC animated:YES completion:nil];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (void)loadRoomIDData{
