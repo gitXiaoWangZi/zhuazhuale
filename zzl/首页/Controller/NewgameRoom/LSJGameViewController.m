@@ -25,7 +25,9 @@
 #import "FXGameWebController.h"
 
 @interface LSJGameViewController ()<UIScrollViewDelegate,WwGameManagerDelegate,LSJTopViewDelegate,LSJOperationNormalViewDelegate,ZYPlayOperationViewDelegate,AVAudioPlayerDelegate,FXCommentViewDelegate,UITextFieldDelegate,ZYCountDownViewDelegate,FXGameResultViewDelegate,LSJGameYuEPopViewDelegate>
-
+{
+    BOOL isPlayGameing;
+}
 @property (nonatomic,strong) ZYRoomVerticalScroll *myScroV;
 @property (nonatomic,strong) BottomViewController *BottomViewVC;
 @property (nonatomic,strong) LSJTopView *topView;
@@ -82,6 +84,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    isPlayGameing = NO;
     self.commentBtnStatue = 1;
     self.musicBtnStatue = 1;
     //搭建页面
@@ -336,8 +339,22 @@
     switch (top) {
         case TopViewBack:
             {
-                self.isNoBack = NO;
-                [self.navigationController popViewControllerAnimated:YES];
+                if (isPlayGameing) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确定退出" message:@"退出将结束游戏" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        
+                    }];
+                    UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        self.isNoBack = NO;
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }];
+                    [alert addAction:action];
+                    [alert addAction:sureAction];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }else{
+                    self.isNoBack = NO;
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
             }
             break;
         case TopViewRecharge:
@@ -433,7 +450,11 @@
             @strongify(self);
             
             if (code == WwCodeSuccess) {
+                isPlayGameing = YES;
                 self.topView.normalView.gameBtn.userInteractionEnabled = NO;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    self.topView.normalView.gameBtn.userInteractionEnabled = YES;
+                });
                 self.playOperationBar.hidden = NO;
                 self.topView.normalView.hidden = YES;
                 self.topView.countDownV.hidden = NO;
@@ -529,6 +550,7 @@
     self.topView.countDownV.status = ZYCountDownStatusRequestResultIng;
     [[WwGameManager GameMgrInstance] requestClawWithForceRelease:NO withComplete:^(NSInteger code, NSString *msg, WwGameResult *resultM) {
         //游戏结束 页面可以滑动
+        isPlayGameing = NO;
         self.myScroV.scrollEnabled = YES;
         
         if (resultM.state == 2) {
