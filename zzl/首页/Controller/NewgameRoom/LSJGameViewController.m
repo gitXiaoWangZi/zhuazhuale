@@ -545,7 +545,6 @@
     }
 }
 
-
 - (void)clawAction {
     self.topView.countDownV.status = ZYCountDownStatusRequestResultIng;
     [[WwGameManager GameMgrInstance] requestClawWithForceRelease:NO withComplete:^(NSInteger code, NSString *msg, WwGameResult *resultM) {

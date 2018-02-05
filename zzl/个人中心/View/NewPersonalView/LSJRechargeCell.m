@@ -75,6 +75,7 @@
     if (model.give.length == 0) {
         _desL.hidden = YES;
         _songL.hidden = YES;
+        _hotImgV.hidden = YES;
     }else{
         _desL.hidden = NO;
         _songL.hidden = NO;
