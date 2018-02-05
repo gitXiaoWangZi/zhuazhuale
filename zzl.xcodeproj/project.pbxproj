@@ -65,6 +65,7 @@
 		924AEBE21FB03F5C00E0DD8C /* FXSelfHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 924AEBE11FB03F5C00E0DD8C /* FXSelfHeaderView.m */; };
 		924AEBE51FB063BA00E0DD8C /* FXAddressManageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924AEBE41FB063BA00E0DD8C /* FXAddressManageController.m */; };
 		924AEBE81FB063DD00E0DD8C /* FXBgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 924AEBE71FB063DD00E0DD8C /* FXBgView.m */; };
+		924FFBCD202591EE006D0C0F /* LSJPayPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 924FFBCC202591EE006D0C0F /* LSJPayPopView.m */; };
 		9250B6011FEBA34F002C8CAA /* VisiteTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250B6001FEBA34F002C8CAA /* VisiteTools.m */; };
 		92570DBA1FAB4E9D00232AE0 /* FXCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92570DB91FAB4E9D00232AE0 /* FXCommentView.m */; };
 		92570DD81FAB54AC00232AE0 /* NSBundle+DYGAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 92570DBF1FAB54A800232AE0 /* NSBundle+DYGAdd.m */; };
@@ -121,6 +122,7 @@
 		92744F491FC03BC400F8D42C /* UIImage+ColorAtPixel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92744F361FBFFE6900F8D42C /* UIImage+ColorAtPixel.m */; };
 		927478C91FBEAF07005C5772 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 927478C41FBEAEE0005C5772 /* libcrypto.a */; };
 		927478CA1FBEAF0A005C5772 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 927478C51FBEAEE0005C5772 /* libssl.a */; };
+		92780853202828F7004810BE /* LSJGameYuEPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92780852202828F7004810BE /* LSJGameYuEPopView.m */; };
 		9279CD72200F401600FC7403 /* LSJLogisticsPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */; };
 		9279CD75200F5AB100FC7403 /* LSJLogisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */; };
 		92801F5B1FF766E60087ECC6 /* LSJOperationNormalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */; };
@@ -363,6 +365,8 @@
 		924AEBE71FB063DD00E0DD8C /* FXBgView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXBgView.m; sourceTree = "<group>"; };
 		924AEBFB1FB1629F00E0DD8C /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		924AEC2C1FB1781000E0DD8C /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		924FFBCB202591EE006D0C0F /* LSJPayPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJPayPopView.h; sourceTree = "<group>"; };
+		924FFBCC202591EE006D0C0F /* LSJPayPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJPayPopView.m; sourceTree = "<group>"; };
 		9250B5FF1FEBA34F002C8CAA /* VisiteTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisiteTools.h; sourceTree = "<group>"; };
 		9250B6001FEBA34F002C8CAA /* VisiteTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VisiteTools.m; sourceTree = "<group>"; };
 		92570DB81FAB4E9D00232AE0 /* FXCommentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXCommentView.h; sourceTree = "<group>"; };
@@ -474,6 +478,8 @@
 		92744F471FC03A8600F8D42C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		927478C41FBEAEE0005C5772 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		927478C51FBEAEE0005C5772 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		92780851202828F7004810BE /* LSJGameYuEPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJGameYuEPopView.h; sourceTree = "<group>"; };
+		92780852202828F7004810BE /* LSJGameYuEPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJGameYuEPopView.m; sourceTree = "<group>"; };
 		9279CD70200F401600FC7403 /* LSJLogisticsPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJLogisticsPopView.h; sourceTree = "<group>"; };
 		9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJLogisticsPopView.m; sourceTree = "<group>"; };
 		9279CD73200F5AB100FC7403 /* LSJLogisticsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJLogisticsCell.h; sourceTree = "<group>"; };
@@ -803,6 +809,8 @@
 				9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */,
 				9279CD73200F5AB100FC7403 /* LSJLogisticsCell.h */,
 				9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */,
+				924FFBCB202591EE006D0C0F /* LSJPayPopView.h */,
+				924FFBCC202591EE006D0C0F /* LSJPayPopView.m */,
 			);
 			path = NewPersonalView;
 			sourceTree = "<group>";
@@ -1349,6 +1357,8 @@
 				928A8FA51FC7C9AB000B621E /* FXHomeLoginSuccessPopView.xib */,
 				928A907F1FC81528000B621E /* FXGameResultView.h */,
 				928A90801FC81528000B621E /* FXGameResultView.m */,
+				92780851202828F7004810BE /* LSJGameYuEPopView.h */,
+				92780852202828F7004810BE /* LSJGameYuEPopView.m */,
 			);
 			path = homePopView;
 			sourceTree = "<group>";
@@ -1795,6 +1805,7 @@
 				9267A0301FA805460058AA70 /* DYGTapGestureRecognizer.m in Sources */,
 				92744F421FC01B2800F8D42C /* FXLatesRecordModel.m in Sources */,
 				9248B6CB1FB309AA00633CDA /* FXNotificationController.m in Sources */,
+				92780853202828F7004810BE /* LSJGameYuEPopView.m in Sources */,
 				9203C62F1FFF33230059708F /* LSJRechargeCell.m in Sources */,
 				9279CD75200F5AB100FC7403 /* LSJLogisticsCell.m in Sources */,
 				928EC81F1FB1818A0072C68B /* MOFSDatePicker.m in Sources */,
@@ -1853,6 +1864,7 @@
 				92570DDF1FAB54AC00232AE0 /* DYGAlertHandleController.m in Sources */,
 				9287E6A91FCE986E00BB1529 /* FXOrdingListViewController.m in Sources */,
 				928349681FC6DC8C0012A2D1 /* FXHomePopView.m in Sources */,
+				924FFBCD202591EE006D0C0F /* LSJPayPopView.m in Sources */,
 				928EC8301FB1B2180072C68B /* FXSwitchCell.m in Sources */,
 				9267A06C1FAB08160058AA70 /* NSDictionary+ZXAdd.m in Sources */,
 				9248B6B61FB2CBF400633CDA /* FXHistoryHeader.m in Sources */,

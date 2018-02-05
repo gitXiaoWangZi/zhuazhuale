@@ -17,6 +17,7 @@
 @property (nonatomic,strong) UILabel *songL;
 @property (nonatomic,strong) UIButton *btn;
 @property (nonatomic,strong) UIImageView *selectImgV;
+@property (nonatomic,strong) UIImageView *hotImgV;
 
 - (void)fillPageWithData:(RechargeModel *)model isFirst:(BOOL)isFirst;
 @end

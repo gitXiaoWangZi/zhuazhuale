@@ -11,8 +11,9 @@
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "FXRechargeViewController.h"
 #import "FXHomeBannerItem.h"
+#import "LSJPayPopView.h"
 
-@interface FXGameWebController ()<UIWebViewDelegate>
+@interface FXGameWebController ()<UIWebViewDelegate,LSJPayPopViewDelegate>
 
 @property (nonatomic,strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *progressView;
@@ -20,9 +21,18 @@
 @property (nonatomic,assign) BOOL isChristmasList;
 @property (nonatomic,assign) BOOL isShare;
 @property (nonatomic,assign) BOOL isOtherPay;
+
+@property (nonatomic,strong) LSJPayPopView *payPopView;
 @end
 
 @implementation FXGameWebController
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if (self.payPopView) {
+        [self.payPopView removeFromSuperview];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -99,7 +109,35 @@
         [self submitOtherPay];
         return NO;
     }
+    if ([urlString containsString:@"activity"]) {
+        NSCharacterSet* nonDigits =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+        int remainSecond =[[urlString stringByTrimmingCharactersInSet:nonDigits] intValue];
+        [self loadDiamondCard:remainSecond];
+        return NO;
+    }
     return YES;
+}
+
+#pragma mark 请求是否购买过当前卡接口
+- (void)loadDiamondCard:(int)number{
+    NSString *path = @"diamondCard";
+    NSDictionary *params = @{@"card":@(number),@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            if ([[dic[@"data"] stringValue] isEqualToString:@"1"]) {//未购买过
+                
+                [[UIApplication sharedApplication].keyWindow addSubview:self.payPopView];
+                self.payPopView.num = [NSString stringWithFormat:@"%zd",number];
+                self.payPopView.hidden = NO;
+                
+            }else{
+                [MBProgressHUD showMessage:@"您已购买过当前卡" toView:self.view];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 #pragma mark 代购
@@ -211,6 +249,78 @@
     
 }
 
+#pragma mark LSJPayPopViewDelegate
+- (void)payForType:(BOOL)isWechat num:(NSString *)num{
+    if (isWechat) {//微信
+        [self wechatPay:num];
+    }else{//支付宝
+        [self zhifubaoPay:num];
+    }
+}
+
+- (void)zhifubaoPay:(NSString *)num{
+    self.payPopView.hidden = YES;
+    NSString *path = @"aliPay";
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"activity":@"1"};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [[AlipaySDK defaultService] payOrder:dic[@"data"] fromScheme:@"zzlwwzfb" callback:^(NSDictionary *resultDic) {
+            }];
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)wechatPay:(NSString *)num{
+    self.payPopView.hidden = YES;
+    NSString *path = @"pay";
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"activity":@"1"};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            PayReq *req = [[PayReq alloc] init];
+            req.partnerId = dic[@"data"][@"partnerid"];
+            req.prepayId = dic[@"data"][@"prepayid"];
+            req.package = dic[@"data"][@"package"];
+            req.nonceStr = dic[@"data"][@"noncestr"];
+            req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
+            req.sign = dic[@"data"][@"sign"];
+            if ([WXApi sendReq:req]) {
+                NSLog(@"调起成功");
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+#pragma mark - 收到支付成功的消息后作相应的处理
+- (void)getOrderPayResult:(NSNotification *)notification
+{
+    if ([notification.object isEqualToString:@"success"]) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self.webView reload];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    }else {
+        [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
+    }
+}
+
+//支付宝回调
+- (void)getOrderzfbPayResult:(NSNotification *)noti{
+    NSDictionary *dic= noti.object;
+    if ([dic[@"resultStatus"] integerValue] == 9000) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self.webView reload];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    }else{
+        [MBProgressHUD showError:@"支付失败" toView:self.view];
+    }
+}
+
 - (UIView *)progressView
 {
     if (!_progressView) {
@@ -223,4 +333,12 @@
     return _progressView;
 }
 
+- (LSJPayPopView *)payPopView{
+    if (!_payPopView) {
+        _payPopView = [LSJPayPopView instance];
+        _payPopView.delegate = self;
+        _payPopView.titleL.text = @"请选择支付方式";
+    }
+    return _payPopView;
+}
 @end

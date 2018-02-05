@@ -190,6 +190,14 @@
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;
             [self.navigationController pushViewController:vc animated:YES];
+            
+            //充值活动
+//            FXHomeBannerItem *item = [FXHomeBannerItem new];
+//            item.href = @"http://openapi.wawa.zhuazhuale.xin/zuanshidsf?uid=69";
+//            item.title = @"邀请好友";
+//            FXGameWebController *vc = [[FXGameWebController alloc] init];
+//            vc.item = item;
+//            [self.navigationController pushViewController:vc animated:YES];
         }else{
             [[VisiteTools shareInstance] outLogin];
         }

@@ -15,6 +15,7 @@
 @property (nonatomic,copy) NSString *ID;
 @property (nonatomic,copy) NSString *money;
 @property (nonatomic,copy) NSString *sort;
-@property (nonatomic,copy) NSString *state;
+@property (nonatomic,copy) NSString *Percentage;
 @property (nonatomic,copy) NSString *time;
+@property (nonatomic,copy) NSString *hot;
 @end

@@ -42,11 +42,15 @@
     [self.songL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.desL.mas_right).offset(10);
         make.centerY.equalTo(self.mas_centerY);
-        make.width.equalTo(@(Px(55)));
         make.height.equalTo(@(Py(20)));
     }];
     self.songL.layer.cornerRadius = Py(10);
     self.songL.layer.masksToBounds = YES;
+    [self addSubview:self.hotImgV];
+    [self.hotImgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.songL.mas_right).offset(5);
+        make.bottom.equalTo(self.songL.mas_top).offset(5);
+    }];
     [self addSubview:self.btn];
     [self.btn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.mas_right).offset(-15);
@@ -68,13 +72,19 @@
 
 - (void)fillPageWithData:(RechargeModel *)model isFirst:(BOOL)isFirst{
     _titleL.text = model.arrival;
-    if (isFirst) {
+    if (model.give.length == 0) {
+        _desL.hidden = YES;
+        _songL.hidden = YES;
+    }else{
         _desL.hidden = NO;
         _songL.hidden = NO;
         _desL.text = model.give;
-    }else{
-        _desL.hidden = YES;
-        _songL.hidden = YES;
+        _songL.text = [NSString stringWithFormat:@" %@   ",model.Percentage];
+        if ([model.hot intValue] == 0) {//不火
+            self.hotImgV.hidden = YES;
+        }else{//火
+            self.hotImgV.hidden = NO;
+        }
     }
     NSString *num = [NSString stringWithFormat:@"¥%@",model.money];
     [_btn setTitle:num forState:UIControlStateNormal];
@@ -86,6 +96,12 @@
         _iconImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_diamo"]];
     }
     return _iconImgV;
+}
+- (UIImageView *)hotImgV{
+    if (!_hotImgV) {
+        _hotImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mine_charge_hot"]];
+    }
+    return _hotImgV;
 }
 - (UIImageView *)selectImgV{
     if (!_selectImgV) {
@@ -116,7 +132,6 @@
         _songL.font = [UIFont systemFontOfSize:10];
         _songL.backgroundColor = DYGColorFromHex(0xFEF1F4);
         _songL.textAlignment = NSTextAlignmentCenter;
-        _songL.text = @"首冲赠送";
     }
     return _songL;
 }

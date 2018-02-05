@@ -20,8 +20,11 @@
 #import "UIButton+Position.h"
 #import "ZYCountDownView.h"
 #import "FXGameResultView.h"
+#import "LSJGameYuEPopView.h"
+#import "FXHomeBannerItem.h"
+#import "FXGameWebController.h"
 
-@interface LSJGameViewController ()<UIScrollViewDelegate,WwGameManagerDelegate,LSJTopViewDelegate,LSJOperationNormalViewDelegate,ZYPlayOperationViewDelegate,AVAudioPlayerDelegate,FXCommentViewDelegate,UITextFieldDelegate,ZYCountDownViewDelegate,FXGameResultViewDelegate>
+@interface LSJGameViewController ()<UIScrollViewDelegate,WwGameManagerDelegate,LSJTopViewDelegate,LSJOperationNormalViewDelegate,ZYPlayOperationViewDelegate,AVAudioPlayerDelegate,FXCommentViewDelegate,UITextFieldDelegate,ZYCountDownViewDelegate,FXGameResultViewDelegate,LSJGameYuEPopViewDelegate>
 
 @property (nonatomic,strong) ZYRoomVerticalScroll *myScroV;
 @property (nonatomic,strong) BottomViewController *BottomViewVC;
@@ -39,6 +42,7 @@
 @property (nonatomic,strong) NSTimer *timer;
 @property (nonatomic,assign) dispatch_source_t timer0;
 @property (nonatomic,assign) BOOL isNoBack;
+@property (nonatomic,strong) LSJGameYuEPopView *yuePopView;//余额不足弹出框
 @end
 
 @implementation LSJGameViewController
@@ -49,6 +53,9 @@
         //销毁房间, 离开房间时务必调用, 否则会影响之后的逻辑
         [[WwGameManager GameMgrInstance] exitRoom];
         self.topView.normalView.gameBtn.userInteractionEnabled = YES;
+        if (self.yuePopView) {
+            [self.yuePopView removeFromSuperview];
+        }
     }
     [self.player stop];
     if (self.timer) {
@@ -273,6 +280,13 @@
 }
 
 #pragma mark lazyload
+- (LSJGameYuEPopView *)yuePopView{
+    if (!_yuePopView) {
+        _yuePopView = [LSJGameYuEPopView shareInstance];
+        _yuePopView.delegate = self;
+    }
+    return _yuePopView;
+}
 -(FXGameResultView *)resultPopView{
     if (!_resultPopView) {
         _resultPopView = [[FXGameResultView alloc] initWithFrame:self.view.bounds];
@@ -398,7 +412,8 @@
             if ([dic[@"data"] intValue] >= self.model.wawa.coin) {
                 [self playGame];
             }else{
-                [MBProgressHUD showError:@"余额不足" toView:self.view];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.yuePopView];
+                self.yuePopView.hidden = NO;
             }
         }
     } failure:^(NSError *error) {
@@ -632,6 +647,34 @@
     dispatch_source_cancel(_timer0);
     _timer0 = nil;
     self.topView.normalView.gameBtn.userInteractionEnabled = YES;
+}
+#pragma mark--- LSJGameYuEPopViewdelegate余额不足弹出框处理
+- (void)clickPayBy:(gameYuEPopViewType)payType{
+    self.yuePopView.hidden = YES;
+    switch (payType) {
+        case gameYuEPopViewTypeOtherPay:
+        {
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
+            item.title = @"好友助力";
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case gameYuEPopViewTypeSelfPay:
+        {
+            self.isNoBack = YES;
+            [MobClick event:@"game_pay"];
+            NSString *firstPunch = [[NSUserDefaults standardUserDefaults] objectForKey:Kfirstpunch];
+            LSJRechargeViewController *rechargeVC = [[LSJRechargeViewController alloc] init];
+            rechargeVC.firstpunch = firstPunch;
+            [self.navigationController pushViewController:rechargeVC animated:YES];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark---WwGameManagerDelegate实现一些回调方法

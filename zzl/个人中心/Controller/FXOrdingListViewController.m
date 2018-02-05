@@ -9,11 +9,10 @@
 #import "FXOrdingListViewController.h"
 #import "FXSpoilsCell.h"
 #import "FXAddressManageController.h"
+#import "LSJPayPopView.h"
 
-@interface FXOrdingListViewController ()
-{
-    NSString *money;
-}
+@interface FXOrdingListViewController ()<LSJPayPopViewDelegate>
+
 @property (nonatomic,strong) UIView *nBgView;
 @property (nonatomic,strong) UIImageView *nAdressIcon;
 @property (nonatomic,strong) UILabel *msgL;
@@ -33,7 +32,7 @@
 @property (nonatomic,strong) UIButton *sureBtn;
 
 @property (nonatomic,strong) WwAddress *addressModel;
-@property (nonatomic,strong) UIView *popBgView;
+@property (nonatomic,strong) LSJPayPopView *payPopView;
 @end
 
 @implementation FXOrdingListViewController
@@ -41,6 +40,9 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.downV removeFromSuperview];
+    if (self.payPopView) {
+        [self.payPopView removeFromSuperview];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -79,96 +81,20 @@
     }
 }
 
-- (void)addPostViewWithMoney:(NSString *)money{
-    UIView *bgView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    bgView.backgroundColor = DYGAColor(0, 0, 0, 0.4);
-    self.popBgView = bgView;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissSelf)];
-    [bgView addGestureRecognizer:tap];
-    
-    UIView *centerV = [[UIView alloc] init];
-    centerV.backgroundColor = [UIColor whiteColor];
-    centerV.cornerRadius = 8;
-    [bgView addSubview:centerV];
-    [centerV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(bgView);
-        make.width.equalTo(@(Px(280)));
-        make.height.equalTo(@(Py(180)));
-    }];
-    UIButton *dismissBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dismissBtn setImage:[UIImage imageNamed:@"mine_send_cross"] forState:UIControlStateNormal];
-    [dismissBtn addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
-    [centerV addSubview:dismissBtn];
-    [dismissBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(centerV).offset(Py(10));
-        make.right.equalTo(centerV).offset(-Px(10));
-    }];
-    UILabel *titleL = [[UILabel alloc] init];
-    titleL.textColor = DYGColor(77, 77, 77);
-    titleL.font = kPingFangSC_Medium(24);
-    titleL.numberOfLines = 2;
-    titleL.textAlignment = NSTextAlignmentCenter;
-    titleL.text = [NSString stringWithFormat:@"单个商品发货需要支付%@元哦~",money];
-    [centerV addSubview:titleL];
-    [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(centerV).offset(Py(50));
-        make.left.equalTo(centerV.mas_left).offset(Px(20));
-        make.right.equalTo(centerV.mas_right).offset(-Px(20));
-    }];
-    UIButton *zhifubaoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [zhifubaoBtn setTitle:@"支付宝" forState:UIControlStateNormal];
-    zhifubaoBtn.titleLabel.font = kPingFangSC_Semibold(15);
-    [zhifubaoBtn setTitleColor:DYGColor(19, 130, 233) forState:UIControlStateNormal];
-    [zhifubaoBtn addTarget:self action:@selector(zhifubaoPay:) forControlEvents:UIControlEventTouchUpInside];
-    [centerV addSubview:zhifubaoBtn];
-    [zhifubaoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(centerV);
-        make.left.equalTo(centerV);
-        make.width.equalTo(@((Px(280)-0.5)/2.0));
-        make.height.equalTo(@(Py(52)));
-    }];
-    UIButton *wechatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [wechatBtn setTitle:@"微信" forState:UIControlStateNormal];
-    wechatBtn.titleLabel.font = kPingFangSC_Semibold(15);
-    [wechatBtn setTitleColor:DYGColor(35, 186, 0) forState:UIControlStateNormal];
-    [wechatBtn addTarget:self action:@selector(wechatPay:) forControlEvents:UIControlEventTouchUpInside];
-    [centerV addSubview:wechatBtn];
-    [wechatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(centerV);
-        make.right.equalTo(centerV);
-        make.width.equalTo(@((Px(280)-0.5)/2.0));
-        make.height.equalTo(@(Py(52)));
-    }];
-    UIView *line0 = [UIView new];
-    line0.backgroundColor = DYGColor(204, 204, 204);
-    [centerV addSubview:line0];
-    [line0 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(centerV);
-        make.width.equalTo(@(0.5));
-        make.centerX.equalTo(centerV);
-        make.height.equalTo(@(Py(52)));
-    }];
-    UIView *line = [UIView new];
-    line.backgroundColor = DYGColor(204, 204, 204);
-    [centerV addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(line0.mas_top);
-        make.height.equalTo(@(0.5));
-        make.left.right.equalTo(centerV);
-    }];
-    [[UIApplication sharedApplication].keyWindow addSubview:bgView];
-    bgView.hidden = YES;
+#pragma mark LSJPayPopViewDelegate
+- (void)payForType:(BOOL)isWechat num:(NSString *)num{
+    if (isWechat) {//微信
+        [self wechatPay:num];
+    }else{//支付宝
+        [self zhifubaoPay:num];
+    }
 }
 
-- (void)dismissSelf{
-    self.popBgView.hidden = YES;
-}
-
-- (void)zhifubaoPay:(UIButton *)sender{
-    self.popBgView.hidden = YES;
+- (void)zhifubaoPay:(NSString *)num{
+    self.payPopView.hidden = YES;
     WwDepositItem *item = self.dataArray[0];
     NSString *path = @"DealiPay";
-    NSDictionary *params = @{@"uid":KUID,@"money":money,@"itemCode":@(item.wid)};
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"itemCode":@(item.wid)};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
@@ -180,11 +106,11 @@
     }];
 }
 
-- (void)wechatPay:(UIButton *)sender{
-    self.popBgView.hidden = YES;
+- (void)wechatPay:(NSString *)num{
+    self.payPopView.hidden = YES;
     WwDepositItem *item = self.dataArray[0];
     NSString *path = @"Depay";
-    NSDictionary *params = @{@"uid":KUID,@"money":money,@"itemCode":@(item.wid)};
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"itemCode":@(item.wid)};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
@@ -235,8 +161,10 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            money = dic[@"data"][@"money"];
-            [self addPostViewWithMoney:money];
+            [[UIApplication sharedApplication].keyWindow addSubview:self.payPopView];
+            self.payPopView.titleL.text = [NSString stringWithFormat:@"两件才包邮哦~单件商品发货要支付%@元",dic[@"data"][@"money"]];
+            self.payPopView.num = dic[@"data"][@"money"];
+            self.payPopView.hidden = YES;
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -397,7 +325,7 @@
     if (self.dataArray.count > 1) {
         [self applySend];
     }else{
-        self.popBgView.hidden = NO;
+        self.payPopView.hidden = NO;
     }
     
 }
@@ -530,5 +458,13 @@
         [_sureBtn addTarget:self action:@selector(sureOrding:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _sureBtn;
+}
+
+- (LSJPayPopView *)payPopView{
+    if (!_payPopView) {
+        _payPopView = [LSJPayPopView instance];
+        _payPopView.delegate = self;
+    }
+    return _payPopView;
 }
 @end
