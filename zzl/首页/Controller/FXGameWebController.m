@@ -64,6 +64,9 @@
         if ([self.item.banner_type isEqualToString:@"6"]) {//冲榜
             self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://wawa.api.fanx.xin/christmasList",KUID];
         }
+        if ([self.item.banner_type isEqualToString:@"3"]) {//钻石放送
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zuanshidsf",KUID];
+        }
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.item.href]];
         [self.webView loadRequest:request];
         [self.view addSubview:self.webView];

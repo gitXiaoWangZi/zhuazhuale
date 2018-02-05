@@ -18,5 +18,6 @@
 + (instancetype)instance;
 @property (nonatomic,assign) id<LSJPayPopViewDelegate> delegate;
 @property (nonatomic,strong) UILabel *titleL;
+@property (nonatomic,strong) UIButton *rightBtn;
 @property (nonatomic,strong) NSString *num;
 @end

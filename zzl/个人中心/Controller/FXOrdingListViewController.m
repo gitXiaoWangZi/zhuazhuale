@@ -108,38 +108,7 @@
 
 - (void)wechatPay:(NSString *)num{
     self.payPopView.hidden = YES;
-    WwDepositItem *item = self.dataArray[0];
-    NSString *path = @"Depay";
-    NSDictionary *params = @{@"uid":KUID,@"money":num,@"itemCode":@(item.wid)};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-        NSDictionary *dic = (NSDictionary *)json;
-        if ([dic[@"code"] integerValue] == 200) {
-            PayReq *req = [[PayReq alloc] init];
-            req.partnerId = dic[@"data"][@"partnerid"];
-            req.prepayId = dic[@"data"][@"prepayid"];
-            req.package = dic[@"data"][@"package"];
-            req.nonceStr = dic[@"data"][@"noncestr"];
-            req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
-            req.sign = dic[@"data"][@"sign"];
-            if ([WXApi sendReq:req]) {
-                NSLog(@"调起成功");
-            }
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-}
-
-#pragma mark - 收到支付成功的消息后作相应的处理
-- (void)getOrderPayResult:(NSNotification *)notification
-{
-    if ([notification.object isEqualToString:@"success"]) {
-        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
-        [self applySend];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
-    }else {
-        [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
-    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 //支付宝回调
@@ -162,7 +131,7 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             [[UIApplication sharedApplication].keyWindow addSubview:self.payPopView];
-            self.payPopView.titleL.text = [NSString stringWithFormat:@"两件才包邮哦~单件商品发货要支付%@元",dic[@"data"][@"money"]];
+            self.payPopView.titleL.text = [NSString stringWithFormat:@"两件才包邮哦~单件商品发货需支付%@元",dic[@"data"][@"money"]];
             self.payPopView.num = dic[@"data"][@"money"];
             self.payPopView.hidden = YES;
         }
@@ -464,6 +433,7 @@
     if (!_payPopView) {
         _payPopView = [LSJPayPopView instance];
         _payPopView.delegate = self;
+        [_payPopView.rightBtn setTitle:@"再抓一次" forState:UIControlStateNormal];
     }
     return _payPopView;
 }

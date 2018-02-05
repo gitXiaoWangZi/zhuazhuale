@@ -76,6 +76,7 @@
         make.height.equalTo(@(Py(52)));
     }];
     UIButton *wechatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rightBtn = wechatBtn;
     [wechatBtn setTitle:@"微信" forState:UIControlStateNormal];
     wechatBtn.titleLabel.font = kPingFangSC_Semibold(15);
     [wechatBtn setTitleColor:DYGColor(35, 186, 0) forState:UIControlStateNormal];
