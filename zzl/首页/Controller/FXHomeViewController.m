@@ -99,7 +99,8 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBundleVersionKey];
-            if (![saveVersion isEqualToString:dic[@"data"][@"version"]]) {
+            NSString *newVersion = dic[@"data"][@"version"];
+            if ([self isNeedUpdateWithsaveVersion:saveVersion newVersion:newVersion]) {
                 UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:dic[@"data"][@"content"] message:nil preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectZero];
@@ -119,6 +120,19 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+//版本号添加一定要3位数，例如：1.3.1
+- (BOOL)isNeedUpdateWithsaveVersion:(NSString *)saveVersion newVersion:(NSString *)newVersion{
+    NSArray *saveArr = [saveVersion componentsSeparatedByString:@"."];
+    NSArray *newArr = [newVersion componentsSeparatedByString:@"."];
+    for (int i = 0; i < saveArr.count; i ++) {
+        if ([saveArr[i] intValue] < [newArr[i] intValue]) {
+            return YES;
+            break;
+        }
+    }
+    return NO;
 }
 
 - (void)loadRoomIDData{
