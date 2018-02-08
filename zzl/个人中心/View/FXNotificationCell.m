@@ -7,6 +7,7 @@
 //
 
 #import "FXNotificationCell.h"
+#import "LSJMsgModel.h"
 
 @interface FXNotificationCell()
 
@@ -35,6 +36,7 @@
         make.left.equalTo(self).offset(Px(12));
         make.top.equalTo(self.mas_top).offset(Py(30));
     }];
+    self.warn.hidden = YES;
     [self addSubview:self.icon];
     [self.icon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(Px(23));
@@ -66,6 +68,14 @@
         make.height.equalTo(@1);
         make.bottom.equalTo(self.mas_bottom);
     }];
+}
+
+- (void)setModel:(LSJMsgModel *)model{
+    _model = model;
+    [self.icon sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:[UIImage imageNamed:@"aboutLogo"]];
+    self.title.text = model.title;
+    self.time.text = model.time;
+    self.message.text = model.content;
 }
 
 -(UIImageView *)warn{

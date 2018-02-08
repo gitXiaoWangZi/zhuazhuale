@@ -8,5 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class LSJMsgModel;
+
 @interface FXNotificationCell : UITableViewCell
+
+@property (nonatomic,strong) LSJMsgModel *model;
 @end

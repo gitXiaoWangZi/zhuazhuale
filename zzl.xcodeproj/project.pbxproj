@@ -189,6 +189,7 @@
 		929EC8C61FF6281400D86470 /* BottomViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929EC8B51FF6279600D86470 /* BottomViewController.xib */; };
 		929EC8C91FF66CDF00D86470 /* LSJTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 929EC8C81FF66CDF00D86470 /* LSJTopView.m */; };
 		92A3138F1FC51B0700296171 /* FXHomeBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A3138E1FC51B0700296171 /* FXHomeBannerItem.m */; };
+		92B34765202BF022005F2F70 /* LSJMsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B34764202BF022005F2F70 /* LSJMsgModel.m */; };
 		92B573FD1FD9370100B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B573FC1FD9370000B32C02 /* UMMobClick.framework */; };
 		92B573FE1FD9377E00B32C02 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D99A921FD925DD00CDEDC4 /* CoreTelephony.framework */; };
 		92B574011FD937CD00B32C02 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B574001FD937CD00B32C02 /* UMMobClick.framework */; };
@@ -591,6 +592,8 @@
 		929EC8C81FF66CDF00D86470 /* LSJTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJTopView.m; sourceTree = "<group>"; };
 		92A3138D1FC51B0700296171 /* FXHomeBannerItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXHomeBannerItem.h; sourceTree = "<group>"; };
 		92A3138E1FC51B0700296171 /* FXHomeBannerItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXHomeBannerItem.m; sourceTree = "<group>"; };
+		92B34763202BF022005F2F70 /* LSJMsgModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJMsgModel.h; sourceTree = "<group>"; };
+		92B34764202BF022005F2F70 /* LSJMsgModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJMsgModel.m; sourceTree = "<group>"; };
 		92B573FC1FD9370000B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMMobClick.framework; path = "zzl/Supporting Files/UMeng/UMMobClick.framework"; sourceTree = "<group>"; };
 		92B574001FD937CD00B32C02 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
 		92B574021FD955F400B32C02 /* zzl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = zzl.entitlements; sourceTree = "<group>"; };
@@ -1103,6 +1106,8 @@
 				92C0479E1FCC0B3100636F15 /* FXRechargeRecordModel.m */,
 				9203C62A1FFF32340059708F /* RechargeModel.h */,
 				9203C62B1FFF32340059708F /* RechargeModel.m */,
+				92B34763202BF022005F2F70 /* LSJMsgModel.h */,
+				92B34764202BF022005F2F70 /* LSJMsgModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1827,6 +1832,7 @@
 				9217B5411FC40EC700B506EB /* UIImage+ScaledSize.m in Sources */,
 				92820E762008A89100D2E4D7 /* LSJTaskPopView.m in Sources */,
 				929EC8B21FF6271D00D86470 /* LSJGameViewController.m in Sources */,
+				92B34765202BF022005F2F70 /* LSJMsgModel.m in Sources */,
 				9248B6AA1FB2A62000633CDA /* FXRecordCell.m in Sources */,
 				9248B6D41FB32EFE00633CDA /* DYGAddCell.m in Sources */,
 				92570DDD1FAB54AC00232AE0 /* NSArray+DYGAdd.m in Sources */,

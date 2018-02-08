@@ -52,14 +52,19 @@
                                 <action selector="msgAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="cDG-91-N4d"/>
                             </connections>
                         </button>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_cell_point" translatesAutoresizingMaskIntoConstraints="NO" id="44A-G0-uuk">
+                            <rect key="frame" x="348" y="28" width="6" height="6"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.97587704659999996" green="0.8470606208" blue="0.29398614169999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
                         <constraint firstItem="IDB-ak-e8T" firstAttribute="centerY" secondItem="QEM-e3-vih" secondAttribute="centerY" id="ETT-85-FHW"/>
                         <constraint firstAttribute="width" secondItem="463-fp-9RZ" secondAttribute="height" multiplier="125:42" id="JEg-pn-wOM"/>
+                        <constraint firstItem="44A-G0-uuk" firstAttribute="top" secondItem="IDB-ak-e8T" secondAttribute="top" id="JFK-4l-bUR"/>
                         <constraint firstItem="e0x-v8-FIO" firstAttribute="leading" secondItem="463-fp-9RZ" secondAttribute="leading" constant="15" id="KJY-Y4-kML"/>
                         <constraint firstItem="QEM-e3-vih" firstAttribute="leading" secondItem="IDB-ak-e8T" secondAttribute="trailing" constant="20" id="OeQ-yD-O3l"/>
                         <constraint firstItem="e0x-v8-FIO" firstAttribute="top" secondItem="463-fp-9RZ" secondAttribute="top" constant="30" id="bv0-nX-J7M"/>
+                        <constraint firstItem="QEM-e3-vih" firstAttribute="leading" secondItem="44A-G0-uuk" secondAttribute="trailing" constant="20" id="cAd-EL-X9b"/>
                         <constraint firstAttribute="trailing" secondItem="QEM-e3-vih" secondAttribute="trailing" constant="20" id="haL-pK-gjK"/>
                         <constraint firstItem="QEM-e3-vih" firstAttribute="centerY" secondItem="e0x-v8-FIO" secondAttribute="centerY" id="qDH-SN-weA"/>
                     </constraints>
@@ -268,6 +273,7 @@
                 <outlet property="nameL" destination="0zj-vK-QLy" id="ACH-ju-Qeu"/>
                 <outlet property="otherPayViewView" destination="fkk-Q6-Qc2" id="UpC-gv-rEs"/>
                 <outlet property="rechargeView" destination="gWB-tz-vhf" id="BOR-Rj-aNe"/>
+                <outlet property="redPoint" destination="44A-G0-uuk" id="6nP-id-fxm"/>
                 <outlet property="zuanNumView" destination="J4C-LQ-Tfs" id="bNO-5d-leA"/>
                 <outlet property="zuanshiL" destination="dT2-A1-4JA" id="0ec-jT-ps7"/>
             </connections>
@@ -275,6 +281,7 @@
         </view>
     </objects>
     <resources>
+        <image name="mine_cell_point" width="6" height="6"/>
         <image name="mine_header_back" width="11" height="21"/>
         <image name="mine_header_bg" width="356" height="212"/>
         <image name="mine_header_icon" width="92" height="92"/>

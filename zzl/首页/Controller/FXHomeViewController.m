@@ -54,6 +54,8 @@
 @property (nonatomic,strong) UIImageView *defaultImageV;
 @property (nonatomic,strong) UIImageView *bgImageV;
 @property (nonatomic,strong) ZYSpreadButton *spreadBtn;
+@property (nonatomic,strong) ZYSpreadSubButton *spreadSubBtn0;
+@property (nonatomic,strong) ZYSpreadSubButton *spreadSubBtn1;
 
 @end
 
@@ -72,9 +74,19 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            if (self.spreadBtn && [dic[@"red"] integerValue] == 1) {
+            if ([dic[@"red"] integerValue] == 1) {//有未读消息
+                [self.spreadSubBtn1 setBackgroundImage:[UIImage imageNamed:@"zy_task_dian"] highlightImage:[UIImage imageNamed:@"zy_task_select"]];
+            }else{//无未读消息
+                [self.spreadSubBtn1 setBackgroundImage:[UIImage imageNamed:@"zy_task"] highlightImage:[UIImage imageNamed:@"zy_task_select"]];
+            }
+            if ([dic[@"messagehint"] integerValue] == 1) {//有未读消息
+                [self.spreadSubBtn0 setBackgroundImage:[UIImage imageNamed:@"zy_msg_dian"] highlightImage:[UIImage imageNamed:@"zy_msg_select"]];
+            }else{//无未读消息
+                [self.spreadSubBtn0 setBackgroundImage:[UIImage imageNamed:@"zy_msg"] highlightImage:[UIImage imageNamed:@"zy_msg_select"]];
+            }
+            if (self.spreadBtn && ([dic[@"red"] integerValue] == 1 || [dic[@"messagehint"] integerValue] == 1)) {
                 [self.spreadBtn setImage:[UIImage imageNamed:@"zhangyu_btn"] highImage:[UIImage imageNamed:@"zhangyu_btn_light"]];
-            }else if (self.spreadBtn && [dic[@"red"] integerValue] == 0){
+            }else{
                 [self.spreadBtn setImage:[UIImage imageNamed:@"zhangyu_btn_no"] highImage:[UIImage imageNamed:@"zhangyu_btn_light_no"]];
             }
         }
@@ -185,6 +197,7 @@
             [[VisiteTools shareInstance] outLogin];
         }
     }];
+    self.spreadSubBtn0 = btn0;
     ZYSpreadSubButton *btn1 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_task"] highlightImage:[UIImage imageNamed:@"zy_task_select"] clickedBlock:^(int index, UIButton *sender) {
         NSLog(@"点击任务");
         if (![[VisiteTools shareInstance] isVisite]) {
@@ -194,6 +207,7 @@
             [[VisiteTools shareInstance] outLogin];
         }
     }];
+    self.spreadSubBtn1 = btn1;
     ZYSpreadSubButton *btn2 = [[ZYSpreadSubButton alloc] initWithBackgroundImage:[UIImage imageNamed:@"zy_share"] highlightImage:[UIImage imageNamed:@"zy_share_select"] clickedBlock:^(int index, UIButton *sender) {
         NSLog(@"点击分享");
         if (![[VisiteTools shareInstance] isVisite]) {

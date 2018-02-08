@@ -8,9 +8,14 @@
 
 #import "FXNotificationController.h"
 #import "FXNotificationCell.h"
+#import "LSJMsgModel.h"
+#define num 20
 @interface FXNotificationController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    NSInteger currentPage;
+}
 @property(nonatomic,strong)UITableView * tableView;
-@property (nonatomic,strong) NSArray *dataArray;
+@property (nonatomic,strong) NSMutableArray *dataArray;
 
 @property(nonatomic,strong)UIView * defaultV;
 @property(nonatomic,strong)UIImageView * defaultImgV;
@@ -21,6 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    currentPage = 0;
     self.title = @"消息";
     [self addDefaultV];
     [self.view addSubview:self.tableView];
@@ -28,7 +34,7 @@
     headerV.backgroundColor = DYGColorFromHex(0xf7f7f7);
     headerV.frame = CGRectMake(0, 0, kScreenWidth, Py(15));
     self.tableView.tableHeaderView = headerV;
-    [self loadData];
+    [self loadNewData];
 }
 
 - (void)addDefaultV{
@@ -53,14 +59,44 @@
 }
 
 #pragma mark 请求消息数据
-- (void)loadData{
-    self.dataArray = @[@{@"icon":@"ddd",@"title":@"客服",@"msg":@"您的新人奖励已到账，请注意查收",@"time":@"2017-11-11"}];
-    if (self.dataArray.count == 0) {
-        self.defaultV.hidden = NO;
-    }else{
-        self.defaultV.hidden = YES;
-    }
-    [self.tableView reloadData];
+- (void)loadNewData{
+    currentPage = 0;
+    [self loadDataWithPage:currentPage];
+}
+
+- (void)loadMoreData{
+    currentPage ++;
+    [self loadDataWithPage:currentPage];
+}
+
+- (void)loadDataWithPage:(NSInteger)page{
+    NSString *path = @"latestNews";
+    NSDictionary *params = @{@"uid":KUID,@"index":@(page),@"num":@(num)};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            if (page == 0) {
+                [self.dataArray removeAllObjects];
+            }
+            NSArray *tempArr = [LSJMsgModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+            [self.dataArray addObjectsFromArray:tempArr];
+            if (tempArr.count < num) {
+                self.tableView.mj_footer.hidden = YES;
+            }else{
+                self.tableView.mj_footer.hidden = NO;
+            }
+            if (self.dataArray.count == 0) {
+                self.defaultV.hidden = NO;
+            }else{
+                self.defaultV.hidden = YES;
+            }
+            [self.tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 #pragma mark tableview Delegae And DataSource
@@ -76,6 +112,7 @@
     if (!cell) {
         cell = [[FXNotificationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseId];
     }
+    cell.model = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -92,6 +129,8 @@
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.estimatedRowHeight = 200;
+        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+        _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     }
     return _tableView;
 }
@@ -118,5 +157,11 @@
         _defaultL.textAlignment = NSTextAlignmentCenter;
     }
     return _defaultL;
+}
+- (NSMutableArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
 }
 @end

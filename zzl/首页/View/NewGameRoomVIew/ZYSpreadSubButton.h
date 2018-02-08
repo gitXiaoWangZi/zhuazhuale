@@ -16,6 +16,6 @@ typedef void (^ButtonClickBlock)(int index, UIButton *sender);
 
 - (instancetype)initWithBackgroundImage:(UIImage *)backgroundImage highlightImage:(UIImage *)highlightImage clickedBlock:(ButtonClickBlock)buttonClickBlock;
 
-
+- (void)setBackgroundImage:(UIImage *)backgroundImage highlightImage:(UIImage *)highlightImage;
 @end
 

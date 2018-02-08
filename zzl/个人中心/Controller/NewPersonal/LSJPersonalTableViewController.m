@@ -90,6 +90,11 @@ static NSString *const cellID = @"LSJMineCell";
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             _receive = [dic[@"red"] stringValue];
+            if ([dic[@"messagehint"] integerValue]==1) {
+                self.headerView.redPoint.hidden = NO;
+            }else{
+                self.headerView.redPoint.hidden = YES;
+            }
             [self.tableView reloadData];
         }
     } failure:^(NSError *error) {

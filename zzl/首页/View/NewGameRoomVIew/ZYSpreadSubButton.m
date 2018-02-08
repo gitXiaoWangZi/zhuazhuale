@@ -21,6 +21,11 @@
     return self;
 }
 
+- (void)setBackgroundImage:(UIImage *)backgroundImage highlightImage:(UIImage *)highlightImage{
+    [self setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+    [self setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
+}
+
 - (void)configureButtonWithBackgroundImage:(UIImage *)backgroundImage highlightImage:(UIImage *)highlightImage clickedBlock:(ButtonClickBlock)buttonClickBlock {
     if (backgroundImage != nil) {
         [self setBackgroundImage:backgroundImage forState:UIControlStateNormal];

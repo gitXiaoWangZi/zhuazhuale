@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, personalHeader) {
 @interface LSJPersonalHeaderView : UIView
 
 + (instancetype)shareInstance;
+@property (weak, nonatomic) IBOutlet UIImageView *redPoint;
 @property (nonatomic,assign) personalHeader personalHeader;
 @property (nonatomic,assign) id<LSJPersonalHeaderViewDelegate> delegate;
 @property (nonatomic,strong) AccountItem *item;
