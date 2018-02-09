@@ -13,6 +13,8 @@
 #import "FXNavigationController.h"
 #import "FXHomeViewController.h"
 #import "XHLaunchAd.h"
+#import "FXHomeBannerItem.h"
+#import "FXGameWebController.h"
 // iOS10注册APNs所需头文件
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
@@ -226,6 +228,24 @@
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
+    
+    NSString *url = userInfo[@"url"];
+    if (url.length != 0) {
+        if (KisLogin) {
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            self.window.rootViewController = nav;
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = userInfo[@"url"];
+            item.title = userInfo[@"type"];
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [nav pushViewController:vc animated:YES];
+        }else{
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXLoginHomeController new]];
+            self.window.rootViewController = nav;
+        }
+    }
+    
     if (@available(iOS 10.0, *)) {
         if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
             [JPUSHService handleRemoteNotification:userInfo];
@@ -247,6 +267,22 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
+    NSString *url = userInfo[@"url"];
+    if (url.length != 0) {
+        if (KisLogin) {
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            self.window.rootViewController = nav;
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = userInfo[@"url"];
+            item.title = userInfo[@"type"];
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [nav pushViewController:vc animated:YES];
+        }else{
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXLoginHomeController new]];
+            self.window.rootViewController = nav;
+        }
+    }
     if (@available(iOS 10.0, *)) {
         if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
             [JPUSHService handleRemoteNotification:userInfo];
@@ -261,6 +297,22 @@
     [MobClick event:@"get_push_click"];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    NSString *url = userInfo[@"url"];
+    if (url.length != 0) {
+        if (KisLogin) {
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            self.window.rootViewController = nav;
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = userInfo[@"url"];
+            item.title = userInfo[@"type"];
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [nav pushViewController:vc animated:YES];
+        }else{
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXLoginHomeController new]];
+            self.window.rootViewController = nav;
+        }
+    }
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
@@ -270,6 +322,23 @@
     [MobClick event:@"get_push_click"];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    NSString *url = userInfo[@"url"];
+    if (url.length != 0) {
+        if (KisLogin) {
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXHomeViewController new]];
+            self.window.rootViewController = nav;
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = userInfo[@"url"];
+            item.title = userInfo[@"type"];
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [nav pushViewController:vc animated:YES];
+        }else{
+            FXNavigationController *nav = [[FXNavigationController alloc] initWithRootViewController:[FXLoginHomeController new]];
+            self.window.rootViewController = nav;
+        }
+    }
+    
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
 }
