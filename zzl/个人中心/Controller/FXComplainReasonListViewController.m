@@ -123,6 +123,8 @@ static NSString *const cellID = @"LSJComplainReasonCell";
             if (code == WwCodeSuccess) {
                 [self addPopView];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDetail" object:nil];
+            }else{
+                [MBProgressHUD showMessage:@"投诉失败" toView:self.view];
             }
         }];
     }else{

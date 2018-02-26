@@ -10,9 +10,13 @@
 #import "RechargeModel.h"
 #import "LSJRechargeCell.h"
 #import "LSJRechargeFooterV.h"
+#import "MinePreferentialViewController.h"
+#import "LSJPreferentialModel.h"
 
 @interface LSJRechargeViewController ()<LSJRechargeFooterVDelegate>
-
+{
+    NSString *coupon_id;//优惠券ID
+}
 @property (nonatomic,strong) NSArray *dataArr;
 @property (nonatomic,strong) LSJRechargeFooterV *footerV;
 
@@ -34,6 +38,10 @@ static NSString *const cellID = @"LSJRechargeCell";
     [self.tableView registerClass:[LSJRechargeCell class] forCellReuseIdentifier:cellID];
     self.tableView.tableHeaderView = [self headerView];
     self.tableView.tableFooterView = self.footerV;
+    if (self.model != nil) {
+        coupon_id = self.model.ID;
+        self.footerV.preferentialDesL.text = self.model.title;
+    }
     [self loadData];
     // 判断 用户是否安装微信
     //如果判断结果一直为NO,可能appid无效,这里的是无效的
@@ -44,6 +52,7 @@ static NSString *const cellID = @"LSJRechargeCell";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderPayResult:) name:@"ORDER_PAY_NOTIFICATION" object:nil];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderzfbPayResult:) name:@"ORDER_ZFBPAY_NOTIFICATION" object:nil];
+
 }
 
 - (UIView *)headerView{
@@ -139,6 +148,19 @@ static NSString *const cellID = @"LSJRechargeCell";
 }
 
 #pragma mark  LSJRechargeFooterVDelegate
+-(void)preferential{
+    MinePreferentialViewController *preferVC = [[MinePreferentialViewController alloc] init];
+    preferVC.usePreferTialBlock = ^(LSJPreferentialModel *model) {
+//        NSLog(@"使用id为%@的优惠券",model.ID);
+        if (model != nil) {
+            coupon_id = model.ID;
+            self.footerV.preferentialDesL.text = model.title;
+        }else{
+            self.footerV.preferentialDesL.text = @"该优惠券无效";
+        }
+    };
+    [self.navigationController pushViewController:preferVC animated:YES];
+}
 - (void)payActionWithType:(RechargePayType)type{
     if (![self isCanPay]) {
         return;
@@ -147,7 +169,12 @@ static NSString *const cellID = @"LSJRechargeCell";
         case RechargePayTypeWechat:
             {
                 NSString *path = @"pay";
-                NSDictionary *params = @{@"uid":KUID,@"money":@(self.payNum)};
+                NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                [params setObject:KUID forKey:@"uid"];
+                [params setObject:@(self.payNum) forKey:@"money"];
+                if (coupon_id != nil || coupon_id.length != 0) {
+                    [params setObject:coupon_id forKey:@"coupon_id"];
+                }
                 [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
                     NSDictionary *dic = (NSDictionary *)json;
                     if ([dic[@"code"] integerValue] == 200) {
@@ -171,7 +198,12 @@ static NSString *const cellID = @"LSJRechargeCell";
         case RechargePayTypeZhifubao:
         {
             NSString *path = @"aliPay";
-            NSDictionary *params = @{@"uid":KUID,@"money":@(self.payNum)};
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            [params setObject:KUID forKey:@"uid"];
+            [params setObject:@(self.payNum) forKey:@"money"];
+            if (coupon_id != nil || coupon_id.length != 0) {
+                [params setObject:coupon_id forKey:@"coupon_id"];
+            }
             [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
                 NSDictionary *dic = (NSDictionary *)json;
                 if ([dic[@"code"] integerValue] == 200) {
@@ -267,7 +299,7 @@ static NSString *const cellID = @"LSJRechargeCell";
 - (LSJRechargeFooterV *)footerV{
     if (!_footerV) {
         _footerV = [[[NSBundle mainBundle] loadNibNamed:@"LSJRechargeFooterV" owner:nil options:nil] firstObject];
-        _footerV.frame = CGRectMake(0, 0, kScreenWidth, 237);
+        _footerV.frame = CGRectMake(0, 0, kScreenWidth, 306);
         _footerV.delegate = self;
     }
     return _footerV;

@@ -17,10 +17,12 @@ typedef NS_ENUM(NSInteger,RechargePayType) {
 @protocol LSJRechargeFooterVDelegate <NSObject>
 
 - (void)payActionWithType:(RechargePayType)type;
+- (void)preferential;
 @end
 
 @interface LSJRechargeFooterV : UIView
 
+@property (weak, nonatomic) IBOutlet UILabel *preferentialDesL;
 @property (nonatomic,assign) id<LSJRechargeFooterVDelegate> delegate;
 @property (nonatomic,assign) RechargePayType paytype;
 

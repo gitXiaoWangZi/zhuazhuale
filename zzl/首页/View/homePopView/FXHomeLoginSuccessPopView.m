@@ -22,6 +22,9 @@
 }
 
 - (IBAction)sureClick:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(dealThingAfterSuccess)]) {
+        [self.delegate dealThingAfterSuccess];
+    }
     [self removeFromSuperview];
 }
 

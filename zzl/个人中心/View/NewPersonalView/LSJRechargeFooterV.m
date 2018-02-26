@@ -46,4 +46,10 @@
         [self.delegate payActionWithType:self.paytype];
     }
 }
+
+- (IBAction)preferentialAction:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(preferential)]) {
+        [self.delegate preferential];
+    }
+}
 @end

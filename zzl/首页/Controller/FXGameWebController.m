@@ -9,9 +9,9 @@
 #import "FXGameWebController.h"
 #import "FXLatesRecordModel.h"
 #import <ShareSDKUI/ShareSDK+SSUI.h>
-#import "FXRechargeViewController.h"
 #import "FXHomeBannerItem.h"
 #import "LSJPayPopView.h"
+#import "LSJRechargeViewController.h"
 
 @interface FXGameWebController ()<UIWebViewDelegate,LSJPayPopViewDelegate>
 
@@ -97,7 +97,7 @@
         return NO;
     }
     if ([urlString containsString:@"recharge"]) {
-        FXRechargeViewController *rechargeVC= [[FXRechargeViewController alloc] init];
+        LSJRechargeViewController *rechargeVC= [[LSJRechargeViewController alloc] init];
         [self.navigationController pushViewController:rechargeVC animated:YES];
         return NO;
     }

@@ -111,6 +111,10 @@
 		9267A06F1FAB20BF0058AA70 /* DYGPopDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267A06E1FAB20BF0058AA70 /* DYGPopDetailView.m */; };
 		9267A0721FAB28900058AA70 /* FXTextDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267A0711FAB28900058AA70 /* FXTextDetailCell.m */; };
 		9269330E1FD90FF500AE2EF6 /* MyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9269330D1FD90FF100AE2EF6 /* MyTextView.m */; };
+		926EAE2F20415731008DDD90 /* MinePreferentialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EAE2E20415731008DDD90 /* MinePreferentialViewController.m */; };
+		926EAE3220415787008DDD90 /* MinePreferentialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EAE3120415787008DDD90 /* MinePreferentialCell.m */; };
+		926EAE3520416695008DDD90 /* LSJPreferentialModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EAE3420416695008DDD90 /* LSJPreferentialModel.m */; };
+		926EAE38204169D5008DDD90 /* LSJPreferentialController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EAE37204169D5008DDD90 /* LSJPreferentialController.m */; };
 		926EDC5C2015C06900A93A01 /* ZYSpreadButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EDC582015C06800A93A01 /* ZYSpreadButton.m */; };
 		926EDC5D2015C06900A93A01 /* ZYSpreadSubButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 926EDC592015C06800A93A01 /* ZYSpreadSubButton.m */; };
 		92744F3D1FC001FD00F8D42C /* ZYCountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92744F3C1FC0003D00F8D42C /* ZYCountDownView.m */; };
@@ -459,6 +463,14 @@
 		9267A0711FAB28900058AA70 /* FXTextDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXTextDetailCell.m; sourceTree = "<group>"; };
 		9269330C1FD90FF100AE2EF6 /* MyTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyTextView.h; sourceTree = "<group>"; };
 		9269330D1FD90FF100AE2EF6 /* MyTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyTextView.m; sourceTree = "<group>"; };
+		926EAE2D20415731008DDD90 /* MinePreferentialViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinePreferentialViewController.h; sourceTree = "<group>"; };
+		926EAE2E20415731008DDD90 /* MinePreferentialViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinePreferentialViewController.m; sourceTree = "<group>"; };
+		926EAE3020415787008DDD90 /* MinePreferentialCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinePreferentialCell.h; sourceTree = "<group>"; };
+		926EAE3120415787008DDD90 /* MinePreferentialCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinePreferentialCell.m; sourceTree = "<group>"; };
+		926EAE3320416695008DDD90 /* LSJPreferentialModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJPreferentialModel.h; sourceTree = "<group>"; };
+		926EAE3420416695008DDD90 /* LSJPreferentialModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJPreferentialModel.m; sourceTree = "<group>"; };
+		926EAE36204169D5008DDD90 /* LSJPreferentialController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJPreferentialController.h; sourceTree = "<group>"; };
+		926EAE37204169D5008DDD90 /* LSJPreferentialController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJPreferentialController.m; sourceTree = "<group>"; };
 		926EDC582015C06800A93A01 /* ZYSpreadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSpreadButton.m; sourceTree = "<group>"; };
 		926EDC592015C06800A93A01 /* ZYSpreadSubButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSpreadSubButton.m; sourceTree = "<group>"; };
 		926EDC5A2015C06800A93A01 /* ZYSpreadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSpreadButton.h; sourceTree = "<group>"; };
@@ -782,6 +794,10 @@
 				9293C7872010363300A29ED3 /* LSJWaWaDeliverController.m */,
 				9293C7892010364600A29ED3 /* LSJWaWaExchangeController.h */,
 				9293C78A2010364600A29ED3 /* LSJWaWaExchangeController.m */,
+				926EAE2D20415731008DDD90 /* MinePreferentialViewController.h */,
+				926EAE2E20415731008DDD90 /* MinePreferentialViewController.m */,
+				926EAE36204169D5008DDD90 /* LSJPreferentialController.h */,
+				926EAE37204169D5008DDD90 /* LSJPreferentialController.m */,
 			);
 			path = NewPersonal;
 			sourceTree = "<group>";
@@ -814,6 +830,8 @@
 				9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */,
 				924FFBCB202591EE006D0C0F /* LSJPayPopView.h */,
 				924FFBCC202591EE006D0C0F /* LSJPayPopView.m */,
+				926EAE3020415787008DDD90 /* MinePreferentialCell.h */,
+				926EAE3120415787008DDD90 /* MinePreferentialCell.m */,
 			);
 			path = NewPersonalView;
 			sourceTree = "<group>";
@@ -1108,6 +1126,8 @@
 				9203C62B1FFF32340059708F /* RechargeModel.m */,
 				92B34763202BF022005F2F70 /* LSJMsgModel.h */,
 				92B34764202BF022005F2F70 /* LSJMsgModel.m */,
+				926EAE3320416695008DDD90 /* LSJPreferentialModel.h */,
+				926EAE3420416695008DDD90 /* LSJPreferentialModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1607,7 +1627,7 @@
 				TargetAttributes = {
 					9260ABC01FA73AE200EA1881 = {
 						CreatedOnToolsVersion = 9.0;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1761,8 +1781,10 @@
 				9267A03C1FA9B5FC0058AA70 /* FXRoomCell.m in Sources */,
 				9248B6DA1FB3F51700633CDA /* FXAboutUsController.m in Sources */,
 				9248B6B01FB2B6CF00633CDA /* FXRechargeRecordContoller.m in Sources */,
+				926EAE38204169D5008DDD90 /* LSJPreferentialController.m in Sources */,
 				928EC8201FB1818A0072C68B /* MOFSPickerManager.m in Sources */,
 				9203C6321FFF4F870059708F /* LSJKoulingPopView.m in Sources */,
+				926EAE3220415787008DDD90 /* MinePreferentialCell.m in Sources */,
 				92570DE21FAB54AC00232AE0 /* DYGActionSheetController.m in Sources */,
 				928EC81E1FB1818A0072C68B /* MOFSAddressPickerView.m in Sources */,
 				928349611FC660C50012A2D1 /* FXOnlineIconCell.m in Sources */,
@@ -1770,6 +1792,7 @@
 				9267A0721FAB28900058AA70 /* FXTextDetailCell.m in Sources */,
 				923820BA1FD172B300D58B07 /* LSJHasNetwork.m in Sources */,
 				928EC8241FB1818A0072C68B /* GDataXMLNode.m in Sources */,
+				926EAE2F20415731008DDD90 /* MinePreferentialViewController.m in Sources */,
 				928EC8271FB18DF20072C68B /* FXAddressCell.m in Sources */,
 				9217B5511FC42AB900B506EB /* DYGEnCode.m in Sources */,
 				9267A0691FAB07D50058AA70 /* DYGPersonInfoTbCell.m in Sources */,
@@ -1802,6 +1825,7 @@
 				92744F491FC03BC400F8D42C /* UIImage+ColorAtPixel.m in Sources */,
 				92570DBA1FAB4E9D00232AE0 /* FXCommentView.m in Sources */,
 				92570DE01FAB54AC00232AE0 /* NSString+DYGAdd.m in Sources */,
+				926EAE3520416695008DDD90 /* LSJPreferentialModel.m in Sources */,
 				9293C785201035FE00A29ED3 /* LSJWaWaDepositController.m in Sources */,
 				9267A06F1FAB20BF0058AA70 /* DYGPopDetailView.m in Sources */,
 				9248B6D11FB32BE900633CDA /* FXHelpController.m in Sources */,
@@ -2019,8 +2043,8 @@
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2156,8 +2180,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "e8cbe65d-7788-4984-a1ef-0fece1a71723";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhuale_distribution_pp;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
@@ -2173,8 +2197,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = zzl/zzl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 8285362Q6G;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2310,8 +2334,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanstars.zhuazhualeww;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "e8cbe65d-7788-4984-a1ef-0fece1a71723";
+				PROVISIONING_PROFILE_SPECIFIER = zhuazhuale_distribution_pp;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";

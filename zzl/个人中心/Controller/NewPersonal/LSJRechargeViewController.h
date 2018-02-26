@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class AccountItem;
+@class AccountItem,LSJPreferentialModel;
 @interface LSJRechargeViewController : UITableViewController
 
 @property (nonatomic,strong) AccountItem *item;
+@property (nonatomic,strong) LSJPreferentialModel *model;
 @property (nonatomic,copy) NSString *firstpunch;
 @end

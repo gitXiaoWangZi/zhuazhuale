@@ -27,10 +27,11 @@
 #import "ZYSpreadSubButton.h"
 #import "FXNotificationController.h"
 #import "FXTaskViewController.h"
+#import <SDCycleScrollView.h>
 
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
-@interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomManagerDelegate>
+@interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomManagerDelegate,SDCycleScrollViewDelegate,FXHomeLoginSuccessPopViewDelegate>
 
 /**
  *  轮播图
@@ -45,6 +46,7 @@
 @property (nonatomic,strong) NSMutableArray *roomsArray;
 
 @property (nonatomic,strong) NSArray *bannerArray;
+@property (nonatomic,strong) NSArray *popBannerArray;
 @property (nonatomic,strong) NSMutableArray *roomPicArray;
 @property (nonatomic, assign) BOOL passValidity;
 @property (nonatomic,strong) FXHomePopView *popView;
@@ -56,6 +58,10 @@
 @property (nonatomic,strong) ZYSpreadButton *spreadBtn;
 @property (nonatomic,strong) ZYSpreadSubButton *spreadSubBtn0;
 @property (nonatomic,strong) ZYSpreadSubButton *spreadSubBtn1;
+
+//弹出的轮播页面
+@property (nonatomic,strong) UIView *cycleSBgView;
+@property (nonatomic,strong) SDCycleScrollView *cycleS;
 
 @end
 
@@ -102,6 +108,119 @@
     [self.view addSubview:_bgImageV];
     [self.view sendSubviewToBack:_bgImageV];
     [self loadVersionData];
+}
+
+#pragma mark 请求弹出式轮播图数据
+- (void)loadPopScrollData{
+    NSString *path = @"peacock";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            self.popBannerArray = [FXHomeBannerItem mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+            if (self.popBannerArray.count > 0) {
+                [self addPopScrollV];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+#pragma mark 添加弹出式轮播图
+- (void)addPopScrollV{
+    UIView *cycleSBgView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.cycleSBgView = cycleSBgView;
+    cycleSBgView.backgroundColor = DYGAColor(0, 0, 0, 0.6);
+    [[UIApplication sharedApplication].keyWindow addSubview:cycleSBgView];
+    
+    NSMutableArray *picArr = [NSMutableArray array];
+    for (FXHomeBannerItem *item in self.popBannerArray) {
+        [picArr addObject:item.img_path];
+    }
+    
+    SDCycleScrollView *cycleS = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(Px(42.5), 0,Px(290), Py(348)) delegate:self placeholderImage:[UIImage imageNamed:@"home_pop_default"]];
+    self.cycleS = cycleS;
+    cycleS.layer.cornerRadius = 37;
+    cycleS.layer.masksToBounds = YES;
+    cycleS.center = cycleSBgView.center;
+    cycleS.imageURLStringsGroup = picArr;
+    [cycleSBgView addSubview:cycleS];
+    
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftBtn setBackgroundImage:[UIImage imageNamed:@"home_pop_leftArrow"] forState:UIControlStateNormal];
+    leftBtn.frame = CGRectMake(Px(10), 0, Px(19), Py(37));
+    [leftBtn addTarget:self action:@selector(leftScrollClick:) forControlEvents:UIControlEventTouchUpInside];
+    leftBtn.centerY = cycleSBgView.centerY;
+    [cycleSBgView addSubview:leftBtn];
+    
+    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightBtn setBackgroundImage:[UIImage imageNamed:@"home_pop_rightArrow"] forState:UIControlStateNormal];
+    rightBtn.frame = CGRectMake(kScreenWidth - Px(29), 0, Px(19), Py(37));
+    [rightBtn addTarget:self action:@selector(rightScrollClick:) forControlEvents:UIControlEventTouchUpInside];
+    rightBtn.centerY = cycleSBgView.centerY;
+    [cycleSBgView addSubview:rightBtn];
+    
+    UIButton *errorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [errorBtn setBackgroundImage:[UIImage imageNamed:@"home_pop_error"] forState:UIControlStateNormal];
+    errorBtn.frame = CGRectMake(kScreenWidth - Px(43), Py(30), Px(33), Px(33));
+    [errorBtn addTarget:self action:@selector(errorScrollClick:) forControlEvents:UIControlEventTouchUpInside];
+    [cycleSBgView addSubview:errorBtn];
+//    if (self.popBannerArray.count<2) {
+        leftBtn.hidden = YES;
+        rightBtn.hidden = YES;
+//    }
+}
+
+- (void)leftScrollClick:(UIButton *)sender{
+    
+//    for (UIView *subV in self.cycleS.subviews) {
+//        if ([subV isKindOfClass:[UICollectionView class]]) {
+//            UICollectionView *scroV = (UICollectionView *)subV;
+//
+//            NSInteger index = scroV.contentOffset.x/self.cycleS.width;
+//        }
+//    }
+//    self.cycleS.itemDidScrollOperationBlock = ^(NSInteger currentIndex) {
+//        NSLog(@"告诉我这是滴%ld",currentIndex);
+//        if (currentIndex>1) {
+//            [weakSelf.cycleS makeScrollViewScrollToIndex:currentIndex-1];
+//        }else{
+//            [weakSelf.cycleS makeScrollViewScrollToIndex:self.popBannerArray.count - 1];
+//        }
+//    };
+}
+
+- (void)rightScrollClick:(UIButton *)sender{
+//    if (currentIndex<self.popBannerArray.count) {
+//        [weakSelf.cycleS makeScrollViewScrollToIndex:currentIndex+1];
+//    }else{
+//        [weakSelf.cycleS makeScrollViewScrollToIndex:0];
+//    }
+}
+
+- (void)errorScrollClick:(UIButton *)sender{
+    [self.cycleSBgView removeFromSuperview];
+}
+
+#pragma mark SDCycleScrollViewDelegate
+/** 点击图片回调 */
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
+    [self.cycleSBgView removeFromSuperview];
+    if (![[VisiteTools shareInstance] isVisite]) {
+//        [MobClick event:@"main_banner_clieck"];
+        FXHomeBannerItem *item = self.popBannerArray[index];
+        FXGameWebController *webVC = [[FXGameWebController alloc] init];
+        webVC.item = item;
+        [self.navigationController pushViewController:webVC animated:YES];
+    }else{
+        [[VisiteTools shareInstance] outLogin];
+    }
+}
+
+/** 图片滚动回调 */
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index{
+    
 }
 
 #pragma mark 版本号
@@ -620,6 +739,8 @@
                 }
             }else{//已签到
                 NSLog(@"已签到");
+                
+                [self loadPopScrollData];
             }
         }
     } failure:^(NSError *error) {
@@ -639,6 +760,7 @@
             self.loginPopView.frame = self.view.bounds;
             self.loginPopView.day = day;
             self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
+            self.loginPopView.delegate = self;
             [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
         }
     } failure:^(NSError *error) {
@@ -646,8 +768,19 @@
     }];
 }
 
+#pragma mark FXHomeLoginSuccessPopViewDelegate
+- (void)dealThingAfterSuccess{
+    [self loadPopScrollData];
+}
+
 #pragma mark --懒加载
 
+- (NSArray *)popBannerArray{
+    if (!_popBannerArray) {
+        _popBannerArray = [NSArray array];
+    }
+    return _popBannerArray;
+}
 - (NSMutableArray *)roomPicArray{
     if (!_roomPicArray) {
         _roomPicArray = [NSMutableArray array];

@@ -26,6 +26,7 @@
 #import "FXRechargeRecordContoller.h"
 #import "LSJRechargeViewController.h"
 #import "LSJKoulingPopView.h"
+#import "LSJPreferentialController.h"
 
 @interface LSJPersonalTableViewController ()<LSJPersonalHeaderViewDelegate>
 
@@ -192,6 +193,9 @@ static NSString *const cellID = @"LSJMineCell";
         }else if (indexPath.row == 3) {
             FXAddressManageController *addressVC = [[FXAddressManageController alloc] init];
             [self.navigationController pushViewController:addressVC animated:YES];
+        }else if (indexPath.row == 4) {
+            LSJPreferentialController *preferentialVC = [[LSJPreferentialController alloc] init];
+            [self.navigationController pushViewController:preferentialVC animated:YES];
         }
     }else{
         if (indexPath.row == 0) {
@@ -308,7 +312,8 @@ static NSString *const cellID = @"LSJMineCell";
         _dataArray = @[@[@{@"image":@"mine_header_myWawa",@"name":@"我的娃娃"},
                          @{@"image":@"mine_header_gameRecord",@"name":@"游戏记录"},
                          @{@"image":@"mine_header_task",@"name":@"每日任务"},
-                         @{@"image":@"mine_header_address",@"name":@"收货地址"}],
+                         @{@"image":@"mine_header_address",@"name":@"收货地址"},
+                         @{@"image":@"mine_header_preferential",@"name":@"优惠券"}],
                        @[@{@"image":@"mine_header_yaoqing",@"name":@"邀请好友"},
                          @{@"image":@"mine_header_kouling",@"name":@"口令兑换"},
                          @{@"image":@"mine_phone_number",@"name":@"绑定手机号"},
@@ -322,7 +327,8 @@ static NSString *const cellID = @"LSJMineCell";
         _phoneArray = @[@[@{@"image":@"mine_header_myWawa",@"name":@"我的娃娃"},
                          @{@"image":@"mine_header_gameRecord",@"name":@"游戏记录"},
                          @{@"image":@"mine_header_task",@"name":@"每日任务"},
-                         @{@"image":@"mine_header_address",@"name":@"收货地址"}],
+                          @{@"image":@"mine_header_address",@"name":@"收货地址"},
+                          @{@"image":@"mine_header_preferential",@"name":@"优惠券"}],
                        @[@{@"image":@"mine_header_yaoqing",@"name":@"邀请好友"},
                          @{@"image":@"mine_header_kouling",@"name":@"口令兑换"},
                          @{@"image":@"mine_header_help",@"name":@"帮助与反馈"}]];

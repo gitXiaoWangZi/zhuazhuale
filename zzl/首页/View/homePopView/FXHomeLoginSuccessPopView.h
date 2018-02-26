@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol FXHomeLoginSuccessPopViewDelegate <NSObject>
+
+- (void)dealThingAfterSuccess;
+@end
+
 @interface FXHomeLoginSuccessPopView : UIView
 
 @property (nonatomic,copy) NSString *day;
 @property (nonatomic,copy) NSString *money;
+@property (nonatomic,assign) id<FXHomeLoginSuccessPopViewDelegate> delegate;
 @end
