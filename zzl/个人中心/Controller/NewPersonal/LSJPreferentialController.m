@@ -11,7 +11,7 @@
 #import "LSJPreferentialModel.h"
 #import "LSJRechargeViewController.h"
 
-@interface LSJPreferentialController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface LSJPreferentialController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 {
     NSInteger page;
 }
@@ -74,6 +74,8 @@ static NSString *const cellID = @"MinePreferentialCell";
         UITableView *tableV = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth * i, 0, kScreenWidth, self.myScrollV.height) style:UITableViewStylePlain];
         tableV.delegate = self;
         tableV.dataSource = self;
+        tableV.emptyDataSetSource = self;
+        tableV.emptyDataSetDelegate = self;
         tableV.tag = 200+i;
         tableV.backgroundColor = DYGColorFromHex(0xf7f7f7);
         [tableV registerClass:[MinePreferentialCell class] forCellReuseIdentifier:cellID];
@@ -211,6 +213,7 @@ static NSString *const cellID = @"MinePreferentialCell";
             }
             if (tempArr.count < 20) {
                 [self.currentTableV.mj_footer endRefreshingWithNoMoreData];
+                self.currentTableV.mj_footer = nil;
             }else{
                 self.currentTableV.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
             }
@@ -222,6 +225,22 @@ static NSString *const cellID = @"MinePreferentialCell";
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+#pragma mark DZNEmptyDataSetSource,DZNEmptyDataSetDelegate
+- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return [UIImage imageNamed:@"mine_empty_placeholder"];
+}
+
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view
+{
+    [self refreshTableVWithPage:page];
+}
+
+- (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return -Py(103);
 }
 
 #pragma mark lazyload

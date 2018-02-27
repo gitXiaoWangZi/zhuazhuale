@@ -15,4 +15,5 @@ pod 'JPush'
 pod 'FCFileManager', '~> 1.0.17'
 pod 'XHLaunchAd'
 pod 'SDCycleScrollView','~> 1.75'
+pod 'DZNEmptyDataSet'
 end

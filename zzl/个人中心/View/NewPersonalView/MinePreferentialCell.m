@@ -56,7 +56,7 @@
     }];
     [self addSubview:self.useBtn];
     [self.useBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.bgImgV.mas_right).offset(-Px(26));
+        make.right.equalTo(self.bgImgV.mas_right).offset(-Px(18));
         make.centerY.equalTo(self.bgImgV.mas_centerY);
     }];
     self.useBtn.userInteractionEnabled = NO;

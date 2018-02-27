@@ -10,7 +10,7 @@
 #import "MinePreferentialCell.h"
 #import "LSJPreferentialModel.h"
 
-@interface MinePreferentialViewController ()
+@interface MinePreferentialViewController ()<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 {
     NSInteger currentPage;
 }
@@ -26,6 +26,8 @@ static NSString *const cellID  = @"MinePreferentialCell";
     self.title = @"优惠券";
     currentPage = 0;
     self.tableView.backgroundColor = DYGColorFromHex(0xf7f7f7);
+    self.tableView.emptyDataSetSource = self;
+    self.tableView.emptyDataSetDelegate = self;
     [self.tableView registerClass:[MinePreferentialCell class] forCellReuseIdentifier:cellID];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
@@ -91,6 +93,22 @@ static NSString *const cellID  = @"MinePreferentialCell";
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];
+}
+
+#pragma mark DZNEmptyDataSetSource,DZNEmptyDataSetDelegate
+- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return [UIImage imageNamed:@"mine_empty_placeholder"];
+}
+
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view
+{
+    [self loadNewData];
+}
+
+- (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView
+{
+    return -Py(103);
 }
 
 #pragma mark lazyload
