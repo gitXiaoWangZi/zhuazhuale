@@ -102,7 +102,7 @@
         return NO;
     }
     if ([urlString containsString:@"friendspay"] || [urlString containsString:@"mine"]) {
-        [self submitOtherPay];
+        [self shareActionData];
         return NO;
     }
     if ([urlString containsString:@"activity"]) {
@@ -136,24 +136,9 @@
     }];
 }
 
-#pragma mark 代购
-- (void)submitOtherPay{
-    NSString *path = @"friendSharePay";
-    NSDictionary *params = @{@"uid":KUID};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-        NSDictionary *dic = (NSDictionary *)json;
-        if ([dic[@"code"] integerValue] == 200) {
-            _isOtherPay = YES;
-            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-}
-
 - (void)shareActionData{
-        NSString *path = @"shares";
-    NSDictionary *params = @{@"uid":KUID};
+        NSString *path = @"shareMerger";
+    NSDictionary *params = @{@"uid":KUID,@"bannerid":self.item.ID};
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {

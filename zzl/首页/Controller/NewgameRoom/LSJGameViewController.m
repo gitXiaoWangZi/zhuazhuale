@@ -16,6 +16,7 @@
 #import "LSJRechargeViewController.h"
 #import "FXCommentView.h"
 #import <AVFoundation/AVFoundation.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "BulletManager.h"
 #import "UIButton+Position.h"
 #import "ZYCountDownView.h"
@@ -23,10 +24,12 @@
 #import "LSJGameYuEPopView.h"
 #import "FXHomeBannerItem.h"
 #import "FXGameWebController.h"
+#import "LSJSpoilsController.h"
 
 @interface LSJGameViewController ()<UIScrollViewDelegate,WwGameManagerDelegate,LSJTopViewDelegate,LSJOperationNormalViewDelegate,ZYPlayOperationViewDelegate,AVAudioPlayerDelegate,FXCommentViewDelegate,UITextFieldDelegate,ZYCountDownViewDelegate,FXGameResultViewDelegate,LSJGameYuEPopViewDelegate>
 {
     BOOL isPlayGameing;
+    BOOL resultState;
 }
 @property (nonatomic,strong) ZYRoomVerticalScroll *myScroV;
 @property (nonatomic,strong) BottomViewController *BottomViewVC;
@@ -84,6 +87,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    resultState = NO;
     isPlayGameing = NO;
     self.commentBtnStatue = 1;
     self.musicBtnStatue = 1;
@@ -571,6 +575,7 @@
     if (isSuccess) {
         [self loadgetWaWaSuccessData];
     }
+    resultState = isSuccess;
     [self loadPlayGameSuccessData];
     //通知个人中心 更新钻石数量
     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
@@ -654,27 +659,111 @@
 }
 
 #pragma mark FXGameResultViewDelegate
-- (void)gameAgainAction{
+- (void)gameAgainOrBringAction{
     
     dispatch_source_cancel(_timer0);
-    [self playGame];
+    if (resultState) {
+        self.isNoBack = YES;
+        LSJSpoilsController *spoils = [[LSJSpoilsController alloc] init];
+        [self.navigationController pushViewController:spoils animated:YES];
+    }else{
+        [self playGame];
+    }
 }
 
-- (void)cancelAction{
+- (void)cancelOrShareAction{
+    [self dismissAction];
+    if (resultState) {//分享
+        [self getVideoOrdingId];
+    }
+}
+
+- (void)dismissAction{
     if (self.timer) {
         [self.timer invalidate];
     }
-    
     dispatch_source_cancel(_timer0);
     _timer0 = nil;
     self.topView.normalView.gameBtn.userInteractionEnabled = YES;
 }
+
+#pragma mark 视频分享模块开始————————————————————————————————————————————————————
+- (void)getVideoOrdingId{
+    [[WwRoomManager RoomMgrInstance] requestCatchHistory:self.model.ID atPage:1 withComplete:^(NSInteger code, NSString *message, NSArray<WwRoomCatchRecordItem *> *list) {
+        if (code == WwCodeSuccess) {
+            WwRoomCatchRecordItem *info = list[0];
+            [self shareActionDataWithOrdingID:info.orderId];
+        }else{
+            [MBProgressHUD showMessage:@"获取视频失败" toView:self.view];
+        }
+    }];
+}
+
+- (void)shareActionDataWithOrdingID:(NSString *)orderId{
+    NSString *path = @"videoShare";
+    NSDictionary *params = @{@"orderId":orderId};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)shareActionWithHref:(NSString *)href title:(NSString *)title content:(NSString *)content imageArr:(NSArray *)images0{
+    NSMutableDictionary *shareParams0 = [NSMutableDictionary dictionary];
+    NSURL *url = [NSURL URLWithString:href];
+    [shareParams0 SSDKSetupShareParamsByText:content images:images0 url:url title:title type:SSDKContentTypeAuto];
+    
+    [shareParams0 SSDKSetupSinaWeiboShareParamsByText:[NSString stringWithFormat:@"%@ %@",content,href] title:title images:images0 video:nil url:nil latitude:0.0 longitude:0.0 objectID:nil isShareToStory:NO type:SSDKContentTypeAuto];
+    
+    [shareParams0 SSDKSetupWeChatParamsByText:content title:title url:url thumbImage:nil image:images0 musicFileURL:nil extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformSubTypeWechatSession];
+    
+    [shareParams0 SSDKSetupWeChatParamsByText:content title:title url:url thumbImage:nil image:images0 musicFileURL:nil extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformSubTypeWechatTimeline];
+    
+    //    [shareParams0 SSDKSetupQQParamsByText:content title:title url:url audioFlashURL:nil videoFlashURL:nil thumbImage:nil images:images0 type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformTypeQQ];
+    
+    [ShareSDK showShareActionSheet:self.view items:nil shareParams:shareParams0 onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+        switch (state) {
+            case SSDKResponseStateSuccess:
+            {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                    message:nil
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles:nil];
+                [alertView show];
+                break;
+            }
+            case SSDKResponseStateFail:
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                message:[NSString stringWithFormat:@"%@",error]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil, nil];
+                [alert show];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+}
+
+#pragma mark 视频分享模块结束————————————————————————————————————————————————————
+
+
+
 #pragma mark--- LSJGameYuEPopViewdelegate余额不足弹出框处理
 - (void)clickPayBy:(gameYuEPopViewType)payType{
     self.yuePopView.hidden = YES;
     switch (payType) {
         case gameYuEPopViewTypeOtherPay:
         {
+            self.isNoBack = YES;
             FXHomeBannerItem *item = [FXHomeBannerItem new];
             item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
             item.title = @"好友助力";

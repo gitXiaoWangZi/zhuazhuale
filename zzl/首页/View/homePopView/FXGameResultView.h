@@ -10,8 +10,9 @@
 
 @protocol FXGameResultViewDelegate<NSObject>
 
-- (void)gameAgainAction;
-- (void)cancelAction;
+- (void)gameAgainOrBringAction;
+- (void)cancelOrShareAction;
+- (void)dismissAction;
 
 
 @end

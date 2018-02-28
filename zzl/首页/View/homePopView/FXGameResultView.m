@@ -15,6 +15,7 @@
 @property(nonatomic,strong) UIImageView * resultImg;
 @property (nonatomic,strong) UIButton *game;
 @property (nonatomic,strong) UIButton *cancel;
+@property (nonatomic,strong) UIButton *dismiss;
 @property (nonatomic,strong) UILabel *titleL;
 @end
 
@@ -47,6 +48,12 @@
         make.width.equalTo(@(Px(264)));
         make.height.equalTo(@(Px(355.5)));
     }];
+    [self.bgView addSubview:self.dismiss];
+    [self.dismiss mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.resultImg.mas_top).offset(Py(95));
+        make.right.equalTo(self.resultImg.mas_right).offset(-5);
+    }];
+    self.dismiss.hidden = YES;
     [self.bgView addSubview:self.titleL];
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.resultImg.mas_top).offset(Py(115));
@@ -59,23 +66,25 @@
         make.top.equalTo(self.titleL.mas_bottom).offset(Py(5));
         make.height.equalTo(@(Py(21)));
     }];
-    [self.bgView addSubview:self.game];
-    [self.game mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.bgView addSubview:self.cancel];
+    [self.cancel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.desL.mas_bottom).offset(Py(20));
         make.centerX.equalTo(self.bgView);
     }];
-    [self.bgView addSubview:self.cancel];
-    [self.cancel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.game.mas_bottom).offset(Py(20));
+    [self.bgView addSubview:self.game];
+    [self.game mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cancel.mas_bottom).offset(Py(20));
         make.centerX.equalTo(self.bgView);
     }];
-    
 }
 
 - (void)showStatusView:(BOOL)isSuccess{
     if (isSuccess) {
         self.bgImg.hidden = NO;
+        self.dismiss.hidden = NO;
         self.resultImg.image = [UIImage imageNamed:@"game_result_success_bg"];
+        [self.cancel setImage:[UIImage imageNamed:@"game_result_share"] forState:UIControlStateNormal];
+        [self.game setImage:[UIImage imageNamed:@"game_result_bring"] forState:UIControlStateNormal];
         self.titleL.text = @"天呀你是抓娃娃之神吗";
     }else{
         self.bgImg.hidden = YES;
@@ -120,6 +129,16 @@
     return _game;
 }
 
+- (UIButton *)dismiss{
+    if (!_dismiss) {
+        _dismiss = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dismiss setImage:[UIImage imageNamed:@"game_result_error"] forState:UIControlStateNormal];
+        [_dismiss addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];
+        _dismiss.adjustsImageWhenHighlighted = NO;
+    }
+    return _dismiss;
+}
+
 - (UIImageView *)resultImg{
     if (!_resultImg) {
         _resultImg = [UIImageView new];
@@ -150,14 +169,20 @@
 }
 - (void)cancel:(UIButton *)sender{
     [self removeFromSuperview];
-    if ([self.delegate respondsToSelector:@selector(cancelAction)]) {
-        [self.delegate cancelAction];
+    if ([self.delegate respondsToSelector:@selector(cancelOrShareAction)]) {
+        [self.delegate cancelOrShareAction];
     }
 }
 - (void)game:(UIButton *)sender{
     [self removeFromSuperview];
-    if ([self.delegate respondsToSelector:@selector(gameAgainAction)]) {
-        [self.delegate gameAgainAction];
+    if ([self.delegate respondsToSelector:@selector(gameAgainOrBringAction)]) {
+        [self.delegate gameAgainOrBringAction];
+    }
+}
+- (void)dismiss:(UIButton *)sender{
+    [self removeFromSuperview];
+    if ([self.delegate respondsToSelector:@selector(dismissAction)]) {
+        [self.delegate dismissAction];
     }
 }
 
