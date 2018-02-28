@@ -72,7 +72,7 @@
         }else{
             orderID = self.orderId;
         }
-        NSDictionary *params = @{@"orderId":orderID};
+        NSDictionary *params = @{@"orderId":orderID,@"uid":KUID,@"auth":@"ios"};
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {

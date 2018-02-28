@@ -701,7 +701,7 @@
 
 - (void)shareActionDataWithOrdingID:(NSString *)orderId{
     NSString *path = @"videoShare";
-    NSDictionary *params = @{@"orderId":orderId};
+    NSDictionary *params = @{@"orderId":orderId,@"uid":KUID,@"auth":@"ios"};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
