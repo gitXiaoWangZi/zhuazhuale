@@ -63,6 +63,8 @@
 @property (nonatomic,strong) UIView *cycleSBgView;
 @property (nonatomic,strong) SDCycleScrollView *cycleS;
 
+@property (nonatomic,strong) UIView *versionBgView;//版本更新view
+
 @end
 
 @implementation FXHomeViewController
@@ -218,39 +220,84 @@
     }
 }
 
-/** 图片滚动回调 */
-- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index{
-    
-}
-
 #pragma mark 版本号
 - (void)loadVersionData{
+    
     NSString *path = @"getNewIos";
     [DYGHttpTool postWithURL:path params:nil sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBundleVersionKey];
             NSString *newVersion = dic[@"data"][@"version"];
-            if ([self isNeedUpdateWithsaveVersion:saveVersion newVersion:newVersion]) {
-                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:dic[@"data"][@"content"] message:nil preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectZero];
-                    NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1320308247?mt=8"];
-                    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-                    [webV loadRequest:request];
-                    [self.view addSubview:webV];
-                }];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"暂不" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    NSLog(@"Cancel Action");
-                }];
-                [alertVC addAction:okAction];
-                [alertVC addAction:cancelAction];
-                [self presentViewController:alertVC animated:YES completion:nil];
+            if (![self isNeedUpdateWithsaveVersion:saveVersion newVersion:newVersion]) {
+                UIView *windowView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+                self.versionBgView = windowView;
+                windowView.backgroundColor = DYGAColor(0, 0, 0, 0.6);
+                [[UIApplication sharedApplication].keyWindow addSubview:windowView];
+                
+                UIView *centerV = [[UIView alloc] initWithFrame:CGRectMake(Px(41), Py(107), kScreenWidth - Px(82), Py(352))];
+                centerV.backgroundColor = [UIColor clearColor];
+                [windowView addSubview:centerV];
+                
+                UIImageView *cenImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_version_background"]];
+                cenImgV.frame = centerV.bounds;
+                [centerV addSubview:cenImgV];
+                
+                NSString *content = dic[@"data"][@"content"];
+                if ([content containsString:@"\\n"]) {
+                    NSArray *arr = [content componentsSeparatedByString:@"\\n"];
+                    content = [arr componentsJoinedByString:@"\n"];
+                }
+                UILabel *contentL = [[UILabel alloc] initWithFrame:CGRectMake(Px(34), Py(218),centerV.width - Px(68), Py(60))];
+                contentL.text = content;//dic[@"data"][@"content"];
+                contentL.numberOfLines = 0;
+                contentL.textColor = DYGColor(141, 141, 141);
+                contentL.font = kPingFangSC_Medium(14);
+                [centerV addSubview:contentL];
+                
+                UIButton *dissBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [dissBtn setBackgroundImage:[UIImage imageNamed:@"home_version_close"] forState:UIControlStateNormal];
+                dissBtn.frame = CGRectMake(0, Py(107)+Py(352), Px(52), Py(71));
+                dissBtn.centerX = centerV.centerX;
+                [dissBtn addTarget:self action:@selector(cancelVersionView:) forControlEvents:UIControlEventTouchUpInside];
+                [windowView addSubview:dissBtn];
+                
+                UILabel *versionL = [[UILabel alloc] initWithFrame:CGRectMake(Px(204), Py(116), Px(50), Py(18))];
+                versionL.text = newVersion;
+                versionL.font = kPingFangSC_Medium(15);
+                versionL.textColor = [UIColor whiteColor];
+                versionL.textAlignment = NSTextAlignmentCenter;
+                versionL.backgroundColor = DYGColor(255, 174, 0);
+                versionL.layer.cornerRadius = Py(3);
+                [centerV addSubview:versionL];
+                
+                UIButton *sjBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [sjBtn setBackgroundImage:[UIImage imageNamed:@"home_version_button"] forState:UIControlStateNormal];
+                sjBtn.frame = CGRectMake(Px(34), centerV.height - Py(70),centerV.width - Px(68), Py(45));
+                [sjBtn addTarget:self action:@selector(sjAction:) forControlEvents:UIControlEventTouchUpInside];
+                [centerV addSubview:sjBtn];
             }
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+- (void)cancelVersionView:(UIButton *)sender{
+    [self.versionBgView removeFromSuperview];
+    //请求签到天数数据
+    [self loadSignDayNumData];
+}
+
+- (void)sjAction:(UIButton *)sender{
+    [self.versionBgView removeFromSuperview];
+    UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectZero];
+    NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1320308247?mt=8"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [webV loadRequest:request];
+    [self.view addSubview:webV];
+    //请求签到天数数据
+    [self loadSignDayNumData];
 }
 
 //版本号添加一定要3位数，例如：1.3.1
@@ -346,7 +393,7 @@
         NSLog(@"代付");
         if (![[VisiteTools shareInstance] isVisite]) {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
+            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;
@@ -462,7 +509,7 @@
         if (has) {//有网
             [self loadBannerData];
             //请求签到天数数据
-            [self loadSignDayNumData];
+//            [self loadSignDayNumData];
         }else{//没网
             [MBProgressHUD showMessage:@"请检查网络" toView:self.view];
             return ;

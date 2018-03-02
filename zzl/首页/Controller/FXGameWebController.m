@@ -14,7 +14,9 @@
 #import "LSJRechargeViewController.h"
 
 @interface FXGameWebController ()<UIWebViewDelegate,LSJPayPopViewDelegate>
-
+{
+    NSDictionary *dataDic;
+}
 @property (nonatomic,strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *progressView;
 @property (nonatomic, strong) CADisplayLink *displayLink;
@@ -38,7 +40,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    dataDic = [NSDictionary dictionary];
     [self addWebView];
+    if ([self.item.title isEqualToString:@"好友助力"]) {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"助力记录" style:UIBarButtonItemStylePlain target:self action:@selector(HelpRecord:)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
+}
+
+- (void)HelpRecord:(UIBarButtonItem *)item {
+    FXHomeBannerItem *newitem = [FXHomeBannerItem new];
+    newitem.href = @"http://openapi.wawa.zhuazhuale.xin/zhuli";
+    newitem.title = @"好友助力 ";
+    FXGameWebController *vc = [[FXGameWebController alloc] init];
+    vc.item = newitem;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)addWebView
@@ -76,7 +92,7 @@
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {
-                
+                dataDic = dic;
                 NSURL *url = [NSURL URLWithString:dic[@"data"][@"linkurl"]];
                 NSURLRequest *request = [NSURLRequest requestWithURL:url];
                 [self.webView loadRequest:request];
@@ -101,14 +117,20 @@
         [self.navigationController pushViewController:rechargeVC animated:YES];
         return NO;
     }
-    if ([urlString containsString:@"friendspay"] || [urlString containsString:@"mine"]) {
-        [self shareActionData];
+    if ([urlString containsString:@"mine"] || [urlString containsString:@"friendspay"]) {
+        [self shareFriendpayActionData];
         return NO;
     }
     if ([urlString containsString:@"activity"]) {
         NSCharacterSet* nonDigits =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
         int remainSecond =[[urlString stringByTrimmingCharactersInSet:nonDigits] intValue];
         [self loadDiamondCard:remainSecond];
+        return NO;
+    }
+    if ([urlString containsString:@"videoshare"]) {
+        if (dataDic) {
+            [self shareActionWithHref:dataDic[@"data"][@"shareurl"] title:dataDic[@"data"][@"title"] content:dataDic[@"data"][@"conten"] imageArr:@[dataDic[@"data"][@"path"]]];
+        }
         return NO;
     }
     return YES;
@@ -137,8 +159,8 @@
 }
 
 - (void)shareActionData{
-        NSString *path = @"shareMerger";
-    NSDictionary *params = @{@"uid":KUID,@"bannerid":self.item.ID};
+        NSString *path = @"shares";
+    NSDictionary *params = @{@"uid":KUID};
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {
@@ -147,6 +169,18 @@
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];
+}
+- (void)shareFriendpayActionData{
+    NSString *path = @"friendSharePay";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (void)shareActionWithHref:(NSString *)href title:(NSString *)title content:(NSString *)content imageArr:(NSArray *)images0{

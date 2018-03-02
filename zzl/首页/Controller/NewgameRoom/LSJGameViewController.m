@@ -700,59 +700,10 @@
 }
 
 - (void)shareActionDataWithOrdingID:(NSString *)orderId{
-    NSString *path = @"videoShare";
-    NSDictionary *params = @{@"orderId":orderId,@"uid":KUID,@"auth":@"ios"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-        NSDictionary *dic = (NSDictionary *)json;
-        if ([dic[@"code"] integerValue] == 200) {
-            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+    FXGameWebController *vc = [[FXGameWebController alloc] init];
+    vc.orderId = orderId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
-
-- (void)shareActionWithHref:(NSString *)href title:(NSString *)title content:(NSString *)content imageArr:(NSArray *)images0{
-    NSMutableDictionary *shareParams0 = [NSMutableDictionary dictionary];
-    NSURL *url = [NSURL URLWithString:href];
-    [shareParams0 SSDKSetupShareParamsByText:content images:images0 url:url title:title type:SSDKContentTypeAuto];
-    
-    [shareParams0 SSDKSetupSinaWeiboShareParamsByText:[NSString stringWithFormat:@"%@ %@",content,href] title:title images:images0 video:nil url:nil latitude:0.0 longitude:0.0 objectID:nil isShareToStory:NO type:SSDKContentTypeAuto];
-    
-    [shareParams0 SSDKSetupWeChatParamsByText:content title:title url:url thumbImage:nil image:images0 musicFileURL:nil extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformSubTypeWechatSession];
-    
-    [shareParams0 SSDKSetupWeChatParamsByText:content title:title url:url thumbImage:nil image:images0 musicFileURL:nil extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformSubTypeWechatTimeline];
-    
-    //    [shareParams0 SSDKSetupQQParamsByText:content title:title url:url audioFlashURL:nil videoFlashURL:nil thumbImage:nil images:images0 type:SSDKContentTypeAuto forPlatformSubType:SSDKPlatformTypeQQ];
-    
-    [ShareSDK showShareActionSheet:self.view items:nil shareParams:shareParams0 onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
-        switch (state) {
-            case SSDKResponseStateSuccess:
-            {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
-                                                                    message:nil
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
-                [alertView show];
-                break;
-            }
-            case SSDKResponseStateFail:
-            {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
-                                                                message:[NSString stringWithFormat:@"%@",error]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil, nil];
-                [alert show];
-                break;
-            }
-            default:
-                break;
-        }
-    }];
-}
-
 #pragma mark 视频分享模块结束————————————————————————————————————————————————————
 
 
@@ -765,7 +716,7 @@
         {
             self.isNoBack = YES;
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
+            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;

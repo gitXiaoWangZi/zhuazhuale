@@ -288,7 +288,7 @@ static NSString *const cellID = @"LSJMineCell";
         case personalHeaderOtherPay:
         {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = [NSString stringWithFormat:@"%@?uid=%@",@"http://openapi.wawa.zhuazhuale.xin/zhuli",KUID];
+            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;
