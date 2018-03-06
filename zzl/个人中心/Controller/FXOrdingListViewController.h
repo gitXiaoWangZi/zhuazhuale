@@ -11,4 +11,5 @@
 @interface FXOrdingListViewController : UITableViewController
 
 @property (nonatomic,strong) NSArray *dataArray;
+@property (nonatomic,assign) BOOL isDifference;//是否补差价过来的
 @end

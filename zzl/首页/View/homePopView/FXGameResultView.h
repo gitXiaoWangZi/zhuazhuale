@@ -23,5 +23,5 @@
 @property (nonatomic,strong) UILabel *desL;
 @property (nonatomic,strong) NSTimer *timer;
 
-- (void)showStatusView:(BOOL)isSuccess;
+- (void)showStatusView:(BOOL)isSuccess special:(BOOL)isSpecial;
 @end

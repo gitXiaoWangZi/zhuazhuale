@@ -271,19 +271,24 @@
 
 //申请发货
 - (void)applySend{
-    NSMutableArray *tempArr = [NSMutableArray array];
-    for (WwDepositItem *model in self.dataArray) {
-        [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
-    }
-    [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
+    WwDepositItem *model = self.dataArray[0];
+    if ((kWaWaID == model.wid && self.dataArray.count == 10)||(kWaWaID != model.wid)||(kWaWaID == model.wid && self.isDifference == YES)) {
         
-        if (code == WwCodeSuccess) {
-            [MBProgressHUD showMessage:@"申请成功" toView:self.view];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
+        NSMutableArray *tempArr = [NSMutableArray array];
+        for (WwDepositItem *model in self.dataArray) {
+            [tempArr addObject:[NSString stringWithFormat:@"%zd",model.ID]];
         }
-    }];
+        [[WawaSDK WawaSDKInstance].userInfoMgr requestCreateOrderWithWawaIds:tempArr address:self.addressModel completeHandler:^(int code, NSString *message) {
+            
+            if (code == WwCodeSuccess) {
+                [MBProgressHUD showMessage:@"申请成功" toView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }
+        }];
+    }
+    
 }
 
 - (void)sureOrding:(UIButton *)sender{

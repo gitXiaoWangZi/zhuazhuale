@@ -214,7 +214,22 @@
         FXHomeBannerItem *item = self.popBannerArray[index];
         FXGameWebController *webVC = [[FXGameWebController alloc] init];
         webVC.item = item;
-        [self.navigationController pushViewController:webVC animated:YES];
+        if ([item.href containsString:@"freePower"]) {
+            [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_Deposit completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
+                
+                NSMutableArray *tempArr = [NSMutableArray array];
+                for (WwDepositItem *depositItem in model.depositList) {
+                    if (depositItem.wid == kWaWaID) {
+                        [tempArr addObject:depositItem];
+                    }
+                }
+                webVC.iphoneNum = [NSString stringWithFormat:@"%ld",tempArr.count];
+                webVC.roomArr = self.roomsArray;
+                [self.navigationController pushViewController:webVC animated:YES];
+            }];
+        }else{
+            [self.navigationController pushViewController:webVC animated:YES];
+        }
     }else{
         [[VisiteTools shareInstance] outLogin];
     }
@@ -323,6 +338,17 @@
             self.roomPicArray = [FXHomeHouseItem mj_objectArrayWithKeyValuesArray:dic[@"data"]];
             for (FXHomeHouseItem *item in self.roomPicArray) {
                 [self.roomIdsArray addObject:item.dicid];
+            }
+            if ([dic[@"doll"] integerValue] >= 0) {
+                [[NSUserDefaults standardUserDefaults] setInteger:[dic[@"doll"] integerValue] forKey:kSPECIALDOLLID];
+                [[WwRoomManager RoomMgrInstance] requestCatchHistory:kRoomID atPage:1 withComplete:^(NSInteger code, NSString *message, NSArray<WwRoomCatchRecordItem *> *list) {
+                    if (list.count>0) {
+                        WwRoomCatchRecordItem *item = list[0];
+                        [[NSUserDefaults standardUserDefaults] setInteger:item.wawaId forKey:kSPECIALWAWAID];
+                    }
+                }];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSPECIALDOLLID];
             }
             [self initData];
         }
@@ -690,10 +716,6 @@
         LSJGameViewController *game = [[LSJGameViewController alloc] init];
         game.model = self.roomsArray[subIndex];
         [self.navigationController pushViewController:game animated:YES];
-        
-//        FXGameWaitController * vc = [[FXGameWaitController alloc]init];
-//        vc.model = self.roomsArray[subIndex];
-//        [self.navigationController pushViewController:vc animated:YES];
     }else{
         [[VisiteTools shareInstance] outLogin];
     }
@@ -737,7 +759,22 @@
         FXHomeBannerItem *item = self.bannerArray[index];
         FXGameWebController *webVC = [[FXGameWebController alloc] init];
         webVC.item = item;
-        [self.navigationController pushViewController:webVC animated:YES];
+        if ([item.href containsString:@"freePower"]) {
+            [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_Deposit completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
+
+                NSMutableArray *tempArr = [NSMutableArray array];
+                for (WwDepositItem *depositItem in model.depositList) {
+                    if (depositItem.wid == kWaWaID) {
+                        [tempArr addObject:depositItem];
+                    }
+                }
+                webVC.iphoneNum = [NSString stringWithFormat:@"%ld",tempArr.count];
+                webVC.roomArr = self.roomsArray;
+                [self.navigationController pushViewController:webVC animated:YES];
+            }];
+        }else{
+            [self.navigationController pushViewController:webVC animated:YES];
+        }
     }else{
         [[VisiteTools shareInstance] outLogin];
     }

@@ -59,19 +59,28 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * resueId = @"spolisCell";
+    WwDepositItem *model = self.dataArray[indexPath.row];
     FXSpoilsCell * cell = [tableView dequeueReusableCellWithIdentifier:resueId];
     if (!cell) {
         cell = [[FXSpoilsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueId];
     }
-    cell.celltype = WawaList_Deposit;
-    cell.model = self.dataArray[indexPath.row];
+    if (model.wid == kWaWaID) {
+        cell.isSelectBtn.hidden = YES;
+    }else{
+        cell.celltype = WawaList_Deposit;
+    }
+    cell.model = model;
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    WwDepositItem *model = self.dataArray[indexPath.row];
+    if (model.wid == kWaWaID) {
+        return;
+    }
     FXSpoilsCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     cell.isSelectBtn.selected = !cell.isSelectBtn.selected;
-    WwDepositItem *model = self.dataArray[indexPath.row];
     model.selected = cell.isSelectBtn.selected;
     
     [self.selectArray removeAllObjects];

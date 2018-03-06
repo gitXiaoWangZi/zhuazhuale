@@ -95,11 +95,9 @@
     [self setUpUI];
     //请求接口
     [self loadData];
-
 }
 
 - (void)loadData{
-    
     //请求最近抓中记录数据
     [self loadLatesRecordData];
     //刷新娃娃详情的数据
@@ -583,7 +581,8 @@
     
     //添加弹出视图
     [self.view addSubview:self.resultPopView];
-    [self.resultPopView showStatusView:isSuccess];
+    BOOL isSpecial = kRoomID == self.model.ID?YES:NO;
+    [self.resultPopView showStatusView:isSuccess special:isSpecial];
     [self countDownAction];
 }
 
@@ -629,7 +628,7 @@
             num--;
         });
         
-        if (num <= 0 || num > 10) {
+        if (num < 0 || num > 10) {
             // 关闭定时器
             dispatch_source_cancel(timer0);
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -662,12 +661,17 @@
 - (void)gameAgainOrBringAction{
     
     dispatch_source_cancel(_timer0);
-    if (resultState) {
-        self.isNoBack = YES;
-        LSJSpoilsController *spoils = [[LSJSpoilsController alloc] init];
-        [self.navigationController pushViewController:spoils animated:YES];
-    }else{
+    
+    if (kRoomID == self.model.ID) {
         [self playGame];
+    }else{
+        if (resultState) {
+            self.isNoBack = YES;
+            LSJSpoilsController *spoils = [[LSJSpoilsController alloc] init];
+            [self.navigationController pushViewController:spoils animated:YES];
+        }else{
+            [self playGame];
+        }
     }
 }
 

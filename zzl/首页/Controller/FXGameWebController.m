@@ -12,10 +12,13 @@
 #import "FXHomeBannerItem.h"
 #import "LSJPayPopView.h"
 #import "LSJRechargeViewController.h"
+#import "LSJGameViewController.h"
+#import "FXOrdingListViewController.h"
 
 @interface FXGameWebController ()<UIWebViewDelegate,LSJPayPopViewDelegate>
 {
     NSDictionary *dataDic;
+    BOOL _isIphoneXAction;
 }
 @property (nonatomic,strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *progressView;
@@ -25,6 +28,7 @@
 @property (nonatomic,assign) BOOL isOtherPay;
 
 @property (nonatomic,strong) LSJPayPopView *payPopView;
+
 @end
 
 @implementation FXGameWebController
@@ -38,10 +42,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _isIphoneXAction = NO;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     dataDic = [NSDictionary dictionary];
     [self addWebView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderzfbPayResult:) name:@"ORDER_ZFBPAY_NOTIFICATION" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOrderPayResult:) name:@"ORDER_PAY_NOTIFICATION" object:nil];
     if ([self.item.title isEqualToString:@"好友助力"]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"助力记录" style:UIBarButtonItemStylePlain target:self action:@selector(HelpRecord:)];
         self.navigationItem.rightBarButtonItem = rightItem;
@@ -75,7 +82,12 @@
         if ([self.item.banner_type isEqualToString:@"5"]) {//大转盘
             _isChristmasList = YES;
         }
-        self.item.href = [NSString stringWithFormat:@"%@?uid=%@",self.item.href,KUID];
+        if ([self.item.href containsString:@"freePower"]) {
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@&number=%@",self.item.href,KUID,self.iphoneNum];
+        }else{
+            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",self.item.href,KUID];
+        }
+        
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.item.href]];
         [self.webView loadRequest:request];
         [self.view addSubview:self.webView];
@@ -112,6 +124,23 @@
         [self shareActionData];
         return NO;
     }
+    if ([urlString containsString:@"iphonexshare"]) {
+        [self shareCommonBannerAction];
+        return NO;
+    }
+    if ([urlString containsString:@"iphonexpay"]) {
+        NSArray *tempArr = [urlString componentsSeparatedByString:@"*"];
+        if ([tempArr[1] integerValue] == 0) {//微信
+            [self iPhone_XpayForType:YES num:tempArr[2]];
+        }else{//支付宝
+            [self iPhone_XpayForType:NO num:tempArr[2]];
+        }
+        return NO;
+    }
+    if ([urlString containsString:@"exchange"]) {
+        [self jumpWawaPageWith:NO];
+        return NO;
+    }
     if ([urlString containsString:@"recharge"]) {
         LSJRechargeViewController *rechargeVC= [[LSJRechargeViewController alloc] init];
         [self.navigationController pushViewController:rechargeVC animated:YES];
@@ -133,7 +162,90 @@
         }
         return NO;
     }
+    if ([urlString containsString:@"iphonexgame"]) {//iPhone X活动
+        NSArray *strArr = [urlString componentsSeparatedByString:@"iphonexgame"];
+        NSInteger roomID = [strArr[1] integerValue];
+        [self jumpGameRoomWithRoomID:roomID];
+        return NO;
+    }
     return YES;
+}
+
+#pragma mark 活动中跳转发货页面
+- (void)jumpWawaPageWith:(BOOL)isBuFa{
+    
+    [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_Deposit completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
+        
+        NSMutableArray *tempArr = [NSMutableArray array];
+        for (WwDepositItem *depositItem in model.depositList) {
+            if (depositItem.wid == kWaWaID) {
+                [tempArr addObject:depositItem];
+            }
+        }
+        FXOrdingListViewController *listVC = [[FXOrdingListViewController alloc] initWithStyle:UITableViewStylePlain];
+        listVC.dataArray = tempArr;
+        listVC.isDifference = isBuFa;
+        [self.navigationController pushViewController:listVC animated:YES];
+    }];
+}
+
+#pragma mark iPhone X活动支付模块
+- (void)iPhone_XpayForType:(BOOL)isWechat num:(NSString *)num{
+    _isIphoneXAction = YES;
+    NSString *money = [NSString stringWithFormat:@"%ld",(10 - [self.iphoneNum integerValue])*1280];
+    if (isWechat) {//微信
+        [self iPhone_XwechatPay:money];
+    }else{//支付宝
+        [self iPhone_XzhifubaoPay:money];
+    }
+}
+
+- (void)iPhone_XzhifubaoPay:(NSString *)num{
+    NSString *path = @"DealiPay";
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [[AlipaySDK defaultService] payOrder:dic[@"data"] fromScheme:@"zzlwwzfb" callback:^(NSDictionary *resultDic) {
+            }];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)iPhone_XwechatPay:(NSString *)num{
+    
+    NSString *path = @"Depay";
+    NSDictionary *params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            PayReq *req = [[PayReq alloc] init];
+            req.partnerId = dic[@"data"][@"partnerid"];
+            req.prepayId = dic[@"data"][@"prepayid"];
+            req.package = dic[@"data"][@"package"];
+            req.nonceStr = dic[@"data"][@"noncestr"];
+            req.timeStamp = [dic[@"data"][@"timestamp"] intValue];
+            req.sign = dic[@"data"][@"sign"];
+            if ([WXApi sendReq:req]) {
+                NSLog(@"调起成功");
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+#pragma mark 活动中跳转游戏房间游戏
+- (void)jumpGameRoomWithRoomID:(NSInteger)roomID{
+    for (WwRoom *room in self.roomArr) {
+        if (roomID == room.ID) {
+            LSJGameViewController *gameVC = [[LSJGameViewController alloc] init];
+            gameVC.model = room;
+            [self.navigationController pushViewController:gameVC animated:YES];
+        }
+    }
 }
 
 #pragma mark 请求是否购买过当前卡接口
@@ -158,18 +270,32 @@
     }];
 }
 
-- (void)shareActionData{
-        NSString *path = @"shares";
-    NSDictionary *params = @{@"uid":KUID};
-        [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-            NSDictionary *dic = (NSDictionary *)json;
-            if ([dic[@"code"] integerValue] == 200) {
-                [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
-            }
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
+- (void)shareCommonBannerAction{
+    NSString *path = @"shareMerger";
+    NSDictionary *params = @{@"uid":KUID,@"bannerid":self.item.ID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [self shareActionWithHref:dic[@"data"][0][@"link"] title:dic[@"data"][0][@"title"] content:dic[@"data"][0][@"content"] imageArr:@[dic[@"data"][0][@"icon"]]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
+
+- (void)shareActionData{
+    NSString *path = @"shares";
+    NSDictionary *params = @{@"uid":KUID};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            [self shareActionWithHref:dic[@"data"][@"linkurl"] title:dic[@"data"][@"title"] content:dic[@"data"][@"conten"] imageArr:@[dic[@"data"][@"path"]]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
 - (void)shareFriendpayActionData{
     NSString *path = @"friendSharePay";
     NSDictionary *params = @{@"uid":KUID};
@@ -315,24 +441,32 @@
 #pragma mark - 收到支付成功的消息后作相应的处理
 - (void)getOrderPayResult:(NSNotification *)notification
 {
-    if ([notification.object isEqualToString:@"success"]) {
-        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
-        [self.webView reload];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
-    }else {
-        [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
+    if (_isIphoneXAction) {
+        [self jumpWawaPageWith:YES];
+    }else{
+        if ([notification.object isEqualToString:@"success"]) {
+            [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+            [self.webView reload];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+        }else {
+            [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
+        }
     }
 }
 
 //支付宝回调
 - (void)getOrderzfbPayResult:(NSNotification *)noti{
-    NSDictionary *dic= noti.object;
-    if ([dic[@"resultStatus"] integerValue] == 9000) {
-        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
-        [self.webView reload];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+    if (_isIphoneXAction) {
+        [self jumpWawaPageWith:YES];
     }else{
-        [MBProgressHUD showError:@"支付失败" toView:self.view];
+        NSDictionary *dic= noti.object;
+        if ([dic[@"resultStatus"] integerValue] == 9000) {
+            [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+            [self.webView reload];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+        }else{
+            [MBProgressHUD showError:@"支付失败" toView:self.view];
+        }
     }
 }
 

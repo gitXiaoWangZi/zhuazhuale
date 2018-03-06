@@ -58,7 +58,7 @@
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.resultImg.mas_top).offset(Py(115));
         make.centerX.equalTo(self.bgView);
-        make.height.equalTo(@(Py(21)));
+        make.height.equalTo(@(Py(40)));
     }];
     [self.bgView addSubview:self.desL];
     [self.desL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -68,28 +68,48 @@
     }];
     [self.bgView addSubview:self.cancel];
     [self.cancel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.desL.mas_bottom).offset(Py(20));
+        make.top.equalTo(self.desL.mas_bottom).offset(Py(10));
         make.centerX.equalTo(self.bgView);
     }];
     [self.bgView addSubview:self.game];
     [self.game mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.cancel.mas_bottom).offset(Py(20));
+        make.top.equalTo(self.cancel.mas_bottom).offset(Py(10));
         make.centerX.equalTo(self.bgView);
     }];
 }
 
-- (void)showStatusView:(BOOL)isSuccess{
+- (void)showStatusView:(BOOL)isSuccess special:(BOOL)isSpecial{
     if (isSuccess) {
         self.bgImg.hidden = NO;
         self.dismiss.hidden = NO;
         self.resultImg.image = [UIImage imageNamed:@"game_result_success_bg"];
         [self.cancel setImage:[UIImage imageNamed:@"game_result_share"] forState:UIControlStateNormal];
-        [self.game setImage:[UIImage imageNamed:@"game_result_bring"] forState:UIControlStateNormal];
-        self.titleL.text = @"天呀你是抓娃娃之神吗";
+        if (isSpecial) {
+            self.desL.textColor = DYGColorFromHex(0xff5329);
+            [self.game setImage:[UIImage imageNamed:@"game_result_game"] forState:UIControlStateNormal];
+            [[WwUserInfoManager UserInfoMgrInstance] requestMyWawaList:WawaList_Deposit completeHandler:^(int code, NSString *message, WwUserWawaModel *model) {
+                
+                NSMutableArray *tempArr = [NSMutableArray array];
+                for (WwDepositItem *depositItem in model.depositList) {
+                    if (depositItem.wid == kWaWaID) {
+                        [tempArr addObject:depositItem];
+                    }
+                }
+                self.titleL.text = [NSString stringWithFormat:@"成功抓中1280元iPhone X兑换券\n再获取%ld张可免费拿iPhone X",10 - tempArr.count];
+            }];
+        }else{
+            [self.game setImage:[UIImage imageNamed:@"game_result_bring"] forState:UIControlStateNormal];
+            self.titleL.text = @"天呀你是抓娃娃之神吗";
+        }
     }else{
         self.bgImg.hidden = YES;
         self.resultImg.image = [UIImage imageNamed:@"game_result_fail_bg"];
-        self.titleL.text = @"失败是成功滴妈咪";
+        if (isSpecial) {
+            self.desL.textColor = DYGColorFromHex(0xff5329);
+            self.titleL.text = @"别灰心在抓一次\niPhone X就是你的了";
+        }else{
+            self.titleL.text = @"失败是成功滴妈咪";
+        }
     }
 }
 
@@ -154,6 +174,7 @@
         _titleL.textAlignment = NSTextAlignmentCenter;
         _titleL.font = [UIFont boldSystemFontOfSize:14];
         _titleL.text = @"天呀你是抓娃娃之神吗";
+        _titleL.numberOfLines = 2;
     }
     return _titleL;
 }
