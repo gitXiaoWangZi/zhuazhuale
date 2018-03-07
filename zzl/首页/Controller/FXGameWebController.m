@@ -441,32 +441,30 @@
 #pragma mark - 收到支付成功的消息后作相应的处理
 - (void)getOrderPayResult:(NSNotification *)notification
 {
-    if (_isIphoneXAction) {
-        [self jumpWawaPageWith:YES];
-    }else{
-        if ([notification.object isEqualToString:@"success"]) {
-            [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
-            [self.webView reload];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
-        }else {
-            [MBProgressHUD showSuccess:@"支付失败" toView:self.view];
+    if ([notification.object isEqualToString:@"success"]) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self.webView reload];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+        if (_isIphoneXAction) {
+            [self jumpWawaPageWith:YES];
         }
+    }else {
+        [MBProgressHUD showMessage:@"支付失败" toView:self.view];
     }
 }
 
 //支付宝回调
 - (void)getOrderzfbPayResult:(NSNotification *)noti{
-    if (_isIphoneXAction) {
-        [self jumpWawaPageWith:YES];
-    }else{
-        NSDictionary *dic= noti.object;
-        if ([dic[@"resultStatus"] integerValue] == 9000) {
-            [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
-            [self.webView reload];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
-        }else{
-            [MBProgressHUD showError:@"支付失败" toView:self.view];
+    NSDictionary *dic= noti.object;
+    if ([dic[@"resultStatus"] integerValue] == 9000) {
+        [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
+        [self.webView reload];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
+        if (_isIphoneXAction) {
+            [self jumpWawaPageWith:YES];
         }
+    }else{
+        [MBProgressHUD showMessage:@"支付失败" toView:self.view];
     }
 }
 

@@ -35,9 +35,13 @@
 - (void)allRefreshData:(BOOL)isSelect{
     [self.selectArray removeAllObjects];
     for (WwDepositItem *model in self.dataArray) {
-        model.selected = isSelect;
-        if (isSelect) {
-            [self.selectArray addObject:model];
+        if (model.wid == kWaWaID) {
+            
+        }else{
+            model.selected = isSelect;
+            if (isSelect) {
+                [self.selectArray addObject:model];
+            }
         }
     }
     [self.tableView reloadData];

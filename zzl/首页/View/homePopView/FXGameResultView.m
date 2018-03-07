@@ -104,6 +104,7 @@
     }else{
         self.bgImg.hidden = YES;
         self.resultImg.image = [UIImage imageNamed:@"game_result_fail_bg"];
+        [self.cancel setImage:[UIImage imageNamed:@"game_result_quit"] forState:UIControlStateNormal];
         if (isSpecial) {
             self.desL.textColor = DYGColorFromHex(0xff5329);
             self.titleL.text = @"别灰心在抓一次\niPhone X就是你的了";
