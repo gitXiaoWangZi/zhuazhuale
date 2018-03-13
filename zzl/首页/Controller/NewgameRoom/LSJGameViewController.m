@@ -30,6 +30,9 @@
 {
     BOOL isPlayGameing;
     BOOL resultState;
+    
+    BOOL isAction;
+    NSString *activePrice;
 }
 @property (nonatomic,strong) ZYRoomVerticalScroll *myScroV;
 @property (nonatomic,strong) BottomViewController *BottomViewVC;
@@ -91,6 +94,7 @@
     isPlayGameing = NO;
     self.commentBtnStatue = 1;
     self.musicBtnStatue = 1;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refeshCountDownAction) name:KrefreshActiveCountDown object:nil];
     //搭建页面
     [self setUpUI];
     //请求接口
@@ -139,6 +143,15 @@
     
     //添加视频View
     [self configRtcPlayer];
+    
+    //请求是否活动房间倒计时
+    [self refeshCountDownAction];
+}
+
+//请求是否活动房间倒计时
+- (void)refeshCountDownAction{
+    
+    [self activeWithWawaID:self.model.wawa.ID];
 }
 
 -(void)setMusicPayer{
@@ -147,6 +160,29 @@
     self.player.numberOfLoops = -1;
     self.player.delegate = self;
     [self.player play];
+}
+
+#pragma mark 请求是否活动房间倒计时
+- (void)activeWithWawaID:(NSInteger)ID{
+    NSString *path = @"gameCoupon";
+    NSDictionary *params = @{@"uid":KUID,@"itemCode":@(ID),@"credits":@(self.model.wawa.coin)};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            if ([dic[@"data"][@"discount"] integerValue] == 0) {//无折扣
+                [self.topView refeshClock:NO];
+                [self.topView stopCountDownAction];
+                isAction = NO;
+            }else{//有折扣
+                [self.topView refeshClock:YES];
+                [self.topView refreshViewWithOrigin:self.model.wawa.coin Credits:dic[@"data"][@"credits"] time:dic[@"data"][@"time"]];
+                isAction = YES;
+                activePrice = dic[@"data"][@"credits"];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 #pragma mark commentView pop
@@ -428,11 +464,19 @@
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
             sender.enabled = YES;
-            if ([dic[@"data"] intValue] >= self.model.wawa.coin) {
-                [self playGame];
+            if (isAction) {//活动房间对比折后价
+                if ([dic[@"data"] intValue] >= [activePrice intValue]) {
+                    [self playGame];
+                }else{
+                    [MBProgressHUD showMessage:@"余额不足" toView:self.view];
+                }
             }else{
-                [[UIApplication sharedApplication].keyWindow addSubview:self.yuePopView];
-                self.yuePopView.hidden = NO;
+                if ([dic[@"data"] intValue] >= self.model.wawa.coin) {
+                    [self playGame];
+                }else{
+                    [[UIApplication sharedApplication].keyWindow addSubview:self.yuePopView];
+                    self.yuePopView.hidden = NO;
+                }
             }
         }
     } failure:^(NSError *error) {
@@ -554,6 +598,7 @@
         isPlayGameing = NO;
         self.myScroV.scrollEnabled = YES;
         
+        [self refeshCountDownAction];
         if (resultM.state == 2) {
             [self showResultPopViewWithResult:YES];
         } else {

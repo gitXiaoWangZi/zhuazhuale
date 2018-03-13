@@ -83,11 +83,8 @@
             _isChristmasList = YES;
         }
         if ([self.item.href containsString:@"freePower"]) {
-            self.item.href = [NSString stringWithFormat:@"%@?uid=%@&number=%@",self.item.href,KUID,self.iphoneNum];
-        }else{
-            self.item.href = [NSString stringWithFormat:@"%@?uid=%@",self.item.href,KUID];
+            self.item.href = [NSString stringWithFormat:@"%@&number=%@",self.item.href,self.iphoneNum];
         }
-        
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.item.href]];
         [self.webView loadRequest:request];
         [self.view addSubview:self.webView];
@@ -150,7 +147,7 @@
         [self shareFriendpayActionData];
         return NO;
     }
-    if ([urlString containsString:@"activity"]) {
+    if ([urlString containsString:@"zsactivity"]) {
         NSCharacterSet* nonDigits =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
         int remainSecond =[[urlString stringByTrimmingCharactersInSet:nonDigits] intValue];
         [self loadDiamondCard:remainSecond];

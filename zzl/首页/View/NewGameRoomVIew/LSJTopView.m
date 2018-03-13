@@ -40,6 +40,14 @@
 @property (nonatomic,strong) UIButton *musicBtn;
 @property (nonatomic,strong) UIButton *barrageBtn;
 
+@property (nonatomic,strong) UIImageView *clockImgV;//闹钟图标
+@property (nonatomic,strong) UILabel *clockL;//
+@property (nonatomic,strong) UILabel *clockCountDownL;//
+@property (nonatomic,strong) UIView *lineView;//
+
+@property (nonatomic,strong) NSTimer *timer;
+
+@property (nonatomic,assign) int countDownTime;
 
 @end
 
@@ -237,15 +245,61 @@ static NSString * reuserId= @"roomCell";
     [self.perPayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.normalView.mas_top).offset(-20);
         make.centerX.equalTo(self.mas_centerX);
-        make.width.equalTo(@(Px(80)));
-        make.height.equalTo(@(Py(27)));
+//        make.width.equalTo(@(Px(93)));
+        make.height.equalTo(@(Py(19)));
     }];
-    self.perPayBtn.layer.cornerRadius = 13.5f;
+    self.perPayBtn.layer.cornerRadius = Py(9.5);
     self.perPayBtn.layer.masksToBounds = YES;
     
+    //现价每次多少金币
+    [self addSubview:self.currentPayBtn];
+    [self.currentPayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.perPayBtn.mas_top).offset(-4);
+        make.centerX.equalTo(self.mas_centerX);
+//        make.width.equalTo(@(Px(93)));
+        make.height.equalTo(@(Py(19)));
+    }];
+    self.currentPayBtn.layer.cornerRadius = Py(9.5);
+    self.currentPayBtn.layer.masksToBounds = YES;
+    
+    [self addSubview:self.clockCountDownL];
+    [self.clockCountDownL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.perPayBtn.mas_bottom).offset(10);
+        make.right.equalTo(self.mas_right).offset(-Px(24));
+        make.width.equalTo(@(Px(50)));
+        make.height.equalTo(@(Py(16)));
+    }];
+    self.clockCountDownL.layer.cornerRadius = Py(8);
+    self.clockCountDownL.layer.masksToBounds = YES;
+    
+    [self addSubview:self.clockL];
+    [self.clockL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.clockCountDownL.mas_top).offset(-Py(3));
+        make.centerX.equalTo(self.clockCountDownL.mas_centerX);
+    }];
+    
+    [self addSubview:self.clockImgV];
+    [self.clockImgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.clockL.mas_top).offset(-Py(3));
+        make.centerX.equalTo(self.clockCountDownL.mas_centerX);
+    }];
+    [self addSubview:self.lineView];
+    [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(self.perPayBtn.mas_width);
+        make.centerX.equalTo(self.perPayBtn.mas_centerX);
+        make.centerY.equalTo(self.perPayBtn.mas_centerY);
+        make.height.equalTo(@(1));
+    }];
     
     [self creaetBarrage];
     [self.bulletManager start];
+    
+    self.currentPayBtn.hidden = YES;
+    self.clockCountDownL.hidden = YES;
+    self.clockL.hidden = YES;
+    self.clockImgV.hidden = YES;
+    self.lineView.hidden = YES;
+    
 }
 
 -(void)creaetBarrage{
@@ -361,9 +415,83 @@ static NSString * reuserId= @"roomCell";
     self.statusImgV.hidden = YES;
 }
 - (void)refrshWaWaDetailsWithModel:(WwRoom *)model{
-    NSString *coin = [NSString stringWithFormat:@"%zd/次",model.wawa.coin];
+    NSString *coin = [NSString stringWithFormat:@"%zd/次 ",model.wawa.coin];
     [self.perPayBtn setTitle:coin forState:UIControlStateNormal];
-    [self.perPayBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont boldSystemFontOfSize:12] spacing:5];
+    [self.perPayBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont systemFontOfSize:12] spacing:0];
+}
+
+- (void)refreshViewWithOrigin:(NSInteger )price Credits:(NSString *)credits time:(NSString *)time{
+    
+    [self.perPayBtn setTitle:[NSString stringWithFormat:@"原价:%ld/次 ",price] forState:UIControlStateNormal];
+    [self.perPayBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont systemFontOfSize:12] spacing:0];
+    
+    if ([credits integerValue] == price && [time integerValue] != 0) {
+        [self.currentPayBtn setTitle:[NSString stringWithFormat:@"原价:%@/次 ",credits] forState:UIControlStateNormal];
+        self.perPayBtn.hidden = YES;
+        self.lineView.hidden = YES;
+        self.clockCountDownL.hidden = NO;
+        self.clockL.hidden = NO;
+        self.clockImgV.hidden = NO;
+        self.countDownTime = [time intValue];
+        if (self.timer) {
+            [self.timer invalidate];
+            self.timer = nil;
+        }
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown:) userInfo:nil repeats:YES];
+    }else{
+        [self.currentPayBtn setTitle:[NSString stringWithFormat:@"现价:%@/次 ",credits] forState:UIControlStateNormal];
+        self.perPayBtn.hidden = NO;
+        self.lineView.hidden = NO;
+        self.clockCountDownL.hidden = YES;
+        self.clockL.hidden = YES;
+        self.clockImgV.hidden = YES;
+        if (self.timer) {
+            [self.timer invalidate];
+            self.timer = nil;
+        }
+    }
+    [self.currentPayBtn xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont systemFontOfSize:12] spacing:0];
+}
+
+- (void)countdown:(NSTimer *)timer{
+    self.countDownTime --;
+    
+    if (self.countDownTime <= 0) {
+        [self.timer invalidate];
+        self.timer = nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:KrefreshActiveCountDown object:nil];
+        return;
+    }
+    
+    int seconds = self.countDownTime % 60;
+    int minutes = (self.countDownTime / 60) % 60;
+    int hours = self.countDownTime / 3600;
+    
+    self.clockCountDownL.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    
+}
+
+- (void)stopCountDownAction{
+    if (self.timer) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
+
+- (void)refeshClock:(BOOL)isActive{
+    if (isActive) {
+        self.currentPayBtn.hidden = NO;
+        self.clockCountDownL.hidden = NO;
+        self.clockL.hidden = NO;
+        self.clockImgV.hidden = NO;
+        self.lineView.hidden = NO;
+    }else{
+        self.currentPayBtn.hidden = YES;
+        self.clockCountDownL.hidden = YES;
+        self.clockL.hidden = YES;
+        self.clockImgV.hidden = YES;
+        self.lineView.hidden = YES;
+    }
 }
 
 #pragma mark lazyload
@@ -544,9 +672,21 @@ static NSString * reuserId= @"roomCell";
         [_perPayBtn setImage:[UIImage imageNamed:@"game_recharge_zs"] forState:UIControlStateNormal];
         [_perPayBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
         _perPayBtn.backgroundColor = DYGAColor(0, 0, 0, 0.6);
-        _perPayBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+        _perPayBtn.titleLabel.font = [UIFont systemFontOfSize:12];
     }
     return _perPayBtn;
+}
+
+- (UIButton *)currentPayBtn{
+    if (!_currentPayBtn) {
+        _currentPayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_currentPayBtn setImage:[UIImage imageNamed:@"game_recharge_zs"] forState:UIControlStateNormal];
+        [_currentPayBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+        _currentPayBtn.backgroundColor = DYGAColor(0, 0, 0, 0.6);
+        _currentPayBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_currentPayBtn setTitle:@"现价:23/次" forState:UIControlStateNormal];
+    }
+    return _currentPayBtn;
 }
 
 - (LSJOperationNormalView *)normalView{
@@ -574,5 +714,41 @@ static NSString * reuserId= @"roomCell";
         _countDownV.hidden = YES;
     }
     return _countDownV;
+}
+
+- (UIImageView *)clockImgV{
+    if (!_clockImgV) {
+        _clockImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"game_clock"]];
+    }
+    return _clockImgV;
+}
+
+- (UILabel *)clockL{
+    if (!_clockL) {
+        _clockL = [[UILabel alloc] init];
+        _clockL.text = @"折扣开启时间";
+        _clockL.font = [UIFont systemFontOfSize:13];
+        _clockL.textColor = [UIColor whiteColor];
+    }
+    return _clockL;
+}
+
+- (UILabel *)clockCountDownL{
+    if (!_clockCountDownL) {
+        _clockCountDownL = [[UILabel alloc] init];
+        _clockCountDownL.text = @"00:00:00";
+        _clockCountDownL.font = [UIFont systemFontOfSize:11];
+        _clockCountDownL.textColor = [UIColor whiteColor];
+        _clockCountDownL.backgroundColor = DYGAColor(0, 0, 0, 0.5);
+        _clockCountDownL.textAlignment = NSTextAlignmentCenter;
+    }
+    return _clockCountDownL;
+}
+- (UIView *)lineView{
+    if (!_lineView) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = DYGColorFromHex(0xfed811);
+    }
+    return _lineView;
 }
 @end

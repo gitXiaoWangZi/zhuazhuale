@@ -147,6 +147,7 @@ dispatch_async(dispatch_get_main_queue(), block);\
 #define kSPECIALWAWAID @"specialwawaID"
 #define kRoomID [[NSUserDefaults standardUserDefaults] integerForKey:kSPECIALDOLLID]//特殊房间ID
 #define kWaWaID [[NSUserDefaults standardUserDefaults] integerForKey:kSPECIALWAWAID]//特殊娃娃ID
+#define KrefreshActiveCountDown @"refreshActiveCountDown"//房间折扣活动倒计时
 
 //字体相关
 #define kPingFangSC_Regular(fontSize)   [UIFont fontWithName:@"PingFangSC-Regular" size:(fontSize)]

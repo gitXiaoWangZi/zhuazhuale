@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger,TopView) {
 @property (nonatomic,strong) NSArray *dataArray;
 
 @property (nonatomic,strong) UIButton *perPayBtn;
+@property (nonatomic,strong) UIButton *currentPayBtn;
 @property (nonatomic, strong) ZYCountDownView *countDownV;          /**< 倒计时视图*/
 @property (nonatomic,strong) LSJOperationNormalView *normalView;
 @property (nonatomic, strong) BulletManager *bulletManager;//弹幕
@@ -41,6 +42,9 @@ typedef NS_ENUM(NSInteger,TopView) {
 - (void)refreshAudienceWithWwUserNum:(NSInteger)num withModel:(WwRoom*)model;
 - (void)refreGameUserByUser:(WwUser *)user;
 - (void)refrshWaWaDetailsWithModel:(WwRoom *)model;
+- (void)refreshViewWithOrigin:(NSInteger )price Credits:(NSString *)credits time:(NSString *)time;
+- (void)stopCountDownAction;
+- (void)refeshClock:(BOOL)isActive;
 
 - (void)start;
 - (void)stopScroll;
