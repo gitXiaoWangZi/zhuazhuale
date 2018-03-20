@@ -244,7 +244,7 @@
         if ([dic[@"code"] integerValue] == 200) {
             NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBundleVersionKey];
             NSString *newVersion = dic[@"data"][@"version"];
-            if (![self isNeedUpdateWithsaveVersion:saveVersion newVersion:newVersion]) {
+            if ([self isNeedUpdateWithsaveVersion:saveVersion newVersion:newVersion]) {
                 UIView *windowView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
                 self.versionBgView = windowView;
                 windowView.backgroundColor = DYGAColor(0, 0, 0, 0.6);
@@ -291,6 +291,9 @@
                 sjBtn.frame = CGRectMake(Px(34), centerV.height - Py(70),centerV.width - Px(68), Py(45));
                 [sjBtn addTarget:self action:@selector(sjAction:) forControlEvents:UIControlEventTouchUpInside];
                 [centerV addSubview:sjBtn];
+            }else{
+                //请求签到天数数据
+                [self loadSignDayNumData];
             }
         }
     } failure:^(NSError *error) {
@@ -404,7 +407,7 @@
         NSLog(@"点击分享");
         if (![[VisiteTools shareInstance] isVisite]) {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = @"http://wawa.api.fanx.xin/share";
+            item.href = [NSString stringWithFormat:@"http://wawa.api.fanx.xin/share?uid=%@",KUID];
             item.title = @"邀请好友";
             item.banner_type = @"2";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
@@ -419,7 +422,7 @@
         NSLog(@"代付");
         if (![[VisiteTools shareInstance] isVisite]) {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
+            item.href = [NSString stringWithFormat:@"http://openapi.wawa.zhuazhuale.xin/newzhuli?uid=%@",KUID];
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;

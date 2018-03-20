@@ -378,12 +378,6 @@
         } failure:^(NSError *error) {
         }];
     }
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"share_game"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
     
 }
 

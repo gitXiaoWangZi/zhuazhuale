@@ -43,6 +43,17 @@
 
 @implementation FXLoginHomeController
 
+- (void)viewWillAppear:(BOOL)animated{
+    if (![WXApi isWXAppInstalled]) {//用户没有安装微信客户端
+        //构造SendAuthReq结构体
+        self.wechatBtn.hidden = YES;
+        self.phoneRightCons.constant = 58 - (kScreenWidth - 40)/2;
+    }else{//用户安装微信客户端
+        self.wechatBtn.hidden = NO;
+        self.phoneRightCons.constant = -21;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
@@ -52,14 +63,6 @@
         make.top.equalTo(self.phoneBtn.mas_bottom).offset(30);
         make.centerX.equalTo(self.view);
     }];
-    if (![WXApi isWXAppInstalled]) {//用户没有安装微信客户端
-        //构造SendAuthReq结构体
-        self.wechatBtn.hidden = YES;
-        self.phoneRightCons.constant = 58 - (kScreenWidth - 40)/2;
-    }else{//用户安装微信客户端
-        self.wechatBtn.hidden = NO;
-        self.phoneRightCons.constant = -21;
-    }
     
     self.downImagV.layer.cornerRadius = 10;
     
@@ -107,8 +110,8 @@
 #pragma mark -------微信登录
 -(void)weChatAction {
     
-//    if ([WXApi isWXAppInstalled]) {//用户已经安装微信客户端
-//        //构造SendAuthReq结构体
+    if ([WXApi isWXAppInstalled]) {//用户已经安装微信客户端
+        //构造SendAuthReq结构体
         SendAuthReq* req =[[SendAuthReq alloc ] init ];
         req.scope = @"snsapi_userinfo" ;
         req.state = @"123" ;
@@ -116,9 +119,9 @@
         self.appdelegate.delegate = self;
         //第三方向微信终端发送一个SendAuthReq消息结构
         [WXApi sendReq:req];
-//    }else{//用户未安装微信客户端
-////
-//    }
+    }else{//用户未安装微信客户端
+//
+    }
 }
 
 - (void)loginSuccessByCode:(NSString *)code{

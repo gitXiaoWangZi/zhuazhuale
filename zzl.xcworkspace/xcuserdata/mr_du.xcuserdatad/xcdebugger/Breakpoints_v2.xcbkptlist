@@ -20,23 +20,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "zzl/Main/AppDelegate.m"
-            timestampString = "542096952.1808161"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
-            landmarkName = "-application:didReceiveRemoteNotification:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "zzl/Main/AppDelegate.m"
-            timestampString = "542096952.181187"
+            timestampString = "542862559.9140019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "301"

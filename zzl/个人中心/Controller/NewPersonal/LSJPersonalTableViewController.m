@@ -200,7 +200,7 @@ static NSString *const cellID = @"LSJMineCell";
     }else{
         if (indexPath.row == 0) {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = @"http://wawa.api.fanx.xin/share";
+            item.href = [NSString stringWithFormat:@"http://wawa.api.fanx.xin/share?uid=%@",KUID];
             item.title = @"邀请好友";
             item.banner_type = @"2";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
@@ -288,7 +288,7 @@ static NSString *const cellID = @"LSJMineCell";
         case personalHeaderOtherPay:
         {
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
+            item.href = [NSString stringWithFormat:@"http://openapi.wawa.zhuazhuale.xin/newzhuli?uid=%@",KUID];
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;

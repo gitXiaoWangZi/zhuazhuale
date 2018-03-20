@@ -41,7 +41,7 @@
 
 @property (nonatomic,assign) int commentBtnStatue;
 @property (nonatomic,assign) int musicBtnStatue;
-@property (nonatomic,strong) FXGameResultView * resultPopView;
+@property (nonatomic,strong) FXGameResultView * resultPopView;//游戏结果弹窗
 @property (nonatomic,strong) AVAudioPlayer * player;
 @property (nonatomic,strong) MBProgressHUD *hud;
 @property (nonatomic,strong) UIView *playView;//视频view
@@ -155,8 +155,8 @@
 }
 
 -(void)setMusicPayer{
-    NSURL * url = [[NSBundle mainBundle]URLForResource:@"gameWait.mp3" withExtension:nil];
-    self.player = [[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
+    NSURL * url = [[NSBundle mainBundle] URLForResource:@"gameWait.mp3" withExtension:nil];
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
     self.player.numberOfLoops = -1;
     self.player.delegate = self;
     [self.player play];
@@ -201,7 +201,6 @@
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGFloat kbHeight = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
     self.commentBtnStatue = 0;
-    DYGLog(@"%f",kbHeight);
     CGFloat offset = kbHeight+Py(80);
     double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     if(offset > 0) {
@@ -229,7 +228,6 @@
 
 #pragma mark --FXCommentViewDelegate
 - (void)sendClick{
-    
     if (self.comment.commentTF.text != nil && ![self.comment.commentTF.text isEqualToString:@""]) {
         [[WwGameManager GameMgrInstance] sendDamuMsg:self.comment.commentTF.text];
         [self loadMsgDanmuDataWithContent:self.comment.commentTF.text];
@@ -407,22 +405,18 @@
             break;
         case TopViewMusic:
         {
-            if (sender.selected) {
-                NSLog(@"音乐");
+            if (sender.selected) {//音乐
                 [self.player pause];
-            }else{
-                NSLog(@"不要音乐");
+            }else{//不要音乐
                 [self.player play];
             }
         }
             break;
         case TopViewBarrage:
         {
-            if (sender.selected) {
-                NSLog(@"不要弹幕");
+            if (sender.selected) {//不要弹幕
                 [self.topView stopScroll];
-            }else{
-                NSLog(@"弹幕");
+            }else{//弹幕
                 [self.topView start];
             }
         }
@@ -468,9 +462,10 @@
                 if ([dic[@"data"] intValue] >= [activePrice intValue]) {
                     [self playGame];
                 }else{
-                    [MBProgressHUD showMessage:@"余额不足" toView:self.view];
+                    [[UIApplication sharedApplication].keyWindow addSubview:self.yuePopView];
+                    self.yuePopView.hidden = NO;
                 }
-            }else{
+            }else{//非活动房间对比原价
                 if ([dic[@"data"] intValue] >= self.model.wawa.coin) {
                     [self playGame];
                 }else{
@@ -611,7 +606,6 @@
             self.topView.normalView.hidden = NO;
         }));
     }];
-    
 }
 
 - (void)showResultPopViewWithResult:(BOOL)isSuccess{
@@ -619,7 +613,6 @@
         [self loadgetWaWaSuccessData];
     }
     resultState = isSuccess;
-    [self loadPlayGameSuccessData];
     //通知个人中心 更新钻石数量
     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
     [self loadUserInfoData];
@@ -683,16 +676,6 @@
     });
     // 开启定时器
     dispatch_resume(timer0);
-}
-
-#pragma mark 玩游戏成功后的接口
-- (void)loadPlayGameSuccessData{
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"march_game"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
 }
 
 #pragma mark 抓到娃娃成功后的接口
@@ -765,7 +748,7 @@
         {
             self.isNoBack = YES;
             FXHomeBannerItem *item = [FXHomeBannerItem new];
-            item.href = @"http://openapi.wawa.zhuazhuale.xin/newzhuli";
+            item.href = [NSString stringWithFormat:@"http://openapi.wawa.zhuazhuale.xin/newzhuli?uid=%@",KUID];
             item.title = @"好友助力";
             FXGameWebController *vc = [[FXGameWebController alloc] init];
             vc.item = item;
@@ -790,6 +773,15 @@
 #pragma mark---WwGameManagerDelegate实现一些回调方法
 - (void)reciveWatchNumber:(NSInteger)number{
     [self.topView refreshAudienceWithWwUserNum:number withModel:self.model];
+}
+
+// rtmp
+- (void)pushStatusDidChanged:(WwRtmpPush)status{/**< 推流状态发生了变化*/
+    
+}
+
+- (void)playStatusDidChanged:(WWRtmpPlay)status{/**< 拉流状态发生了变化*/
+    
 }
 
 /**< 收到聊天回调*/

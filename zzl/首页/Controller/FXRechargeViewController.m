@@ -61,9 +61,6 @@
 - (void)getOrderzfbPayResult:(NSNotification *)noti{
     NSDictionary *dic= noti.object;
     if ([dic[@"resultStatus"] integerValue] == 9000) {
-        if ([self.firstpunch integerValue] == 1) {//首冲
-            [self loadRechargeSuccessData];
-        }
         [MobClick event:@"alipay_click"];
         [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
@@ -260,9 +257,6 @@
         [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
             NSDictionary *dic = (NSDictionary *)json;
             if ([dic[@"code"] integerValue] == 200) {
-                if ([self.firstpunch integerValue] == 1) {//首冲
-                    [self loadRechargeSuccessData];
-                }
                 [MobClick event:@"wecat_pay"];
                 [MBProgressHUD showSuccess:@"支付成功" toView:self.view];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
@@ -277,16 +271,6 @@
     }else {
         NSLog(@"支付失败");
     }
-}
-
-#pragma mark 首冲成功后的接口
-- (void)loadRechargeSuccessData{
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"first_pay"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
 }
 
 #pragma mark lazy load

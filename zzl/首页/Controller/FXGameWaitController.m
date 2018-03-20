@@ -526,10 +526,6 @@
 }
 
 - (void)showResultPopViewWithResult:(BOOL)isSuccess{
-    if (isSuccess) {
-        [self loadgetWaWaSuccessData];
-    }
-    [self loadPlayGameSuccessData];
     //通知个人中心 更新钻石数量
     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshUserData" object:nil];
     [self loadUserInfoData];
@@ -580,26 +576,6 @@
     });
     // 开启定时器
     dispatch_resume(timer0);
-}
-
-#pragma mark 玩游戏成功后的接口
-- (void)loadPlayGameSuccessData{
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"march_game"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-}
-
-#pragma mark 抓到娃娃成功后的接口
-- (void)loadgetWaWaSuccessData{
-    NSString *path = @"raw_award";
-    NSDictionary *params = @{@"uid":KUID,@"type":@"catch_baby"};
-    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
 }
 
 #pragma mark FXGameResultViewDelegate -- 领取操作和再次游戏操作
