@@ -32,7 +32,9 @@
 #define AppID @"2017112318102887"
 #define AppKey @"552b92dc67b646d5b9d1576799545f4c"
 @interface FXHomeViewController ()<NewPagedFlowViewDelegate,NewPagedFlowViewDataSource,DYGHeaderImageViewDelegate,DYGMoreBtnClickDelegate,UIGestureRecognizerDelegate,FXHomePopViewDelegate,WwRoomManagerDelegate,SDCycleScrollViewDelegate,FXHomeLoginSuccessPopViewDelegate>
-
+{
+    NSMutableDictionary *_signDic;
+}
 /**
  *  轮播图
  */
@@ -802,12 +804,41 @@
 }
 //每天连续登录签到的页面
 - (void)showLoginSignViewWithDic:(NSDictionary *)dic{
+    _signDic = [dic mutableCopy];
     self.signPopView = [[[NSBundle mainBundle] loadNibNamed:@"FXHomeSignPopView" owner:self options:nil] firstObject];
     self.signPopView.frame = self.view.bounds;
     self.signPopView.dataDic = dic;
     __weak typeof(self) weakSelf = self;
     self.signPopView.signActionBlock = ^(NSString *day){
-        [weakSelf loadGetSignDataWithDay:day];
+        [weakSelf loadGetSignDataWithDay:day type:@"1"];
+    };
+    self.signPopView.jumpWeekH5ActionBlock = ^{
+        //周卡按钮状态
+        if ([dic[@"card"][@"week_card"] integerValue] == 0) {
+            [weakSelf.signPopView removeFromSuperview];
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = dic[@"card"][@"url"];
+            item.title = @"卡";
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [weakSelf.navigationController pushViewController:vc animated:YES];
+        }else if ([dic[@"card"][@"week_card"] integerValue] == 1){
+            [weakSelf loadGetSignDataWithDay:0 type:@"3"];//领取周卡
+        }
+    };
+    self.signPopView.jumpMonthH5ActionBlock = ^{
+        //月卡按钮状态
+        if ([dic[@"card"][@"month_card"] integerValue] == 0) {
+            [weakSelf.signPopView removeFromSuperview];
+            FXHomeBannerItem *item = [FXHomeBannerItem new];
+            item.href = dic[@"card"][@"url"];
+            item.title = @"卡";
+            FXGameWebController *vc = [[FXGameWebController alloc] init];
+            vc.item = item;
+            [weakSelf.navigationController pushViewController:vc animated:YES];
+        }else if ([dic[@"card"][@"month_card"] integerValue] == 1){
+            [weakSelf loadGetSignDataWithDay:0 type:@"4"];//领取月卡
+        }
     };
     [[UIApplication sharedApplication].keyWindow addSubview:self.signPopView];
 }
@@ -819,14 +850,41 @@
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            if ([dic[@"today"] integerValue] == 0) {//未签到
-                
+            if ([dic[@"elastic"] integerValue] != 0) {//显示
                 if (![[VisiteTools shareInstance] isVisite]) {
                     [self showLoginSignViewWithDic:dic];
+                    if ([dic[@"today"] integerValue] == 0) {//未签到
+                        [self.signPopView.loginBtn setBackgroundImage:[UIImage imageNamed:@"home_sure_bring"] forState:UIControlStateNormal];
+                        self.signPopView.loginBtn.userInteractionEnabled = YES;
+                    }else{//已签到
+                        [self.signPopView.loginBtn setBackgroundImage:[UIImage imageNamed:@"home_sure_geted"] forState:UIControlStateNormal];
+                        self.signPopView.loginBtn.userInteractionEnabled = NO;
+                    }
+                    //月卡按钮状态
+                    if ([dic[@"card"][@"month_card"] integerValue] == 0) {
+                        [self.signPopView.monthBtn setBackgroundImage:[UIImage imageNamed:@"home_yuecard_buy"] forState:UIControlStateNormal];
+                        self.signPopView.monthBtn.userInteractionEnabled = YES;
+                    }else if ([dic[@"card"][@"month_card"] integerValue] == 1){
+                        [self.signPopView.monthBtn setBackgroundImage:[UIImage imageNamed:@"home_yuecard_bring"] forState:UIControlStateNormal];
+                        self.signPopView.monthBtn.userInteractionEnabled = YES;
+                    }else{
+                        [self.signPopView.monthBtn setBackgroundImage:[UIImage imageNamed:@"home_card_geted"] forState:UIControlStateNormal];
+                        self.signPopView.monthBtn.userInteractionEnabled = NO;
+                    }
+                    //周卡按钮状态
+                    if ([dic[@"card"][@"week_card"] integerValue] == 0) {
+                        [self.signPopView.weekBtn setBackgroundImage:[UIImage imageNamed:@"home_weekcard_buy"] forState:UIControlStateNormal];
+                        self.signPopView.weekBtn.userInteractionEnabled = YES;
+                    }else if ([dic[@"card"][@"week_card"] integerValue] == 1){
+                        [self.signPopView.weekBtn setBackgroundImage:[UIImage imageNamed:@"home_weekcard_bring"] forState:UIControlStateNormal];
+                        self.signPopView.weekBtn.userInteractionEnabled = YES;
+                    }else{
+                        [self.signPopView.weekBtn setBackgroundImage:[UIImage imageNamed:@"home_card_geted"] forState:UIControlStateNormal];
+                        self.signPopView.weekBtn.userInteractionEnabled = NO;
+                    }
+                    
                 }
-            }else{//已签到
-                NSLog(@"已签到");
-                
+            }else{//不显示
                 [self loadPopScrollData];
             }
         }
@@ -835,20 +893,41 @@
     }];
 }
 
-#pragma mark 点击签到
-- (void)loadGetSignDataWithDay:(NSString *)day{
+#pragma mark 点击签到或者周卡月卡按钮
+- (void)loadGetSignDataWithDay:(NSString *)day type:(NSString *)type{
     NSString *path = @"getSign";
-    NSDictionary *params = @{@"uid":KUID};
+    NSDictionary *params = @{@"uid":KUID,@"type":type};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            [self.signPopView removeFromSuperview];
-            self.loginPopView = [[[NSBundle mainBundle] loadNibNamed:@"FXHomeLoginSuccessPopView" owner:nil options:nil] firstObject];
-            self.loginPopView.frame = self.view.bounds;
-            self.loginPopView.day = day;
-            self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
-            self.loginPopView.delegate = self;
-            [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
+            if ([type isEqualToString:@"1"]) {//签到
+                NSInteger continuity = [_signDic[@"continuity"] integerValue];
+                continuity = continuity + 1;
+                _signDic[@"continuity"] = [NSString stringWithFormat:@"%zd",continuity];
+                [self.signPopView setDataDic:_signDic];
+                [self.signPopView.loginBtn setBackgroundImage:[UIImage imageNamed:@"home_sure_geted"] forState:UIControlStateNormal];
+                self.signPopView.loginBtn.userInteractionEnabled = NO;
+                
+                [self.loginPopView isSign:YES];
+                self.loginPopView.day = day;
+                self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
+            }else if ([type isEqualToString:@"3"]){//周卡
+                [self.signPopView.weekBtn setBackgroundImage:[UIImage imageNamed:@"home_card_geted"] forState:UIControlStateNormal];
+                self.signPopView.weekBtn.userInteractionEnabled = NO;
+                
+                [self.loginPopView isSign:NO];
+                self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
+            }else if ([type isEqualToString:@"4"]){//月卡
+                [self.signPopView.monthBtn setBackgroundImage:[UIImage imageNamed:@"home_card_geted"] forState:UIControlStateNormal];
+                self.signPopView.monthBtn.userInteractionEnabled = NO;
+                
+                [self.loginPopView isSign:NO];
+                self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
+            }
+            
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -893,5 +972,12 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
+- (FXHomeLoginSuccessPopView *)loginPopView{
+    if (!_loginPopView) {
+        _loginPopView = [[[NSBundle mainBundle] loadNibNamed:@"FXHomeLoginSuccessPopView" owner:nil options:nil] firstObject];
+        _loginPopView.frame = self.view.bounds;
+        _loginPopView.delegate = self;
+    }
+    return _loginPopView;
+}
 @end

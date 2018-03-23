@@ -129,6 +129,8 @@
 		92780853202828F7004810BE /* LSJGameYuEPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92780852202828F7004810BE /* LSJGameYuEPopView.m */; };
 		9279CD72200F401600FC7403 /* LSJLogisticsPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */; };
 		9279CD75200F5AB100FC7403 /* LSJLogisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */; };
+		927E33A3206391EE005BC1BA /* LSJGameSecretPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E33A2206391EE005BC1BA /* LSJGameSecretPopView.m */; };
+		927E33A520639341005BC1BA /* LSJGameSecretPopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 927E33A420639341005BC1BA /* LSJGameSecretPopView.xib */; };
 		92801F5B1FF766E60087ECC6 /* LSJOperationNormalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */; };
 		92820E73200860EC00D2E4D7 /* LSJTaskHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92820E72200860EC00D2E4D7 /* LSJTaskHeaderView.m */; };
 		92820E762008A89100D2E4D7 /* LSJTaskPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92820E752008A89100D2E4D7 /* LSJTaskPopView.m */; };
@@ -497,6 +499,9 @@
 		9279CD71200F401600FC7403 /* LSJLogisticsPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJLogisticsPopView.m; sourceTree = "<group>"; };
 		9279CD73200F5AB100FC7403 /* LSJLogisticsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJLogisticsCell.h; sourceTree = "<group>"; };
 		9279CD74200F5AB100FC7403 /* LSJLogisticsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJLogisticsCell.m; sourceTree = "<group>"; };
+		927E33A1206391EE005BC1BA /* LSJGameSecretPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJGameSecretPopView.h; sourceTree = "<group>"; };
+		927E33A2206391EE005BC1BA /* LSJGameSecretPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJGameSecretPopView.m; sourceTree = "<group>"; };
+		927E33A420639341005BC1BA /* LSJGameSecretPopView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LSJGameSecretPopView.xib; sourceTree = "<group>"; };
 		92801F591FF766E60087ECC6 /* LSJOperationNormalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJOperationNormalView.h; sourceTree = "<group>"; };
 		92801F5A1FF766E60087ECC6 /* LSJOperationNormalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSJOperationNormalView.m; sourceTree = "<group>"; };
 		92820E71200860EC00D2E4D7 /* LSJTaskHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSJTaskHeaderView.h; sourceTree = "<group>"; };
@@ -1453,6 +1458,9 @@
 				929EC8AD1FF6270F00D86470 /* ZYBaseScrollView.m */,
 				929EC8AE1FF6270F00D86470 /* ZYRoomVerticalScroll.h */,
 				929EC8AF1FF6270F00D86470 /* ZYRoomVerticalScroll.m */,
+				927E33A1206391EE005BC1BA /* LSJGameSecretPopView.h */,
+				927E33A2206391EE005BC1BA /* LSJGameSecretPopView.m */,
+				927E33A420639341005BC1BA /* LSJGameSecretPopView.xib */,
 			);
 			path = NewGameRoomVIew;
 			sourceTree = "<group>";
@@ -1659,6 +1667,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				927E33A520639341005BC1BA /* LSJGameSecretPopView.xib in Resources */,
 				92744F3F1FC0062000F8D42C /* ZYPlayOperationView.xib in Resources */,
 				9282B20B1FFB9E76004A4236 /* FXLoginHomeController.xib in Resources */,
 				9248B6EF1FB42E0100633CDA /* 失败1.wav in Resources */,
@@ -1818,6 +1827,7 @@
 				9267A0451FA9D5700058AA70 /* DYGPopViewMenu.m in Sources */,
 				9287C16D1FA76CAA0042E4CF /* NewPagedFlowView.m in Sources */,
 				92679FC91FA744570058AA70 /* FXNavigationController.m in Sources */,
+				927E33A3206391EE005BC1BA /* LSJGameSecretPopView.m in Sources */,
 				928EC8391FB1BF570072C68B /* ZXContactInfo.m in Sources */,
 				9269330E1FD90FF500AE2EF6 /* MyTextView.m in Sources */,
 				9217B5351FC3D68E00B506EB /* MBProgressHUD+RY.m in Sources */,

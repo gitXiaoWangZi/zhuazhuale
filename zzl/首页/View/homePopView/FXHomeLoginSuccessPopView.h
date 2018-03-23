@@ -18,4 +18,5 @@
 @property (nonatomic,copy) NSString *day;
 @property (nonatomic,copy) NSString *money;
 @property (nonatomic,assign) id<FXHomeLoginSuccessPopViewDelegate> delegate;
+- (void)isSign:(BOOL)status;
 @end

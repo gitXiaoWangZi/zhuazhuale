@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger,TopView) {
     TopViewRecharge = 0, //充值
     TopViewMusic = 1, //音乐
     TopViewBarrage = 2, //弹幕
-    TopViewBack = 3 //返回
+    TopViewBack = 3, //返回
+    TopViewSecret = 4 //秘籍
 };
 
 @protocol LSJTopViewDelegate <NSObject>

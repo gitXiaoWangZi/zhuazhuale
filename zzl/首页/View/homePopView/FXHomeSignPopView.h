@@ -9,8 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface FXHomeSignPopView : UIView
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UIButton *monthBtn;
+@property (weak, nonatomic) IBOutlet UIButton *weekBtn;
 
 @property (nonatomic,strong) NSDictionary *dataDic;
 
 @property (nonatomic,copy) void(^signActionBlock)(NSString *day);
+@property (nonatomic,copy) void(^jumpWeekH5ActionBlock)(void);
+@property (nonatomic,copy) void(^jumpMonthH5ActionBlock)(void);
 @end

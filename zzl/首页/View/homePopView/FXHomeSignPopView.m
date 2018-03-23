@@ -11,7 +11,8 @@
 
 @interface FXHomeSignPopView()
 @property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *imgBgArray;
-@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UILabel *monthDayNumL;
+@property (weak, nonatomic) IBOutlet UILabel *weekDayNumL;
 
 
 @end
@@ -44,7 +45,20 @@
         bgImgV.image = [UIImage imageNamed:[NSString stringWithFormat:@"%zdday",i+1]];
     }
     
+    self.monthDayNumL.text = [NSString stringWithFormat:@"月卡剩余%@天",dataDic[@"card"][@"month_time"]];
+    self.weekDayNumL.text = [NSString stringWithFormat:@"周卡剩余%@天",dataDic[@"card"][@"week_time"]];
     
-    
+}
+
+- (IBAction)monthCardAction:(UIButton *)sender {
+    if (self.jumpMonthH5ActionBlock) {
+        self.jumpMonthH5ActionBlock();
+    }
+}
+
+- (IBAction)weekCardAction:(UIButton *)sender {
+    if (self.jumpWeekH5ActionBlock) {
+        self.jumpWeekH5ActionBlock();
+    }
 }
 @end

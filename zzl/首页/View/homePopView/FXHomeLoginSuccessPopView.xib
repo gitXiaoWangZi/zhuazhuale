@@ -53,6 +53,13 @@
                             <color key="textColor" red="0.43137254899999999" green="0.43137254899999999" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nIA-BP-Py4">
+                            <rect key="frame" x="100" y="127" width="84" height="28"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                            <state key="normal" title="2000" image="home_card_diamond">
+                                <color key="titleColor" red="0.91764705879999997" green="0.74509803919999995" blue="0.16078431369999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </state>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -68,8 +75,10 @@
                         <constraint firstAttribute="width" secondItem="3oi-1R-ukm" secondAttribute="height" multiplier="278:219" id="XRo-XN-3iP"/>
                         <constraint firstAttribute="trailing" secondItem="rfo-2y-tZS" secondAttribute="trailing" id="XnA-ZV-iMR"/>
                         <constraint firstAttribute="bottom" secondItem="hFZ-uH-8Th" secondAttribute="bottom" constant="20" id="bye-IB-28e"/>
+                        <constraint firstItem="nIA-BP-Py4" firstAttribute="centerX" secondItem="hFZ-uH-8Th" secondAttribute="centerX" id="cbh-Je-gTk"/>
                         <constraint firstAttribute="bottom" secondItem="rfo-2y-tZS" secondAttribute="bottom" id="eW9-5H-F99"/>
                         <constraint firstItem="6D9-iy-MTu" firstAttribute="top" secondItem="frb-3y-rwc" secondAttribute="bottom" constant="6" id="heH-ex-oSM"/>
+                        <constraint firstItem="hFZ-uH-8Th" firstAttribute="top" secondItem="nIA-BP-Py4" secondAttribute="bottom" constant="12" id="x6r-9a-gcQ"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -79,7 +88,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.4006932218" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.65217869715211274" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="3oi-1R-ukm" firstAttribute="leading" secondItem="Ta0-tU-xyv" secondAttribute="leading" constant="45" id="5Vf-Ng-UJY"/>
                 <constraint firstAttribute="trailing" secondItem="3oi-1R-ukm" secondAttribute="trailing" constant="45" id="7YK-GM-uZV"/>
@@ -88,13 +97,17 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bgIcon" destination="rfo-2y-tZS" id="aER-Dd-WIW"/>
                 <outlet property="detailL" destination="frb-3y-rwc" id="ek1-vb-pM1"/>
                 <outlet property="diamoBtn" destination="6D9-iy-MTu" id="152-HQ-fqp"/>
+                <outlet property="huodeL" destination="NMb-gn-BQl" id="MJ8-N7-RoO"/>
+                <outlet property="zuanNumbtn" destination="nIA-BP-Py4" id="CgJ-Xw-gON"/>
             </connections>
             <point key="canvasLocation" x="34.5" y="53.5"/>
         </view>
     </objects>
     <resources>
+        <image name="home_card_diamond" width="23" height="21"/>
         <image name="price" width="14" height="12"/>
         <image name="sign_PopView" width="278" height="219"/>
         <image name="sign_gaung" width="449" height="505"/>

@@ -19,6 +19,7 @@
 {
     NSDictionary *dataDic;
     BOOL _isIphoneXAction;
+    BOOL _isWeekCardAction;//是否是月卡周卡活动
 }
 @property (nonatomic,strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *progressView;
@@ -43,6 +44,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _isIphoneXAction = NO;
+    _isWeekCardAction = NO;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     dataDic = [NSDictionary dictionary];
@@ -128,9 +130,9 @@
     if ([urlString containsString:@"iphonexpay"]) {
         NSArray *tempArr = [urlString componentsSeparatedByString:@"*"];
         if ([tempArr[1] integerValue] == 0) {//微信
-            [self iPhone_XpayForType:YES num:tempArr[2]];
+            [self iPhone_XpayForType:YES num:[tempArr[2] integerValue] card:@"2"];
         }else{//支付宝
-            [self iPhone_XpayForType:NO num:tempArr[2]];
+            [self iPhone_XpayForType:NO num:[tempArr[2] integerValue] card:@"2"];
         }
         return NO;
     }
@@ -153,6 +155,15 @@
         [self loadDiamondCard:remainSecond];
         return NO;
     }
+    if ([urlString containsString:@"weekmonthcard"]) {
+        NSArray *tempArr = [urlString componentsSeparatedByString:@"*"];
+        if ([tempArr[1] integerValue] == 0) {//微信
+            [self iPhone_XpayForType:YES num:[tempArr[2] integerValue] card:tempArr[3]];
+        }else{//支付宝
+            [self iPhone_XpayForType:NO num:[tempArr[2] integerValue] card:tempArr[3]];
+        }
+        return NO;
+    }
     if ([urlString containsString:@"videoshare"]) {
         if (dataDic) {
             [self shareActionWithHref:dataDic[@"data"][@"shareurl"] title:dataDic[@"data"][@"title"] content:dataDic[@"data"][@"conten"] imageArr:@[dataDic[@"data"][@"path"]]];
@@ -167,6 +178,8 @@
     }
     return YES;
 }
+
+//
 
 #pragma mark 活动中跳转发货页面
 - (void)jumpWawaPageWith:(BOOL)isBuFa{
@@ -186,20 +199,37 @@
     }];
 }
 
-#pragma mark iPhone X活动支付模块
-- (void)iPhone_XpayForType:(BOOL)isWechat num:(NSString *)num{
-    _isIphoneXAction = YES;
-    NSString *money = [NSString stringWithFormat:@"%ld",(10 - [self.iphoneNum integerValue])*1280];
-    if (isWechat) {//微信
-        [self iPhone_XwechatPay:money];
-    }else{//支付宝
-        [self iPhone_XzhifubaoPay:money];
+#pragma mark iPhone X活动支付模块 周卡月卡活动支付模块  card为周卡月卡模块参数 -1为非卡活动
+- (void)iPhone_XpayForType:(BOOL)isWechat num:(NSInteger)num card:(NSString *)cardType{
+    NSString *money = @"";
+    if ([cardType isEqualToString:@"2"]) {
+        _isIphoneXAction = YES;
+        money = [NSString stringWithFormat:@"%ld",(10 - [self.iphoneNum integerValue])*1280];
+    }else if ([cardType isEqualToString:@"3"] || [cardType isEqualToString:@"4"]){
+        _isWeekCardAction = YES;
+        money = [NSString stringWithFormat:@"%zd",num];
     }
+    if (isWechat) {//微信
+        [self wechatPay:money cardType:cardType];
+    }else{//支付宝
+        [self zhifubaoPay:money cardType:cardType];
+    }
+    
 }
 
-- (void)iPhone_XzhifubaoPay:(NSString *)num{
+- (void)zhifubaoPay:(NSString *)num cardType:(NSString *)cardType{
+    
     NSString *path = @"DealiPay";
-    NSDictionary *params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    NSDictionary *params = @{};
+    if ([cardType isEqualToString:@"2"]) {//iphonex
+        params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    }else if ([cardType isEqualToString:@"3"]){//周卡
+        params = @{@"uid":KUID,@"money":num,@"branch":cardType};
+    }else if ([cardType isEqualToString:@"4"]){//月卡
+        params = @{@"uid":KUID,@"money":num,@"branch":cardType};
+    }else{
+        
+    }
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
@@ -211,10 +241,19 @@
     }];
 }
 
-- (void)iPhone_XwechatPay:(NSString *)num{
+- (void)wechatPay:(NSString *)num cardType:(NSString *)cardType{
     
     NSString *path = @"Depay";
-    NSDictionary *params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    NSDictionary *params = @{};
+    if ([cardType isEqualToString:@"2"]) {//iphonex
+        params = @{@"uid":KUID,@"money":num,@"branch":@"2",@"itemCode":@(kWaWaID),@"number":self.iphoneNum};
+    }else if ([cardType isEqualToString:@"3"]){//周卡
+        params = @{@"uid":KUID,@"money":num,@"branch":cardType};
+    }else if ([cardType isEqualToString:@"4"]){//月卡
+        params = @{@"uid":KUID,@"money":num,@"branch":cardType};
+    }else{
+        
+    }
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {

@@ -25,6 +25,7 @@
 #import "FXHomeBannerItem.h"
 #import "FXGameWebController.h"
 #import "LSJSpoilsController.h"
+#import "LSJGameSecretPopView.h"//秘籍弹出图
 
 @interface LSJGameViewController ()<UIScrollViewDelegate,WwGameManagerDelegate,LSJTopViewDelegate,LSJOperationNormalViewDelegate,ZYPlayOperationViewDelegate,AVAudioPlayerDelegate,FXCommentViewDelegate,UITextFieldDelegate,ZYCountDownViewDelegate,FXGameResultViewDelegate,LSJGameYuEPopViewDelegate>
 {
@@ -42,6 +43,7 @@
 @property (nonatomic,assign) int commentBtnStatue;
 @property (nonatomic,assign) int musicBtnStatue;
 @property (nonatomic,strong) FXGameResultView * resultPopView;//游戏结果弹窗
+@property (nonatomic,strong) LSJGameSecretPopView *secretPopView;//秘籍弹出图
 @property (nonatomic,strong) AVAudioPlayer * player;
 @property (nonatomic,strong) MBProgressHUD *hud;
 @property (nonatomic,strong) UIView *playView;//视频view
@@ -334,6 +336,13 @@
     }
     return _resultPopView;
 }
+- (LSJGameSecretPopView *)secretPopView{
+    if (!_secretPopView) {
+        _secretPopView = [LSJGameSecretPopView shareInstance];
+        _secretPopView.frame = self.view.bounds;
+    }
+    return _secretPopView;
+}
 - (UIScrollView *)myScroV {
     if (!_myScroV) {
         _myScroV = [[ZYRoomVerticalScroll alloc] init];
@@ -421,9 +430,31 @@
             }
         }
             break;
+        case TopViewSecret:
+        {
+            [self loadSecretData];//请求秘籍数据
+        }
+            break;
         default:
             break;
     }
+}
+
+//请求秘籍数据
+#pragma mark 请求秘籍数据
+- (void)loadSecretData{
+    NSString *path = @"userClaw";
+    NSDictionary *params = @{@"uid":KUID,@"itemCode":@(self.model.wawa.ID)};
+    [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
+        NSDictionary *dic = (NSDictionary *)json;
+        if ([dic[@"code"] integerValue] == 200) {
+            //添加弹出视图
+            [self.secretPopView refreshViewWithDic:dic[@"data"]];
+            [self.view addSubview:self.secretPopView];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (void)dealWithbottomViewBy:(OperationNormalView)operation button:(UIButton *)sender{

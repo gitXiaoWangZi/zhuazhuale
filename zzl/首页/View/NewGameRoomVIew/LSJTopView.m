@@ -45,6 +45,10 @@
 @property (nonatomic,strong) UILabel *clockCountDownL;//
 @property (nonatomic,strong) UIView *lineView;//
 
+@property (nonatomic,strong) UIImageView *secretImgV;//秘籍图标
+@property (nonatomic,strong) UILabel *secretL;//秘籍文字
+@property (nonatomic,strong) UIButton *secretBtn;//秘籍按钮
+
 @property (nonatomic,strong) NSTimer *timer;
 
 @property (nonatomic,assign) int countDownTime;
@@ -224,6 +228,26 @@ static NSString * reuserId= @"roomCell";
         make.width.equalTo(self.barrageImgV);
         make.height.equalTo(self.barrageImgV);
     }];
+    //秘籍图
+    [self addSubview:self.secretImgV];
+    [self.secretImgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.barrageL.mas_bottom).offset(Py(10));
+        make.centerX.equalTo(self.barrageImgV);
+    }];
+    //秘籍文字
+    [self addSubview:self.secretL];
+    [self.secretL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.secretImgV);
+        make.top.equalTo(self.secretImgV.mas_bottom).offset(0);
+    }];
+    //秘籍按钮
+    [self addSubview:self.secretBtn];
+    [self.secretBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.secretImgV);
+        make.centerY.equalTo(self.secretImgV);
+        make.width.equalTo(self.secretImgV);
+        make.height.equalTo(self.secretImgV);
+    }];
     //游戏操作
     [self addSubview:self.normalView];
     [self.normalView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -347,6 +371,13 @@ static NSString * reuserId= @"roomCell";
     }
     if ([self.delegate respondsToSelector:@selector(dealWithTopViewBy:button:)]) {
         [self.delegate dealWithTopViewBy:TopViewBarrage button:sender];
+    }
+}
+
+//秘籍
+- (void)secretSwitch:(UIButton *)sender{
+    if ([self.delegate respondsToSelector:@selector(dealWithTopViewBy:button:)]) {
+        [self.delegate dealWithTopViewBy:TopViewSecret button:sender];
     }
 }
 
@@ -750,5 +781,29 @@ static NSString * reuserId= @"roomCell";
         _lineView.backgroundColor = DYGColorFromHex(0xfed811);
     }
     return _lineView;
+}
+
+- (UIImageView *)secretImgV{
+    if (!_secretImgV) {
+        _secretImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"game_miji"]];
+    }
+    return _secretImgV;
+}
+- (UILabel *)secretL{
+    if (!_secretL) {
+        _secretL = [[UILabel alloc] init];
+        _secretL.text = @"秘籍";
+        _secretL.font = [UIFont systemFontOfSize:12];
+        _secretL.textColor = [UIColor whiteColor];
+    }
+    return _secretL;
+}
+-(UIButton *)secretBtn{
+    if (!_secretBtn) {
+        _secretBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _secretBtn.backgroundColor = [UIColor clearColor];
+        [_secretBtn addTarget:self action:@selector(secretSwitch:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _secretBtn;
 }
 @end
