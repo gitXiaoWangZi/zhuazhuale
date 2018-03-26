@@ -695,7 +695,7 @@
 #pragma mark 请求banner图数据
 - (void)loadBannerData{
     NSString *path = @"getIndexnewBanner";
-    NSDictionary *params = @{@"uid":KUID,@"index":@(1),@"num":@(20)};
+    NSDictionary *params = @{@"uid":KUID};
     [DYGHttpTool postWithURL:path params:params sucess:^(id json) {
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
@@ -809,6 +809,9 @@
     self.signPopView.frame = self.view.bounds;
     self.signPopView.dataDic = dic;
     __weak typeof(self) weakSelf = self;
+    self.signPopView.dismissAction = ^{
+        [weakSelf loadPopScrollData];
+    };
     self.signPopView.signActionBlock = ^(NSString *day){
         [weakSelf loadGetSignDataWithDay:day type:@"1"];
     };
@@ -885,7 +888,7 @@
                     
                 }
             }else{//不显示
-                [self loadPopScrollData];
+//                [self loadPopScrollData];
             }
         }
     } failure:^(NSError *error) {
@@ -927,7 +930,6 @@
                 self.loginPopView.money = [dic[@"data"][@"money"] stringValue];
                 [[UIApplication sharedApplication].keyWindow addSubview:self.loginPopView];
             }
-            
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -936,7 +938,7 @@
 
 #pragma mark FXHomeLoginSuccessPopViewDelegate
 - (void)dealThingAfterSuccess{
-    [self loadPopScrollData];
+//    [self loadPopScrollData];
 }
 
 #pragma mark --懒加载

@@ -78,7 +78,7 @@
 
 #pragma mark 消费记录
 - (void)loadNewData{
-    _currentPage = 1;
+    _currentPage = 0;
     [self loadDataWithCurrentPage:_currentPage];
 }
 
@@ -95,7 +95,7 @@
         [self.tableView.mj_footer endRefreshing];
         NSDictionary *dic = (NSDictionary *)json;
         if ([dic[@"code"] integerValue] == 200) {
-            if (page == 1) {
+            if (page == 0) {
                 [self.dataArray removeAllObjects];
             }
             NSArray *tempArr = [FXRechargeRecordModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];

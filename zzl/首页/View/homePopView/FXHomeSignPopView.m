@@ -25,6 +25,9 @@
 
 - (IBAction)dismissClick:(UIButton *)sender {
     [self removeFromSuperview];
+    if (self.dismissAction) {
+        self.dismissAction();
+    }
 }
 
 - (IBAction)loginClick:(UIButton *)sender {
@@ -45,8 +48,8 @@
         bgImgV.image = [UIImage imageNamed:[NSString stringWithFormat:@"%zdday",i+1]];
     }
     
-    self.monthDayNumL.text = [NSString stringWithFormat:@"月卡剩余%@天",dataDic[@"card"][@"month_time"]];
-    self.weekDayNumL.text = [NSString stringWithFormat:@"周卡剩余%@天",dataDic[@"card"][@"week_time"]];
+    self.monthDayNumL.text = dataDic[@"card"][@"month_time"];
+    self.weekDayNumL.text = dataDic[@"card"][@"week_time"];
     
 }
 

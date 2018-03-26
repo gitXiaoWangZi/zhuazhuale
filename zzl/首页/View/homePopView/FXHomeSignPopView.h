@@ -18,4 +18,5 @@
 @property (nonatomic,copy) void(^signActionBlock)(NSString *day);
 @property (nonatomic,copy) void(^jumpWeekH5ActionBlock)(void);
 @property (nonatomic,copy) void(^jumpMonthH5ActionBlock)(void);
+@property (nonatomic,copy) void(^dismissAction)(void);
 @end
