@@ -13,8 +13,6 @@
 @interface PGIndexBannerSubiew()
 
 @property(nonatomic,strong) UIButton *gameState;
-@property (nonatomic,strong) UIButton *toolsName;
-@property (nonatomic,strong) UIButton *diamond;
 
 @end
 
@@ -66,11 +64,6 @@
         make.left.equalTo(self).offset(Px(5));
         make.bottom.equalTo(self.diamond.mas_top).offset(Py(15));
     }];
-    
-    [self addSubview:self.coverView];
-    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.bottom.equalTo(self);
-    }];
 }
 
 
@@ -101,7 +94,7 @@
         [_toolsName setTitleColor:DYGColorFromHex(0xaf4e00) forState:UIControlStateNormal];
         _toolsName.titleLabel.font = kPingFangSC_Medium(14);
         UIImage *img = [UIImage imageNamed:@"home_name_bgImgV"];
-        img = [img stretchableImageWithLeftCapWidth:50 topCapHeight:0];
+        img = [img resizableImageWithCapInsets:UIEdgeInsetsMake(10, 40, 10, 40) resizingMode:UIImageResizingModeStretch];
         [_toolsName setBackgroundImage:img forState:UIControlStateNormal];
         _toolsName.enabled = NO;
         _toolsName.alpha = 1.0;
@@ -145,7 +138,6 @@
         [_gameState setTitle:@"游戏中" forState:UIControlStateNormal];
         [_gameState setBackgroundImage:[UIImage imageNamed:@"home_room_status"] forState:UIControlStateNormal];
     }
-    [_toolsName setTitle:model.wawa.name forState:UIControlStateNormal];
     [_diamond setTitle:[self getCostDescribeByWawaInfo:model.wawa] forState:UIControlStateNormal];
     [_diamond xm_setImagePosition:XMImagePositionLeft titleFont:[UIFont systemFontOfSize:14] spacing:5];
     

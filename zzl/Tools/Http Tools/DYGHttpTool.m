@@ -74,7 +74,7 @@ static AFHTTPSessionManager * mgr;
    NSMutableDictionary *dict =@{@"appid":@"2017081014329854",@"appsecret":@"IOS02bca5a9db076ee14aa841ab60735e74",@"timestamp":timeSp,@"os":@"ios",@"version":version}.mutableCopy;
     [dict addEntriesFromDictionary:params];
     NSMutableArray *keyArr = [NSMutableArray array];
-    [dict enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
+    [dict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
         [keyArr addObject:key];
     }];
     ///排序

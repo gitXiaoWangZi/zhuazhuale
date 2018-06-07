@@ -744,6 +744,7 @@
     for (FXHomeHouseItem *item in self.roomPicArray) {
         if ([item.dicid isEqualToString:[NSString stringWithFormat:@"%zd",model.ID]]) {
             [bannerView.mainImageView sd_setImageWithURL:[NSURL URLWithString:item.img_path] placeholderImage:[UIImage imageNamed:@"鱿鱼"]];
+            [bannerView.toolsName setTitle:[NSString stringWithFormat:@"   %@   ",item.title] forState:UIControlStateNormal];
         }
     }
     return bannerView;
@@ -888,7 +889,7 @@
                     
                 }
             }else{//不显示
-//                [self loadPopScrollData];
+                [self loadPopScrollData];
             }
         }
     } failure:^(NSError *error) {

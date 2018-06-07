@@ -43,7 +43,7 @@ static NSTimeInterval RPressTimerInteraval = 0.05f; // 秒
 - (void)initUI {
     
     if (kScreenWidth < 370) {
-        for (UIButton * btn in @[_upBtn,_downBtn,_leftBtn,_rightBtn]) {
+        for (UIButton * btn in @[self.upBtn,self.downBtn,self.leftBtn,self.rightBtn]) {
             CGRect frame = btn.frame;
             frame.origin.x -= 18;
             btn.frame = frame;

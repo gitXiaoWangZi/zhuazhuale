@@ -30,6 +30,8 @@
  *  主图
  */
 @property (nonatomic, strong) UIImageView *mainImageView;
+@property (nonatomic,strong) UIButton *toolsName;
+@property (nonatomic,strong) UIButton *diamond;
 
 /**
  *  用来变色的view
